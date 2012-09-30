@@ -45,7 +45,7 @@ namespace ODataPad
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var group = SampleDataSource.GetGroup((String)navigationParameter);
+            var group = ServiceDataSource.GetGroup((String)navigationParameter);
             if (group == null)
                 return;
 
@@ -67,7 +67,7 @@ namespace ODataPad
                 // Restore the previously saved state associated with this page
                 if (pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null)
                 {
-                    var selectedItem = SampleDataSource.GetItem((String)pageState["SelectedItem"]);
+                    var selectedItem = ServiceDataSource.GetItem((String)pageState["SelectedItem"]);
                     this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
@@ -83,7 +83,7 @@ namespace ODataPad
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (SampleDataItem)this.itemsViewSource.View.CurrentItem;
+                var selectedItem = (ServiceDataItem)this.itemsViewSource.View.CurrentItem;
                 if (selectedItem != null) pageState["SelectedItem"] = selectedItem.UniqueId;
             }
         }
