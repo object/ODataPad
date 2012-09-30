@@ -8,6 +8,6 @@ namespace ODataPad.DataModel
         public string Description { get; set; }
         public string Uri { get; set; }
         public string MetadataCache { get; set; }
-        public DateTimeOffset CacheUpdated { get; set; }
+        public DateTimeOffset? CacheUpdated { get; set; }
     }
 }

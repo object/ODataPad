@@ -1,4 +1,4 @@
-﻿using ODataPad.Data;
+﻿using ODataPad.DataModel;
 
 using System;
 using System.Collections.Generic;

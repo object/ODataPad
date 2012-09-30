@@ -2,8 +2,8 @@
     x:Class="ODataPad.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ODataPad"
-    xmlns:localData="using:ODataPad.Data">
+    xmlns:local="ODataPad"
+    xmlns:localData="ODataPad.Model">
 
     <Application.Resources>
         <ResourceDictionary>

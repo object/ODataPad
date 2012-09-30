@@ -21,7 +21,7 @@ using System.Collections.Specialized;
 // Applications may use this model as a starting point and build on it, or discard it entirely and
 // replace it with something appropriate to their needs.
 
-namespace ODataPad.Data
+namespace ODataPad.DataModel
 {
     /// <summary>
     /// Base class for <see cref="SampleDataItem"/> and <see cref="SampleDataGroup"/> that
@@ -235,7 +235,7 @@ namespace ODataPad.Data
 
         public static IEnumerable<SampleDataGroup> GetGroups(string uniqueId)
         {
-            if (!uniqueId.Equals("AllGroups")) throw new ArgumentException("Only 'AllGroups' is supported as a collection of groups");
+            if (!uniqueId.Equals("ServiceGroups")) throw new ArgumentException("Only 'ServiceGroups' is supported as a collection of groups");
             
             return _sampleDataSource.AllGroups;
         }
@@ -256,7 +256,7 @@ namespace ODataPad.Data
             return null;
         }
 
-        public SampleDataSource()
+        private SampleDataSource()
         {
             String ITEM_CONTENT = String.Format("Item Content: {0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}",
                         "Curabitur class aliquam vestibulum nam curae maecenas sed integer cras phasellus suspendisse quisque donec dis praesent accumsan bibendum pellentesque condimentum adipiscing etiam consequat vivamus dictumst aliquam duis convallis scelerisque est parturient ullamcorper aliquet fusce suspendisse nunc hac eleifend amet blandit facilisi condimentum commodo scelerisque faucibus aenean ullamcorper ante mauris dignissim consectetuer nullam lorem vestibulum habitant conubia elementum pellentesque morbi facilisis arcu sollicitudin diam cubilia aptent vestibulum auctor eget dapibus pellentesque inceptos leo egestas interdum nulla consectetuer suspendisse adipiscing pellentesque proin lobortis sollicitudin augue elit mus congue fermentum parturient fringilla euismod feugiat");
@@ -266,19 +266,21 @@ namespace ODataPad.Data
                     "Registered OData services",
                     "Assets/DarkGray.png",
                     "Description for registered OData services");
-            var xml = ApplicationData.Current.LocalSettings.Values[AppData.ContainerServicesKey] as string;
-            var services = AppData.ParseServiceInfo(xml);
-            foreach (var service in services)
+            if (App.AppData.Services != null)
             {
-                group1.Items.Add(new SampleDataItem(
-                    service.Uri, //"ServiceGroup-Item-1"
-                    service.Name, 
-                    service.Description,  
-                    "Assets/LightGray.png",
-                    null,
-                    ITEM_CONTENT,
-                    group1
-                    ));
+                foreach (var service in App.AppData.Services)
+                {
+                    var metadata = service.MetadataCache;
+                    group1.Items.Add(new SampleDataItem(
+                        service.Uri, //"ServiceGroup-Item-1"
+                        service.Name,
+                        service.Uri,
+                        "Samples/" + service.Name + ".png",
+                        service.Description,
+                        metadata,
+                        group1
+                        ));
+                }
             }
             this.AllGroups.Add(group1);
 
@@ -291,80 +293,24 @@ namespace ODataPad.Data
                     "Item Title: 1",
                     "Item Subtitle: 1",
                     "Assets/DarkGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
+                    "Item Description: 1 Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
                     ITEM_CONTENT,
                     group2));
             group2.Items.Add(new SampleDataItem("MetadataGroup-Item-2",
                     "Item Title: 2",
                     "Item Subtitle: 2",
                     "Assets/MediumGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
+                    "Item Description: 2 Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
                     ITEM_CONTENT,
                     group2));
             group2.Items.Add(new SampleDataItem("MetadataGroup-Item-3",
                     "Item Title: 3",
                     "Item Subtitle: 3",
                     "Assets/LightGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
+                    "Item Description: 3 Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
                     ITEM_CONTENT,
                     group2));
             this.AllGroups.Add(group2);
-
-            var group3 = new SampleDataGroup("ResultGroup",
-                    "Query Results",
-                    "Group Subtitle: 3",
-                    "Assets/MediumGray.png",
-                    "Group Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tempor scelerisque lorem in vehicula. Aliquam tincidunt, lacus ut sagittis tristique, turpis massa volutpat augue, eu rutrum ligula ante a ante");
-            group3.Items.Add(new SampleDataItem("ResultGroup-Item-1",
-                    "Item Title: 1",
-                    "Item Subtitle: 1",
-                    "Assets/MediumGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
-                    ITEM_CONTENT,
-                    group3));
-            group3.Items.Add(new SampleDataItem("ResultGroup-Item-2",
-                    "Item Title: 2",
-                    "Item Subtitle: 2",
-                    "Assets/LightGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
-                    ITEM_CONTENT,
-                    group3));
-            group3.Items.Add(new SampleDataItem("ResultGroup-Item-3",
-                    "Item Title: 3",
-                    "Item Subtitle: 3",
-                    "Assets/DarkGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
-                    ITEM_CONTENT,
-                    group3));
-            group3.Items.Add(new SampleDataItem("ResultGroup-Item-4",
-                    "Item Title: 4",
-                    "Item Subtitle: 4",
-                    "Assets/LightGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
-                    ITEM_CONTENT,
-                    group3));
-            group3.Items.Add(new SampleDataItem("ResultGroup-Item-5",
-                    "Item Title: 5",
-                    "Item Subtitle: 5",
-                    "Assets/MediumGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
-                    ITEM_CONTENT,
-                    group3));
-            group3.Items.Add(new SampleDataItem("ResultGroup-Item-6",
-                    "Item Title: 6",
-                    "Item Subtitle: 6",
-                    "Assets/DarkGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
-                    ITEM_CONTENT,
-                    group3));
-            group3.Items.Add(new SampleDataItem("ResultGroup-Item-7",
-                    "Item Title: 7",
-                    "Item Subtitle: 7",
-                    "Assets/MediumGray.png",
-                    "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
-                    ITEM_CONTENT,
-                    group3));
-            this.AllGroups.Add(group3);
         }
     }
 }

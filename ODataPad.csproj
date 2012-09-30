@@ -100,22 +100,19 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel\AppData.cs" />
     <Compile Include="DataModel\ServiceInfo.cs" />
-    <Compile Include="GroupedItemsPage.xaml.cs">
-      <DependentUpon>GroupedItemsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="GroupDetailPage.xaml.cs">
       <DependentUpon>GroupDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ItemDetailPage.xaml.cs">
       <DependentUpon>ItemDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
@@ -130,14 +127,34 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Samples\DBpedia.png" />
+    <Content Include="Samples\Devexpress Channel.png" />
+    <Content Include="Samples\ebay.edmx" />
+    <Content Include="Samples\ebay.png" />
+    <Content Include="Samples\nerddinner.png" />
+    <Content Include="Samples\Netflix.edmx" />
+    <Content Include="Samples\Netflix.png" />
+    <Content Include="Samples\Northwind Service.png" />
+    <Content Include="Samples\NuGet.edmx" />
+    <Content Include="Samples\Nuget.png" />
+    <Content Include="Samples\OData.org.png" />
+    <Content Include="Samples\Stack Overflow.png" />
+    <Content Include="Samples\twitpic.edmx" />
+    <Content Include="Samples\twitpic.png" />
     <None Include="Common\ReadMe.txt" />
     <None Include="ODataPad_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.png" />
-    <Content Include="Assets\SampleServices.xml" />
+    <Content Include="Samples\Devexpress Channel.edmx" />
+    <Content Include="Samples\DBpedia.edmx" />
+    <Content Include="Samples\Northwind Service.edmx" />
+    <Content Include="Samples\OData.org.edmx" />
+    <Content Include="Samples\nerddinner.edmx" />
+    <Content Include="Samples\SampleServices.xml" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
+    <Content Include="Samples\Stack Overflow.edmx" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
@@ -152,10 +169,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GroupedItemsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="GroupDetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -164,6 +177,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Simple.OData\Simple.OData.Client\Simple.OData.Client.WinRT.csproj">
+      <Project>{fc85ed9b-cc45-4d7d-9436-4c9c9d326dfb}</Project>
+      <Name>Simple.OData.Client.WinRT</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

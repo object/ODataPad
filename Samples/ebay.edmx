@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="1.0">
+    <Schema Namespace="eBay.Model.Entities" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
+      <EntityType Name="Bidder">
+        <Key>
+          <PropertyRef Name="ItemId" />
+          <PropertyRef Name="TimeBidTicks" />
+        </Key>
+        <Property Name="ItemId" Type="Edm.String" Nullable="false" />
+        <Property Name="TimeBidTicks" Type="Edm.String" Nullable="false" />
+        <Property Name="TimeBid" Type="Edm.String" Nullable="true" />
+        <Property Name="Action" Type="Edm.String" Nullable="true" />
+        <Property Name="User" Type="Edm.String" Nullable="true" />
+        <Property Name="Currency" Type="Edm.String" Nullable="true" />
+        <Property Name="MaxBid" Type="Edm.String" Nullable="true" />
+        <Property Name="Quantity" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <EntityType Name="Category">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.String" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationTitle" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="Level" Type="Edm.Int32" Nullable="false" />
+        <Property Name="LeafCategory" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="BestOfferEnabled" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="ParentId" Type="Edm.String" Nullable="true" />
+        <NavigationProperty Name="Children" Relationship="eBay.Model.Entities.Category_Children" FromRole="Category" ToRole="Children" />
+        <NavigationProperty Name="Parent" Relationship="eBay.Model.Entities.Category_Parent" FromRole="Category" ToRole="Parent" />
+        <NavigationProperty Name="Items" Relationship="eBay.Model.Entities.Category_Items" FromRole="Category" ToRole="Items" />
+      </EntityType>
+      <EntityType Name="CrossPromotion">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.String" Nullable="false" />
+        <Property Name="ItemId" Type="Edm.String" Nullable="true" />
+        <Property Name="Title" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationTitle" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="ListingType" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationSummary" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="Position" Type="Edm.Int32" Nullable="false" />
+        <Property Name="TimeLeft" Type="Edm.String" Nullable="true" />
+        <Property Name="PictureUrl" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <EntityType Name="Deal" m:HasStream="true">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.String" Nullable="false" />
+        <Property Name="Title" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationTitle" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationSummary" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="EndTime" Type="Edm.String" Nullable="true" />
+        <Property Name="DealUrl" Type="Edm.String" Nullable="true" />
+        <Property Name="ConvertedCurrentPrice" Type="Edm.Double" Nullable="true" />
+        <Property Name="PrimaryCategoryId" Type="Edm.String" Nullable="true" />
+        <Property Name="Location" Type="Edm.String" Nullable="true" />
+        <Property Name="Quantity" Type="Edm.Int32" Nullable="false" />
+        <Property Name="QuantitySold" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Msrp" Type="Edm.Double" Nullable="true" />
+        <Property Name="SavingsRate" Type="Edm.String" Nullable="true" />
+        <Property Name="AutoPay" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Hot" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Tier" Type="Edm.Int32" Nullable="false" />
+        <Property Name="PictureUrl" Type="Edm.String" Nullable="true" />
+        <Property Name="SmallPictureUrl" Type="Edm.String" Nullable="true" />
+        <Property Name="Picture175Url" Type="Edm.String" Nullable="true" />
+        <NavigationProperty Name="PrimaryCategory" Relationship="eBay.Model.Entities.Deal_PrimaryCategory" FromRole="Deal" ToRole="PrimaryCategory" />
+        <NavigationProperty Name="Item" Relationship="eBay.Model.Entities.Deal_Item" FromRole="Deal" ToRole="Item" />
+      </EntityType>
+      <EntityType Name="Feedback">
+        <Key>
+          <PropertyRef Name="FeedbackId" />
+          <PropertyRef Name="UserId" />
+        </Key>
+        <Property Name="UserId" Type="Edm.String" Nullable="false" />
+        <Property Name="FeedbackId" Type="Edm.String" Nullable="false" />
+        <Property Name="CommentingUser" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationTitle" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="Type" Type="Edm.String" Nullable="true" />
+        <Property Name="Comment" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationSummary" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="Role" Type="Edm.String" Nullable="true" />
+        <Property Name="Time" Type="Edm.DateTime" Nullable="false" />
+        <NavigationProperty Name="User" Relationship="eBay.Model.Entities.Feedback_User" FromRole="Feedback" ToRole="User" />
+      </EntityType>
+      <EntityType Name="Item" m:HasStream="true">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.String" Nullable="false" />
+        <Property Name="UserId" Type="Edm.String" Nullable="true" />
+        <Property Name="Title" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationTitle" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="Subtitle" Type="Edm.String" Nullable="true" />
+        <Property Name="SellingState" Type="Edm.String" Nullable="true" />
+        <Property Name="TimeLeft" Type="Edm.String" Nullable="true" />
+        <Property Name="Currency" Type="Edm.String" Nullable="true" />
+        <Property Name="CurrentPrice" Type="Edm.Double" Nullable="false" m:FC_TargetPath="SyndicationSummary" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="MinimumToBid" Type="Edm.Double" Nullable="false" />
+        <Property Name="BidCount" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" />
+        <Property Name="QuantitySold" Type="Edm.Int32" Nullable="false" />
+        <Property Name="AutoPay" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="CharityId" Type="Edm.String" Nullable="true" />
+        <Property Name="Country" Type="Edm.String" Nullable="true" />
+        <Property Name="Compatibility" Type="Edm.String" Nullable="true" />
+        <Property Name="GalleryUrl" Type="Edm.String" Nullable="true" />
+        <Property Name="GlobalId" Type="Edm.String" Nullable="true" />
+        <Property Name="PostalCode" Type="Edm.String" Nullable="true" />
+        <Property Name="ReturnsAccepted" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="PrimaryCategoryId" Type="Edm.String" Nullable="true" />
+        <Property Name="SecondaryCategoryId" Type="Edm.String" Nullable="true" />
+        <Property Name="Condition" Type="eBay.Model.Entities.Condition" Nullable="false" />
+        <Property Name="ListingInfo" Type="eBay.Model.Entities.ListingInfo" Nullable="false" />
+        <Property Name="Distance" Type="eBay.Model.Entities.Distance" Nullable="false" />
+        <Property Name="ShippingInformation" Type="eBay.Model.Entities.ShippingInformation" Nullable="false" />
+        <Property Name="ViewItemUrl" Type="Edm.String" Nullable="true" />
+        <Property Name="PaymentMethods" Type="Edm.String" Nullable="true" />
+        <NavigationProperty Name="PrimaryCategory" Relationship="eBay.Model.Entities.Item_PrimaryCategory" FromRole="Item" ToRole="PrimaryCategory" />
+        <NavigationProperty Name="SecondaryCategory" Relationship="eBay.Model.Entities.Item_SecondaryCategory" FromRole="Item" ToRole="SecondaryCategory" />
+        <NavigationProperty Name="Bidders" Relationship="eBay.Model.Entities.Item_Bidders" FromRole="Item" ToRole="Bidders" />
+        <NavigationProperty Name="Transactions" Relationship="eBay.Model.Entities.Item_Transactions" FromRole="Item" ToRole="Transactions" />
+        <NavigationProperty Name="Shippings" Relationship="eBay.Model.Entities.Item_Shippings" FromRole="Item" ToRole="Shippings" />
+        <NavigationProperty Name="CrossPromotions" Relationship="eBay.Model.Entities.Item_CrossPromotions" FromRole="Item" ToRole="CrossPromotions" />
+        <NavigationProperty Name="User" Relationship="eBay.Model.Entities.Item_User" FromRole="Item" ToRole="User" />
+      </EntityType>
+      <ComplexType Name="Condition">
+        <Property Name="Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" />
+      </ComplexType>
+      <ComplexType Name="ListingInfo">
+        <Property Name="BestOfferEnabled" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="BuyItNowAvailable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="BuyItNowPrice" Type="Edm.Double" Nullable="true" />
+        <Property Name="ConvertedBuyItNowPrice" Type="Edm.Double" Nullable="true" />
+        <Property Name="Gift" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="ListingType" Type="Edm.String" Nullable="true" />
+        <Property Name="StartTime" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="EndTime" Type="Edm.DateTime" Nullable="false" />
+      </ComplexType>
+      <ComplexType Name="Distance">
+        <Property Name="Unit" Type="Edm.String" Nullable="true" />
+        <Property Name="Value" Type="Edm.Double" Nullable="false" />
+      </ComplexType>
+      <ComplexType Name="ShippingInformation">
+        <Property Name="Delimiter" Type="Edm.String" Nullable="true" />
+        <Property Name="ExpeditedShipping" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="HandlingTime" Type="Edm.Int32" Nullable="false" />
+        <Property Name="OneDayShippingAvailable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="ShippingServiceCost" Type="Edm.Double" Nullable="true" />
+        <Property Name="ShippingType" Type="Edm.String" Nullable="true" />
+      </ComplexType>
+      <EntityType Name="Shipping">
+        <Key>
+          <PropertyRef Name="Id" />
+          <PropertyRef Name="ItemId" />
+        </Key>
+        <Property Name="ItemId" Type="Edm.String" Nullable="false" />
+        <Property Name="Id" Type="Edm.String" Nullable="false" />
+        <Property Name="Service" Type="Edm.String" Nullable="true" />
+        <Property Name="Cost" Type="Edm.Double" Nullable="true" />
+        <Property Name="InsuranceCost" Type="Edm.Double" Nullable="true" />
+        <Property Name="AdditionalCost" Type="Edm.Double" Nullable="true" />
+        <Property Name="ShipToLocation" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <EntityType Name="Transaction">
+        <Key>
+          <PropertyRef Name="ItemId" />
+          <PropertyRef Name="TransactionId" />
+        </Key>
+        <Property Name="ItemId" Type="Edm.String" Nullable="false" />
+        <Property Name="TransactionId" Type="Edm.String" Nullable="false" />
+        <Property Name="AmountPaid" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationSummary" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="Buyer" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationTitle" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="CreatedDate" Type="Edm.String" Nullable="true" />
+        <Property Name="QuantityPurchased" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Item" Relationship="eBay.Model.Entities.Transaction_Item" FromRole="Transaction" ToRole="Item" />
+      </EntityType>
+      <EntityType Name="User">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.String" Nullable="false" m:FC_TargetPath="SyndicationTitle" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="FeedbackRatingStar" Type="Edm.String" Nullable="true" m:FC_TargetPath="SyndicationSummary" m:FC_ContentKind="text" m:FC_KeepInContent="true" />
+        <Property Name="FeedbackScore" Type="Edm.Int32" Nullable="false" />
+        <Property Name="NewUser" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="TopRatedSeller" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="RegistrationDate" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="RegistrationSite" Type="Edm.String" Nullable="true" />
+        <Property Name="Status" Type="Edm.String" Nullable="true" />
+        <Property Name="PositiveFeedbackPercent" Type="Edm.Single" Nullable="false" />
+        <NavigationProperty Name="Feedback" Relationship="eBay.Model.Entities.User_Feedback" FromRole="User" ToRole="Feedback" />
+        <NavigationProperty Name="Items" Relationship="eBay.Model.Entities.User_Items" FromRole="User" ToRole="Items" />
+      </EntityType>
+      <Association Name="Category_Children">
+        <End Role="Category" Type="eBay.Model.Entities.Category" Multiplicity="*" />
+        <End Role="Children" Type="eBay.Model.Entities.Category" Multiplicity="*" />
+      </Association>
+      <Association Name="Category_Parent">
+        <End Role="Category" Type="eBay.Model.Entities.Category" Multiplicity="*" />
+        <End Role="Parent" Type="eBay.Model.Entities.Category" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Category_Items">
+        <End Role="Category" Type="eBay.Model.Entities.Category" Multiplicity="*" />
+        <End Role="Items" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+      </Association>
+      <Association Name="Deal_PrimaryCategory">
+        <End Role="Deal" Type="eBay.Model.Entities.Deal" Multiplicity="*" />
+        <End Role="PrimaryCategory" Type="eBay.Model.Entities.Category" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Deal_Item">
+        <End Role="Deal" Type="eBay.Model.Entities.Deal" Multiplicity="*" />
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Feedback_User">
+        <End Role="Feedback" Type="eBay.Model.Entities.Feedback" Multiplicity="*" />
+        <End Role="User" Type="eBay.Model.Entities.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Item_PrimaryCategory">
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+        <End Role="PrimaryCategory" Type="eBay.Model.Entities.Category" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Item_SecondaryCategory">
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+        <End Role="SecondaryCategory" Type="eBay.Model.Entities.Category" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Item_Bidders">
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+        <End Role="Bidders" Type="eBay.Model.Entities.Bidder" Multiplicity="*" />
+      </Association>
+      <Association Name="Item_Transactions">
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+        <End Role="Transactions" Type="eBay.Model.Entities.Transaction" Multiplicity="*" />
+      </Association>
+      <Association Name="Item_Shippings">
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+        <End Role="Shippings" Type="eBay.Model.Entities.Shipping" Multiplicity="*" />
+      </Association>
+      <Association Name="Item_CrossPromotions">
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+        <End Role="CrossPromotions" Type="eBay.Model.Entities.CrossPromotion" Multiplicity="*" />
+      </Association>
+      <Association Name="Item_User">
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+        <End Role="User" Type="eBay.Model.Entities.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Transaction_Item">
+        <End Role="Transaction" Type="eBay.Model.Entities.Transaction" Multiplicity="*" />
+        <End Role="Item" Type="eBay.Model.Entities.Item" Multiplicity="0..1" />
+      </Association>
+      <Association Name="User_Feedback">
+        <End Role="User" Type="eBay.Model.Entities.User" Multiplicity="*" />
+        <End Role="Feedback" Type="eBay.Model.Entities.Feedback" Multiplicity="*" />
+      </Association>
+      <Association Name="User_Items">
+        <End Role="User" Type="eBay.Model.Entities.User" Multiplicity="*" />
+        <End Role="Items" Type="eBay.Model.Entities.Item" Multiplicity="*" />
+      </Association>
+    </Schema>
+    <Schema Namespace="eBay.Model" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
+      <EntityContainer Name="EBayData" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="Bidders" EntityType="eBay.Model.Entities.Bidder" />
+        <EntitySet Name="Categories" EntityType="eBay.Model.Entities.Category" />
+        <EntitySet Name="CrossPromotions" EntityType="eBay.Model.Entities.CrossPromotion" />
+        <EntitySet Name="Deals" EntityType="eBay.Model.Entities.Deal" />
+        <EntitySet Name="Feedback" EntityType="eBay.Model.Entities.Feedback" />
+        <EntitySet Name="Items" EntityType="eBay.Model.Entities.Item" />
+        <EntitySet Name="Shippings" EntityType="eBay.Model.Entities.Shipping" />
+        <EntitySet Name="Transactions" EntityType="eBay.Model.Entities.Transaction" />
+        <EntitySet Name="Users" EntityType="eBay.Model.Entities.User" />
+        <AssociationSet Name="Category_Children" Association="eBay.Model.Entities.Category_Children">
+          <End Role="Category" EntitySet="Categories" />
+          <End Role="Children" EntitySet="Categories" />
+        </AssociationSet>
+        <AssociationSet Name="Category_Parent" Association="eBay.Model.Entities.Category_Parent">
+          <End Role="Category" EntitySet="Categories" />
+          <End Role="Parent" EntitySet="Categories" />
+        </AssociationSet>
+        <AssociationSet Name="Category_Items" Association="eBay.Model.Entities.Category_Items">
+          <End Role="Category" EntitySet="Categories" />
+          <End Role="Items" EntitySet="Items" />
+        </AssociationSet>
+        <AssociationSet Name="Deal_PrimaryCategory" Association="eBay.Model.Entities.Deal_PrimaryCategory">
+          <End Role="Deal" EntitySet="Deals" />
+          <End Role="PrimaryCategory" EntitySet="Categories" />
+        </AssociationSet>
+        <AssociationSet Name="Deal_Item" Association="eBay.Model.Entities.Deal_Item">
+          <End Role="Deal" EntitySet="Deals" />
+          <End Role="Item" EntitySet="Items" />
+        </AssociationSet>
+        <AssociationSet Name="Feedback_User" Association="eBay.Model.Entities.Feedback_User">
+          <End Role="Feedback" EntitySet="Feedback" />
+          <End Role="User" EntitySet="Users" />
+        </AssociationSet>
+        <AssociationSet Name="Item_PrimaryCategory" Association="eBay.Model.Entities.Item_PrimaryCategory">
+          <End Role="Item" EntitySet="Items" />
+          <End Role="PrimaryCategory" EntitySet="Categories" />
+        </AssociationSet>
+        <AssociationSet Name="Item_SecondaryCategory" Association="eBay.Model.Entities.Item_SecondaryCategory">
+          <End Role="Item" EntitySet="Items" />
+          <End Role="SecondaryCategory" EntitySet="Categories" />
+        </AssociationSet>
+        <AssociationSet Name="Item_Bidders" Association="eBay.Model.Entities.Item_Bidders">
+          <End Role="Item" EntitySet="Items" />
+          <End Role="Bidders" EntitySet="Bidders" />
+        </AssociationSet>
+        <AssociationSet Name="Item_Transactions" Association="eBay.Model.Entities.Item_Transactions">
+          <End Role="Item" EntitySet="Items" />
+          <End Role="Transactions" EntitySet="Transactions" />
+        </AssociationSet>
+        <AssociationSet Name="Item_Shippings" Association="eBay.Model.Entities.Item_Shippings">
+          <End Role="Item" EntitySet="Items" />
+          <End Role="Shippings" EntitySet="Shippings" />
+        </AssociationSet>
+        <AssociationSet Name="Item_CrossPromotions" Association="eBay.Model.Entities.Item_CrossPromotions">
+          <End Role="Item" EntitySet="Items" />
+          <End Role="CrossPromotions" EntitySet="CrossPromotions" />
+        </AssociationSet>
+        <AssociationSet Name="Item_User" Association="eBay.Model.Entities.Item_User">
+          <End Role="Item" EntitySet="Items" />
+          <End Role="User" EntitySet="Users" />
+        </AssociationSet>
+        <AssociationSet Name="Transaction_Item" Association="eBay.Model.Entities.Transaction_Item">
+          <End Role="Transaction" EntitySet="Transactions" />
+          <End Role="Item" EntitySet="Items" />
+        </AssociationSet>
+        <AssociationSet Name="User_Feedback" Association="eBay.Model.Entities.User_Feedback">
+          <End Role="User" EntitySet="Users" />
+          <End Role="Feedback" EntitySet="Feedback" />
+        </AssociationSet>
+        <AssociationSet Name="User_Items" Association="eBay.Model.Entities.User_Items">
+          <End Role="User" EntitySet="Users" />
+          <End Role="Items" EntitySet="Items" />
+        </AssociationSet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

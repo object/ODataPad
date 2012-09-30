@@ -1,4 +1,5 @@
-﻿using ODataPad.Common;
+﻿using System.Threading.Tasks;
+using ODataPad.Common;
 
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace ODataPad
     /// </summary>
     sealed partial class App : Application
     {
-        private AppData _appData;
+        public static AppData AppData { get; private set; }
 
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
@@ -38,7 +39,7 @@ namespace ODataPad
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            LoadAppData();
+            LoadAppDataAsync().Wait();
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace ODataPad
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(GroupedItemsPage), "AllGroups"))
+                if (!rootFrame.Navigate(typeof(MainPage), "ServiceGroup"))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -106,21 +107,25 @@ namespace ODataPad
             deferral.Complete();
         }
 
-        private async void LoadAppData()
+        private async Task<bool> LoadAppDataAsync()
         {
-            _appData = new AppData();
+            AppData = new AppData();
             await ApplicationData.Current.SetVersionAsync(AppData.CurrentVersion, SetVersionHandler);
+            await AppData.LoadServicesAsync();
+            return true;
         }
 
-        private void SetVersionHandler(SetVersionRequest request)
+        private async void SetVersionHandler(SetVersionRequest request)
         {
             SetVersionDeferral deferral = request.GetDeferral();
 
-            switch (ApplicationData.Current.Version)
+            if (request.DesiredVersion == 1)
             {
-                case 0:
-                    _appData.CreateSampleServicesAsync();
-                    break;
+                await AppData.ClearServicesAsync();
+            }
+            else if (request.CurrentVersion == 1 && request.DesiredVersion > 1)
+            {
+                await AppData.CreateSampleServicesAsync();
             }
 
             deferral.Complete();
