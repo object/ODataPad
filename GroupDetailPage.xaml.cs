@@ -56,7 +56,7 @@ namespace ODataPad
         {
             // Navigate to the appropriate destination page, configuring the new page
             // by passing required information as a navigation parameter
-            var itemId = ((ServiceDataItem)e.ClickedItem).UniqueId;
+            var itemId = ((DataItem)e.ClickedItem).UniqueId;
             this.Frame.Navigate(typeof(ItemDetailPage), itemId);
         }
     }

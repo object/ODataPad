@@ -61,7 +61,7 @@ namespace ODataPad
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
-            var selectedItem = (ServiceDataItem)this.flipView.SelectedItem;
+            var selectedItem = (DataItem)this.flipView.SelectedItem;
             pageState["SelectedItem"] = selectedItem.UniqueId;
         }
     }

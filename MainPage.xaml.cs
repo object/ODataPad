@@ -83,7 +83,7 @@ namespace ODataPad
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (ServiceDataItem)this.itemsViewSource.View.CurrentItem;
+                var selectedItem = (DataItem)this.itemsViewSource.View.CurrentItem;
                 if (selectedItem != null) pageState["SelectedItem"] = selectedItem.UniqueId;
             }
         }

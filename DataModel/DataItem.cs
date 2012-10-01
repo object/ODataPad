@@ -6,10 +6,10 @@ namespace ODataPad.DataModel
     /// <summary>
     /// Generic item data model.
     /// </summary>
-    public class ServiceDataItem : ServiceDataCommon
+    public class DataItem : DataCommon
     {
-        public ServiceDataItem(String uniqueId, String name, String uri, String imagePath, String description, String content, ServiceDataGroup group)
-            : base(uniqueId, name, uri, imagePath, description)
+        public DataItem(String uniqueId, String title, String subtitle, String imagePath, String description, String content, DataGroup group)
+            : base(uniqueId, title, subtitle, imagePath, description)
         {
             this._content = content;
             this._group = group;
@@ -22,15 +22,15 @@ namespace ODataPad.DataModel
             set { this.SetProperty(ref this._content, value); }
         }
 
-        private IList<string> _collections = new List<string>();
-        public IList<string> Collections
+        private IList<DataItem> _elements = new List<DataItem>();
+        public IList<DataItem> Elements
         {
-            get { return this._collections; }
-            set { this.SetProperty(ref this._collections, value); }
+            get { return this._elements; }
+            set { this.SetProperty(ref this._elements, value); }
         }
 
-        private ServiceDataGroup _group;
-        public ServiceDataGroup Group
+        private DataGroup _group;
+        public DataGroup Group
         {
             get { return this._group; }
             set { this.SetProperty(ref this._group, value); }

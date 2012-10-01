@@ -34,20 +34,20 @@ namespace ODataPad.DataModel
     {
         private static ServiceDataSource _serviceDataSource = new ServiceDataSource();
 
-        private ObservableCollection<ServiceDataGroup> _allGroups = new ObservableCollection<ServiceDataGroup>();
-        public ObservableCollection<ServiceDataGroup> AllGroups
+        private ObservableCollection<DataGroup> _allGroups = new ObservableCollection<DataGroup>();
+        public ObservableCollection<DataGroup> AllGroups
         {
             get { return this._allGroups; }
         }
 
-        public static IEnumerable<ServiceDataGroup> GetGroups(string uniqueId)
+        public static IEnumerable<DataGroup> GetGroups(string uniqueId)
         {
             if (!uniqueId.Equals("ServiceGroups")) throw new ArgumentException("Only 'ServiceGroups' is supported as a collection of groups");
-            
+
             return _serviceDataSource.AllGroups;
         }
 
-        public static ServiceDataGroup GetGroup(string uniqueId)
+        public static DataGroup GetGroup(string uniqueId)
         {
             // Simple linear search is acceptable for small data sets
             var matches = _serviceDataSource.AllGroups.Where((group) => group.UniqueId.Equals(uniqueId));
@@ -55,7 +55,7 @@ namespace ODataPad.DataModel
             return null;
         }
 
-        public static ServiceDataItem GetItem(string uniqueId)
+        public static DataItem GetItem(string uniqueId)
         {
             // Simple linear search is acceptable for small data sets
             var matches = _serviceDataSource.AllGroups.SelectMany(group => group.Items).Where((item) => item.UniqueId.Equals(uniqueId));
@@ -65,7 +65,7 @@ namespace ODataPad.DataModel
 
         private ServiceDataSource()
         {
-            var serviceDataGroup = new ServiceDataGroup("ServiceGroup",
+            var serviceDataGroup = new DataGroup("ServiceGroup",
                     "OData Services",
                     "Registered OData services",
                     "Assets/DarkGray.png",
@@ -74,25 +74,81 @@ namespace ODataPad.DataModel
             {
                 foreach (var service in App.AppData.Services)
                 {
-                    var metadata = service.MetadataCache;
-                    var schema = ODataClient.ParseSchemaString(metadata);
-                    var item = new ServiceDataItem(
-                        service.Uri,
-                        service.Name,
-                        service.Uri,
-                        "Samples/" + service.Name + ".png",
-                        service.Description,
-                        metadata,
-                        serviceDataGroup
-                        );
-                    foreach(var table in schema.Tables)
-                    {
-                        item.Collections.Add(table.ActualName);
-                    }
+                    var item = CreateServiceItem(serviceDataGroup, service);
                     serviceDataGroup.Items.Add(item);
                 }
             }
             this.AllGroups.Add(serviceDataGroup);
+        }
+
+        private DataItem CreateServiceItem(DataGroup serviceDataGroup, ServiceInfo service)
+        {
+            var metadata = service.MetadataCache;
+            var schema = ODataClient.ParseSchemaString(metadata);
+            var item = new DataItem(
+                service.Uri,
+                service.Name,
+                service.Uri,
+                "Samples/" + service.Name + ".png",
+                service.Description,
+                metadata,
+                serviceDataGroup
+                );
+            foreach (var table in schema.Tables)
+            {
+                var subitem = CreateTableItem(service, table);
+                item.Elements.Add(subitem);
+            }
+            return item;
+        }
+
+        private DataItem CreateTableItem(ServiceInfo service, Table table)
+        {
+            var item = new DataItem(
+                service.Name + ":" + table.ActualName,
+                table.ActualName,
+                string.Format("{0} properties, {1} relations", table.Columns.Count(), table.Associations.Count()),
+                null,
+                null,
+                null,
+                null);
+            foreach (var column in table.Columns)
+            {
+                var subitem = CreateColumnItem(service, table, column);
+                item.Elements.Add(subitem);
+            }
+            foreach (var association in table.Associations)
+            {
+                var subitem = CreateAssociationItem(service, table, association);
+                item.Elements.Add(subitem);
+            }
+            return item;
+        }
+
+        private DataItem CreateColumnItem(ServiceInfo service, Table table, Column column)
+        {
+            var item = new DataItem(
+                service.Name + ":" + table.ActualName + "." + column.ActualName,
+                column.ActualName,
+                "TODO",
+                null,
+                null,
+                null,
+                null);
+            return item;
+        }
+
+        private DataItem CreateAssociationItem(ServiceInfo service, Table table, Association association)
+        {
+            var item = new DataItem(
+                service.Name + ":" + table.ActualName + "." + association.ActualName,
+                association.ActualName,
+                association.Multiplicity,
+                null,
+                null,
+                null,
+                null);
+            return item;
         }
     }
 }

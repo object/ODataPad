@@ -104,9 +104,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel\AppData.cs" />
-    <Compile Include="DataModel\ServiceDataCommon.cs" />
-    <Compile Include="DataModel\ServiceDataGroup.cs" />
-    <Compile Include="DataModel\ServiceDataItem.cs" />
+    <Compile Include="DataModel\DataCommon.cs" />
+    <Compile Include="DataModel\DataGroup.cs" />
+    <Compile Include="DataModel\DataItem.cs" />
     <Compile Include="DataModel\ServiceInfo.cs" />
     <Compile Include="GroupDetailPage.xaml.cs">
       <DependentUpon>GroupDetailPage.xaml</DependentUpon>

@@ -5,19 +5,19 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace ODataPad.DataModel
 {
     /// <summary>
-    /// Base class for <see cref="ServiceDataItem"/> and <see cref="ServiceDataGroup"/> that
+    /// Base class for <see cref="DataItem"/> and <see cref="DataGroup"/> that
     /// defines properties common to both.
     /// </summary>
     [Windows.Foundation.Metadata.WebHostHidden]
-    public abstract class ServiceDataCommon : ODataPad.Common.BindableBase
+    public abstract class DataCommon : ODataPad.Common.BindableBase
     {
         private static Uri _baseUri = new Uri("ms-appx:///");
 
-        public ServiceDataCommon(String uniqueId, String name, String uri, String imagePath, String description)
+        public DataCommon(String uniqueId, String title, String subtitle, String imagePath, String description)
         {
             this._uniqueId = uniqueId;
-            this._name = name;
-            this._uri = uri;
+            this._title = title;
+            this._subtitle = subtitle;
             this._description = description;
             this._imagePath = imagePath;
         }
@@ -29,18 +29,18 @@ namespace ODataPad.DataModel
             set { this.SetProperty(ref this._uniqueId, value); }
         }
 
-        private string _name = string.Empty;
-        public string Name
+        private string _title = string.Empty;
+        public string Title
         {
-            get { return this._name; }
-            set { this.SetProperty(ref this._name, value); }
+            get { return this._title; }
+            set { this.SetProperty(ref this._title, value); }
         }
 
-        private string _uri = string.Empty;
-        public string Uri
+        private string _subtitle = string.Empty;
+        public string Subtitle
         {
-            get { return this._uri; }
-            set { this.SetProperty(ref this._uri, value); }
+            get { return this._subtitle; }
+            set { this.SetProperty(ref this._subtitle, value); }
         }
 
         private string _description = string.Empty;
@@ -58,7 +58,7 @@ namespace ODataPad.DataModel
             {
                 if (this._image == null && this._imagePath != null)
                 {
-                    this._image = new BitmapImage(new Uri(ServiceDataCommon._baseUri, this._imagePath));
+                    this._image = new BitmapImage(new Uri(DataCommon._baseUri, this._imagePath));
                 }
                 return this._image;
             }
@@ -79,7 +79,7 @@ namespace ODataPad.DataModel
 
         public override string ToString()
         {
-            return this.Name;
+            return this.Title;
         }
     }
 }

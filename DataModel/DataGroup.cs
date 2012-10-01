@@ -7,10 +7,10 @@ namespace ODataPad.DataModel
     /// <summary>
     /// Generic group data model.
     /// </summary>
-    public class ServiceDataGroup : ServiceDataCommon
+    public class DataGroup : DataCommon
     {
-        public ServiceDataGroup(String uniqueId, String name, String uri, String imagePath, String description)
-            : base(uniqueId, name, uri, imagePath, description)
+        public DataGroup(String uniqueId, String title, String subtitle, String imagePath, String description)
+            : base(uniqueId, title, subtitle, imagePath, description)
         {
             Items.CollectionChanged += ItemsCollectionChanged;
         }
@@ -79,14 +79,14 @@ namespace ODataPad.DataModel
             }
         }
 
-        private ObservableCollection<ServiceDataItem> _items = new ObservableCollection<ServiceDataItem>();
-        public ObservableCollection<ServiceDataItem> Items
+        private ObservableCollection<DataItem> _items = new ObservableCollection<DataItem>();
+        public ObservableCollection<DataItem> Items
         {
             get { return this._items; }
         }
 
-        private ObservableCollection<ServiceDataItem> _topItem = new ObservableCollection<ServiceDataItem>();
-        public ObservableCollection<ServiceDataItem> TopItems
+        private ObservableCollection<DataItem> _topItem = new ObservableCollection<DataItem>();
+        public ObservableCollection<DataItem> TopItems
         {
             get { return this._topItem; }
         }
