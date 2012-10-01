@@ -21,21 +21,24 @@ namespace ODataPad.DataModel
             var servicesWithMetadata = new List<ServiceInfo>();
             var localSettings = ApplicationData.Current.LocalSettings;
             var xml = localSettings.Values[ServicesKey] as string;
-            if (!string.IsNullOrEmpty(xml))
+            if (string.IsNullOrEmpty(xml))
             {
-                var services = ParseServiceInfo(xml);
-                foreach (var serviceInfo in services)
+                bool ok = await CreateSampleServicesAsync();
+                if (ok)
                 {
-                    var serviceInfoWithMetadata = serviceInfo;
-                    serviceInfoWithMetadata.MetadataCache = await LoadSettingFromFileAsync(serviceInfo.Name + ".edmx");
-                    servicesWithMetadata.Add(serviceInfoWithMetadata);
+                    xml = localSettings.Values[ServicesKey] as string;
                 }
-                this.Services = servicesWithMetadata;
             }
-            else
+
+            var services = ParseServiceInfo(xml);
+            foreach (var serviceInfo in services)
             {
-                this.Services = new ServiceInfo[] { };
+                var serviceInfoWithMetadata = serviceInfo;
+                serviceInfoWithMetadata.MetadataCache = await LoadSettingFromFileAsync(serviceInfo.Name + ".edmx");
+                servicesWithMetadata.Add(serviceInfoWithMetadata);
             }
+            this.Services = servicesWithMetadata;
+
             return this.Services;
         }
 

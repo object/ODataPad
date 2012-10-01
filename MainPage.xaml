@@ -12,7 +12,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-
         <!-- Collection of items displayed by this page -->
         <CollectionViewSource
             x:Name="itemsViewSource"
@@ -26,10 +25,10 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Style="{StaticResource EditAppBarButtonStyle}"/>
                     <Button Style="{StaticResource RemoveAppBarButtonStyle}"/>
-                    <Button Style="{StaticResource AddAppBarButtonStyle}"/>
+                    <Button Style="{StaticResource RefreshAppBarButtonStyle}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource DownloadAppBarButtonStyle}"/>
+                    <Button Style="{StaticResource AddAppBarButtonStyle}"/>
                 </StackPanel>
             </Grid>
         </AppBar>
@@ -50,13 +49,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="primaryColumn" Width="610"/>
+            <ColumnDefinition x:Name="primaryColumn" Width="800"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Back button and page title -->
         <Grid x:Name="titlePanel">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -103,43 +103,40 @@
                 <StackPanel x:Name="itemDetailTitlePanel" Grid.Row="1" Grid.Column="1">
                     <TextBlock x:Name="itemName" Margin="0,10,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
                     <TextBlock x:Name="itemUri" Margin="0,20,0,20" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
-                    <TextBlock x:Name="itemDescription" Margin="0,0,0,20" Text="{Binding Description}" Style="{StaticResource SubtitleTextStyle}"/>
+                    <TextBlock x:Name="itemDescription" Margin="0,0,180,20" Text="{Binding Description}" Style="{StaticResource SubtitleTextStyle}"/>
                 </StackPanel>
             </Grid>
-            <ScrollViewer
-            x:Name="itemDetail"
-            AutomationProperties.AutomationId="ItemDetailScrollViewer"
-            Grid.Column="1"
-            Grid.RowSpan="2"
-            Padding="70,0,120,0"
-            DataContext="{Binding SelectedItem, ElementName=itemListView}"
-            d:DataContext="{Binding AllGroups[0].Items[0], Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}"
-            Style="{StaticResource VerticalScrollViewerStyle}">
 
-                <Grid x:Name="itemDetailGrid" Margin="0,20,0,00">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+            <Grid x:Name="itemDetailGrid" Margin="70,20,0,0"
+                DataContext="{Binding SelectedItem, ElementName=itemListView}"
+        d:DataContext="{Binding AllGroups[0].Items[0], Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
                     <ListView 
-                        x:Name="itemCollection"
-                        Grid.Row="1" Grid.ColumnSpan="1" Margin="0,0,0,0" 
-                        SelectionChanged="ItemListView_SelectionChanged"
-                        ItemsSource="{Binding Elements}" ItemTemplate="{StaticResource Custom80ItemTemplate}" >
-                    </ListView>
-                    <ListView 
-                        Grid.Row="1" Grid.ColumnSpan="1" Margin="400,0,0,0" 
-                        DataContext="{Binding SelectedItem, ElementName=itemCollection}"
-                        d:DataContext="{Binding AllGroups[0].Items[0], Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}"
-                        ItemsSource="{Binding Elements}" ItemTemplate="{StaticResource Custom80ItemTemplate}" >
-                    </ListView>
-                </Grid>
-            </ScrollViewer>
+                    x:Name="itemCollection"
+                    Grid.ColumnSpan="1" 
+                    SelectionChanged="ItemListView_SelectionChanged"
+                    ItemsSource="{Binding Elements}" 
+                    ItemTemplate="{StaticResource Custom80ItemTemplate}" >
+                </ListView>
+                <ListView 
+                    Grid.ColumnSpan="2" 
+                    DataContext="{Binding SelectedItem, ElementName=itemCollection}"
+                    d:DataContext="{Binding AllGroups[0].Items[0], Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}"
+                    ItemsSource="{Binding Elements}" 
+                    ItemTemplate="{StaticResource Custom80ItemTemplate}" 
+                    SelectionMode="None" >
+                </ListView>
+                </StackPanel>
+            </Grid>
         </StackPanel>
 
         <VisualStateManager.VisualStateGroups>

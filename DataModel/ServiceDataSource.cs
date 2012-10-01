@@ -66,7 +66,7 @@ namespace ODataPad.DataModel
         private ServiceDataSource()
         {
             var serviceDataGroup = new DataGroup("ServiceGroup",
-                    "OData Services",
+                    "ODataPad",
                     "Registered OData services",
                     "Assets/DarkGray.png",
                     "Description for registered OData services");
@@ -130,7 +130,7 @@ namespace ODataPad.DataModel
             var item = new DataItem(
                 service.Name + ":" + table.ActualName + "." + column.ActualName,
                 column.ActualName,
-                "TODO",
+                column.PropertyType.ToString().Split('.').Last() + (column.IsNullable ? ("(null)") : null),
                 null,
                 null,
                 null,
