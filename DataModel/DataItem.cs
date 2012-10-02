@@ -29,6 +29,13 @@ namespace ODataPad.DataModel
             set { this.SetProperty(ref this._elements, value); }
         }
 
+        private IEnumerable<IDictionary<string, object>> _results;
+        public IEnumerable<IDictionary<string, object>> Results
+        {
+            get { return this._results; }
+            set { this.SetProperty(ref this._results, value); }
+        }
+
         private DataGroup _group;
         public DataGroup Group
         {

@@ -15,8 +15,7 @@
         <!-- Collection of items displayed by this page -->
         <CollectionViewSource
             x:Name="itemsViewSource"
-            Source="{Binding ItemElements}"
-            d:Source="{Binding RootItem.Elements, Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}"/>
+            Source="{Binding ItemElements}"/>
     </Page.Resources>
 
     <common:LayoutAwarePage.BottomAppBar>
@@ -42,8 +41,7 @@
     -->
     <Grid
         Style="{StaticResource LayoutRootStyle}"
-        DataContext="{Binding Item}"
-        d:DataContext="{Binding RootItem, Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}">
+        DataContext="{Binding Item}" >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
@@ -65,7 +63,7 @@
                 Click="GoBack"
                 IsEnabled="{Binding DefaultViewModel.CanGoBack, ElementName=pageRoot}"
                 Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{Binding Title}" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="ODataPad" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
 
         <!-- Vertical scrolling item list -->
@@ -88,8 +86,7 @@
             Grid.Column="1"
             Grid.RowSpan="2"
             Margin="20,40,0,0"
-            DataContext="{Binding SelectedItem, ElementName=itemListView}"
-            d:DataContext="{Binding RootItem.Elements[0], Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}">
+            DataContext="{Binding SelectedItem, ElementName=itemListView}">
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -139,7 +136,6 @@
                 Margin="20,0,0,0"
                 Width="500"
                 DataContext="{Binding SelectedItem, ElementName=itemCollection}"
-                d:DataContext="{Binding RootItem.Elements[0], Source={d:DesignInstance Type=model:ServiceDataSource, IsDesignTimeCreatable=True}}"
                 ItemsSource="{Binding Elements}" 
                 ItemTemplate="{StaticResource Custom80ItemTemplate}" 
                 SelectionMode="None" />

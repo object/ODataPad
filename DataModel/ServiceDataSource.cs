@@ -33,7 +33,6 @@ namespace ODataPad.DataModel
     public sealed class ServiceDataSource
     {
         private static ServiceDataSource _serviceDataSource = new ServiceDataSource();
-
         private DataItem _rootItem;
 
         public DataItem RootItem

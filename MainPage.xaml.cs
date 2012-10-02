@@ -229,7 +229,7 @@ namespace ODataPad
         private void dataButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedCollection = itemCollection.SelectedItem as DataItem;
-            var ok = this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
+            this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
         }
     }
 }
