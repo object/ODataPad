@@ -189,5 +189,48 @@ namespace ODataPad
         }
 
         #endregion
+
+        private void bottomAppBar_Opened(object sender, object e)
+        {
+            var buttons = this.leftStackPanel.Children;
+            foreach (var button in buttons)
+            {
+                button.Visibility = this.itemListView.SelectedItem == null ? Visibility.Collapsed : Visibility.Visible;
+                if (this.itemListView.SelectedItem != null)
+                {
+                    buttons.First().Visibility = this.itemCollection.SelectedItem == null ? Visibility.Collapsed : Visibility.Visible;
+                }
+            }
+        }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (e.OriginalSource as Button);
+
+        }
+
+        private void removeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (e.OriginalSource as Button);
+
+        }
+
+        private void editButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (e.OriginalSource as Button);
+
+        }
+
+        private void refreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (e.OriginalSource as Button);
+
+        }
+
+        private void dataButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedCollection = itemCollection.SelectedItem as DataItem;
+            this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
+        }
     }
 }

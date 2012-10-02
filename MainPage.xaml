@@ -20,16 +20,16 @@
     </Page.Resources>
 
     <common:LayoutAwarePage.BottomAppBar>
-        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0">
+        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Opened="bottomAppBar_Opened">
             <Grid>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource EditAppBarButtonStyle}"/>
-                    <Button Style="{StaticResource RemoveAppBarButtonStyle}"/>
-                    <Button Style="{StaticResource DataAppBarButtonStyle}" />
-                    <Button Style="{StaticResource RefreshAppBarButtonStyle}"/>
+                <StackPanel x:Name="leftStackPanel" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/>
+                    <Button Style="{StaticResource EditAppBarButtonStyle}" Click="editButton_Click"/>
+                    <Button Style="{StaticResource RemoveAppBarButtonStyle}" Click="removeButton_Click"/>
+                    <Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="refreshButton_Click"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource AddAppBarButtonStyle}"/>
+                <StackPanel x:Name="rightStackPanel" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource AddAppBarButtonStyle}" Click="addButton_Click"/>
                 </StackPanel>
             </Grid>
         </AppBar>
