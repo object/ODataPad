@@ -25,6 +25,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Style="{StaticResource EditAppBarButtonStyle}"/>
                     <Button Style="{StaticResource RemoveAppBarButtonStyle}"/>
+                    <Button Style="{StaticResource DataAppBarButtonStyle}" />
                     <Button Style="{StaticResource RefreshAppBarButtonStyle}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

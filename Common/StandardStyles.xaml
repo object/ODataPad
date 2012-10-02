@@ -562,6 +562,22 @@
         <Setter Property="Content" Value="&#xE196;"/>
     </Style>
 
+    
+    
+    
+    <Style x:Key="ListAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+        <Setter Property="AutomationProperties.AutomationId" Value="ListAppBarButton"/>
+        <Setter Property="AutomationProperties.Name" Value="List"/>
+        <Setter Property="Content" Value="&#xE14C;"/>
+    </Style>
+
+    <Style x:Key="DataAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+        <Setter Property="AutomationProperties.AutomationId" Value="DataAppBarButton"/>
+        <Setter Property="AutomationProperties.Name" Value="Data"/>
+        <Setter Property="Content" Value="&#xE14C;"/>
+    </Style>
+
+
     <!--
     
     <Style x:Key="SkipBackAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
