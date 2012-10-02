@@ -46,11 +46,11 @@ namespace ODataPad
                 navigationParameter = pageState["SelectedItem"];
             }
 
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var item = ServiceDataSource.GetItem((String)navigationParameter);
-            this.DefaultViewModel["Group"] = item.Group;
-            this.DefaultViewModel["Items"] = item.Group.Items;
-            this.flipView.SelectedItem = item;
+            var itemId = navigationParameter.ToString();
+            var item = ServiceDataSource.GetItem(itemId);
+            this.DefaultViewModel["Item"] = item;
+            this.DefaultViewModel["ItemElements"] = item.Elements;
+            //this.gridView.SelectedItem = item;
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace ODataPad
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
-            var selectedItem = (DataItem)this.flipView.SelectedItem;
-            pageState["SelectedItem"] = selectedItem.UniqueId;
+            //var selectedItem = (DataItem)this.gridView.SelectedItem;    
+            //pageState["SelectedItem"] = selectedItem.UniqueId;
         }
     }
 }

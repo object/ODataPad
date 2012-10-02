@@ -44,13 +44,12 @@ namespace ODataPad
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var group = ServiceDataSource.GetGroup((String)navigationParameter);
-            if (group == null)
+            var item = ServiceDataSource.GetItem((String)navigationParameter);
+            if (item == null)
                 return;
 
-            this.DefaultViewModel["Group"] = group;
-            this.DefaultViewModel["Items"] = group.Items;
+            this.DefaultViewModel["Item"] = item;
+            this.DefaultViewModel["ItemElements"] = item.Elements;
 
             if (pageState == null)
             {
@@ -230,7 +229,7 @@ namespace ODataPad
         private void dataButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedCollection = itemCollection.SelectedItem as DataItem;
-            this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
+            var ok = this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
         }
     }
 }

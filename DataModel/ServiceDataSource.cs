@@ -34,65 +34,76 @@ namespace ODataPad.DataModel
     {
         private static ServiceDataSource _serviceDataSource = new ServiceDataSource();
 
-        private ObservableCollection<DataGroup> _allGroups = new ObservableCollection<DataGroup>();
-        public ObservableCollection<DataGroup> AllGroups
+        private DataItem _rootItem;
+
+        public DataItem RootItem
         {
-            get { return this._allGroups; }
+            get { return _rootItem; }
         }
 
-        public static IEnumerable<DataGroup> GetGroups(string uniqueId)
+        public static DataItem GetItem(string itemId)
         {
-            if (!uniqueId.Equals("ServiceGroups")) throw new ArgumentException("Only 'ServiceGroups' is supported as a collection of groups");
-
-            return _serviceDataSource.AllGroups;
+            return GetItem(_serviceDataSource.RootItem, itemId);
         }
 
-        public static DataGroup GetGroup(string uniqueId)
+        private static DataItem GetItem(DataItem parent, string itemId)
         {
-            // Simple linear search is acceptable for small data sets
-            var matches = _serviceDataSource.AllGroups.Where((group) => group.UniqueId.Equals(uniqueId));
-            if (matches.Count() == 1) return matches.First();
-            return null;
-        }
+            if (itemId == parent.UniqueId)
+                return parent;
 
-        public static DataItem GetItem(string uniqueId)
-        {
-            // Simple linear search is acceptable for small data sets
-            var matches = _serviceDataSource.AllGroups.SelectMany(group => group.Items).Where((item) => item.UniqueId.Equals(uniqueId));
-            if (matches.Count() == 1) return matches.First();
+            int parentLevels = string.IsNullOrEmpty(parent.UniqueId) ? 0 : parent.UniqueId.Split('/').Count();
+            int itemLevels = itemId.Split('/').Count();
+            if (itemLevels == parentLevels + 1)
+            {
+                var matches = parent.Elements.Where(x => x.UniqueId.Equals(itemId));
+                if (matches.Count() == 1) 
+                    return matches.First();
+                else 
+                    return null;
+            }
+            else
+            {
+                var matches = parent.Elements.Where(x => itemId.StartsWith(x.UniqueId));
+                if (matches.Count() == 1)
+                    return GetItem(matches.First(), itemId);
+                else
+                    return null;
+            }
             return null;
         }
 
         private ServiceDataSource()
         {
-            var serviceDataGroup = new DataGroup("ServiceGroup",
+            _rootItem = new DataItem("",
                     "ODataPad",
                     "Registered OData services",
                     "Assets/DarkGray.png",
-                    "Description for registered OData services");
+                    "Description for registered OData services",
+                    null,
+                    null);
+
             if (App.AppData.Services != null)
             {
                 foreach (var service in App.AppData.Services)
                 {
-                    var item = CreateServiceItem(serviceDataGroup, service);
-                    serviceDataGroup.Items.Add(item);
+                    var item = CreateServiceItem(service);
+                    _rootItem.Elements.Add(item);
                 }
             }
-            this.AllGroups.Add(serviceDataGroup);
         }
 
-        private DataItem CreateServiceItem(DataGroup serviceDataGroup, ServiceInfo service)
+        private DataItem CreateServiceItem(ServiceInfo service)
         {
             var metadata = service.MetadataCache;
             var schema = ODataClient.ParseSchemaString(metadata);
             var item = new DataItem(
-                service.Uri,
+                service.Name,
                 service.Name,
                 service.Uri,
                 "Samples/" + service.Name + ".png",
                 service.Description,
                 metadata,
-                serviceDataGroup
+                null
                 );
             foreach (var table in schema.Tables)
             {
@@ -105,7 +116,7 @@ namespace ODataPad.DataModel
         private DataItem CreateTableItem(ServiceInfo service, Table table)
         {
             var item = new DataItem(
-                service.Name + ":" + table.ActualName,
+                service.Name + "/" + table.ActualName,
                 table.ActualName,
                 string.Format("{0} properties, {1} relations", table.Columns.Count(), table.Associations.Count()),
                 null,
@@ -128,7 +139,7 @@ namespace ODataPad.DataModel
         private DataItem CreateColumnItem(ServiceInfo service, Table table, Column column)
         {
             var item = new DataItem(
-                service.Name + ":" + table.ActualName + "." + column.ActualName,
+                service.Name + "/" + table.ActualName + "/" + column.ActualName,
                 column.ActualName,
                 column.PropertyType.ToString().Split('.').Last() + (column.IsNullable ? ("(null)") : null),
                 null,
@@ -141,7 +152,7 @@ namespace ODataPad.DataModel
         private DataItem CreateAssociationItem(ServiceInfo service, Table table, Association association)
         {
             var item = new DataItem(
-                service.Name + ":" + table.ActualName + "." + association.ActualName,
+                service.Name + "/" + table.ActualName + "/" + association.ActualName,
                 association.ActualName,
                 association.Multiplicity,
                 null,
