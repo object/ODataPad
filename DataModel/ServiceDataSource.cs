@@ -73,7 +73,7 @@ namespace ODataPad.DataModel
 
         public static void AddServiceItem(ServiceInfo service)
         {
-            _serviceDataSource.CreateServiceItem(service);
+            _serviceDataSource.RootItem.Elements.Add(_serviceDataSource.CreateServiceItem(service));
         }
 
         public static void UpdateServiceItem(DataItem serviceItem, ServiceInfo service)
@@ -111,7 +111,7 @@ namespace ODataPad.DataModel
                 service.Name,
                 service.Name,
                 service.Uri,
-                "Samples/" + service.Name + ".png",
+                "Samples/" + (service.Logo ?? service.Name) + ".png",
                 service.Description,
                 metadata,
                 null

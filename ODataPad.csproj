@@ -127,6 +127,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Samples\Custom.png" />
     <Content Include="Samples\DBpedia.png" />
     <Content Include="Samples\Devexpress Channel.png" />
     <Content Include="Samples\ebay.edmx" />

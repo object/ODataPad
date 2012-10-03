@@ -4,9 +4,12 @@ using System.IO;
 using System.Linq;
 using ODataPad.Common;
 using ODataPad.DataModel;
+using Simple.OData.Client;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -175,10 +178,6 @@ namespace ODataPad
             foreach (var button in buttons)
             {
                 button.Visibility = this.itemListView.SelectedItem == null ? Visibility.Collapsed : Visibility.Visible;
-                //if (this.itemListView.SelectedItem != null)
-                //{
-                //    buttons.First().Visibility = this.itemCollection.SelectedItem == null ? Visibility.Collapsed : Visibility.Visible;
-                //}
             }
         }
 
@@ -204,6 +203,9 @@ namespace ODataPad
         {
             this.bottomAppBar.IsOpen = false;
             _editedItem = null;
+            this.serviceName.Text = string.Empty;
+            this.serviceUrl.Text = string.Empty;
+            this.serviceDescription.Text = string.Empty;
             this.editPopup.IsOpen = true;
             RefreshSaveButtonState();
         }
@@ -211,6 +213,7 @@ namespace ODataPad
         private void removeButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
+            RemoveService();
         }
 
         private void editButton_Click(object sender, RoutedEventArgs e)
@@ -244,25 +247,9 @@ namespace ODataPad
         private void editSaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (_editedItem == null)
-            {
-                ServiceDataSource.AddServiceItem(
-                                                    new ServiceInfo()
-                                                    {
-                                                        Name = this.serviceName.Text,
-                                                        Uri = this.serviceUrl.Text,
-                                                        Description = this.serviceDescription.Text
-                                                    });
-            }
+                AddService();
             else
-            {
-                ServiceDataSource.UpdateServiceItem(_editedItem,
-                                                    new ServiceInfo()
-                                                    {
-                                                        Name = this.serviceName.Text,
-                                                        Uri = this.serviceUrl.Text,
-                                                        Description = this.serviceDescription.Text
-                                                    });
-            }
+                UpdateService();
 
             this.editPopup.IsOpen = false;
         }
@@ -288,6 +275,53 @@ namespace ODataPad
                 !string.IsNullOrEmpty(this.serviceName.Text) &&
                 !string.IsNullOrEmpty(this.serviceUrl.Text) &&
                 !string.IsNullOrEmpty(this.serviceDescription.Text);
+        }
+
+        private void AddService()
+        {
+            var item = ServiceDataSource.GetItem(this.serviceName.Text);
+            if (item != null)
+            {
+                var dialog = new MessageDialog("A service with this name already exists.");
+                dialog.ShowAsync();
+            }
+            else
+            {
+                var serviceInfo = new ServiceInfo()
+                                      {
+                                          Name = this.serviceName.Text,
+                                          Uri = this.serviceUrl.Text,
+                                          Description = this.serviceDescription.Text,
+                                          Logo = "Custom"
+                                      };
+                var metadata = ODataClient.GetSchemaAsString(serviceInfo.Uri);
+                serviceInfo.MetadataCache = metadata;
+                ServiceDataSource.AddServiceItem(serviceInfo);
+            }
+        }
+
+        private void UpdateService()
+        {
+            var serviceInfo = new ServiceInfo()
+            {
+                Name = this.serviceName.Text,
+                Uri = this.serviceUrl.Text,
+                Description = this.serviceDescription.Text
+            };
+            if (_editedItem.Subtitle != serviceInfo.Uri)
+            {
+                var metadata = ODataClient.GetSchemaAsString(serviceInfo.Uri);
+                serviceInfo.MetadataCache = metadata;
+            }
+            ServiceDataSource.UpdateServiceItem(_editedItem, serviceInfo);
+        }
+
+        private static void RemoveService()
+        {
+            var dialog = new MessageDialog("Are you sure you want to delete this service?");
+            dialog.Commands.Add(new UICommand("Yes", command => { }));
+            dialog.Commands.Add(new UICommand("No", command => { }));
+            dialog.ShowAsync();
         }
     }
 }

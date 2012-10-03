@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ODataPad.DataModel
 {
@@ -22,8 +23,8 @@ namespace ODataPad.DataModel
             set { this.SetProperty(ref this._content, value); }
         }
 
-        private IList<DataItem> _elements = new List<DataItem>();
-        public IList<DataItem> Elements
+        private ObservableCollection<DataItem> _elements = new ObservableCollection<DataItem>();
+        public ObservableCollection<DataItem> Elements
         {
             get { return this._elements; }
             set { this.SetProperty(ref this._elements, value); }
