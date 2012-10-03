@@ -175,10 +175,10 @@ namespace ODataPad
             foreach (var button in buttons)
             {
                 button.Visibility = this.itemListView.SelectedItem == null ? Visibility.Collapsed : Visibility.Visible;
-                if (this.itemListView.SelectedItem != null)
-                {
-                    buttons.First().Visibility = this.itemCollection.SelectedItem == null ? Visibility.Collapsed : Visibility.Visible;
-                }
+                //if (this.itemListView.SelectedItem != null)
+                //{
+                //    buttons.First().Visibility = this.itemCollection.SelectedItem == null ? Visibility.Collapsed : Visibility.Visible;
+                //}
             }
         }
 
@@ -195,14 +195,14 @@ namespace ODataPad
 
         private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
+            //if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
 
-            this.bottomAppBar.IsOpen = e.AddedItems.Count > 0;
+            //this.bottomAppBar.IsOpen = e.AddedItems.Count > 0;
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            this.bottomAppBar.Visibility = Visibility.Collapsed;
+            this.bottomAppBar.IsOpen = false;
             _editedItem = null;
             this.editPopup.IsOpen = true;
             RefreshSaveButtonState();
@@ -210,12 +210,12 @@ namespace ODataPad
 
         private void removeButton_Click(object sender, RoutedEventArgs e)
         {
-            this.bottomAppBar.Visibility = Visibility.Collapsed;
+            this.bottomAppBar.IsOpen = false;
         }
 
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
-            this.bottomAppBar.Visibility = Visibility.Collapsed;
+            this.bottomAppBar.IsOpen = false;
             _editedItem = this.itemListView.SelectedItem as DataItem;
             this.serviceName.Text = _editedItem.Title;
             this.serviceUrl.Text = _editedItem.Subtitle;
@@ -226,12 +226,12 @@ namespace ODataPad
 
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            this.bottomAppBar.Visibility = Visibility.Collapsed;
+            this.bottomAppBar.IsOpen = false;
         }
 
         private void dataButton_Click(object sender, RoutedEventArgs e)
         {
-            this.bottomAppBar.Visibility = Visibility.Collapsed;
+            this.bottomAppBar.IsOpen = false;
             var selectedCollection = itemCollection.SelectedItem as DataItem;
             this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
         }

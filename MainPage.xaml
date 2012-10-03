@@ -22,7 +22,7 @@
         <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Opened="bottomAppBar_Opened" Closed="bottomAppBar_Closed">
             <Grid>
                 <StackPanel x:Name="leftStackPanel" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/>
+                    <!--Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/-->
                     <Button Style="{StaticResource EditAppBarButtonStyle}" Click="editButton_Click"/>
                     <Button Style="{StaticResource RemoveAppBarButtonStyle}" Click="removeButton_Click"/>
                     <Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="refreshButton_Click"/>
