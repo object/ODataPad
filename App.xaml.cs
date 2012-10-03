@@ -130,5 +130,14 @@ namespace ODataPad
 
             deferral.Complete();
         }
+
+        public static DataItem GetDataItemFromNavigationParameter(object navigationParameter)
+        {
+            return navigationParameter == null ?
+                null :
+                navigationParameter is DataItem ?
+                navigationParameter as DataItem :
+                ServiceDataSource.GetItem(navigationParameter.ToString());
+        }
     }
 }

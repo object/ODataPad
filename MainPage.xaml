@@ -19,7 +19,7 @@
     </Page.Resources>
 
     <common:LayoutAwarePage.BottomAppBar>
-        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Opened="bottomAppBar_Opened">
+        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Opened="bottomAppBar_Opened" Closed="bottomAppBar_Closed">
             <Grid>
                 <StackPanel x:Name="leftStackPanel" Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/>
@@ -39,7 +39,7 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    <Grid
+    <Grid x:Name="rootPanel"
         Style="{StaticResource LayoutRootStyle}"
         DataContext="{Binding Item}" >
 
@@ -78,7 +78,7 @@
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             IsSwipeEnabled="False"
             SelectionChanged="ItemListView_SelectionChanged"
-            ItemTemplate="{StaticResource Custom130ItemTemplate}" />
+            ItemTemplate="{StaticResource Custom130ItemTemplate}" SelectionMode="Single" />
 
         <!-- Details for selected item -->
         <Grid
@@ -127,9 +127,9 @@
                 TabIndex="2"
                 Margin="20,0,0,0"
                 Width="500"
-                SelectionChanged="ItemListView_SelectionChanged"
+                SelectionChanged="ItemCollection_SelectionChanged"
                 ItemsSource="{Binding Elements}"
-                ItemTemplate="{StaticResource Custom80ItemTemplate}" />
+                ItemTemplate="{StaticResource Custom80ItemTemplate}" SelectionMode="Single" />
 
                 <ListView 
                 TabIndex="3"
@@ -142,6 +142,55 @@
             </StackPanel>
 
         </Grid>
+
+        <Popup x:Name="editPopup" HorizontalAlignment="Center">
+            <Border x:Name="editBorder" Background="RoyalBlue">
+
+                <Grid x:Name="editPanel">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="editBackButton" 
+                        Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top" Margin="30,35,20,0"
+                            Click="editBackButton_Click" />
+                    <Button x:Name="editSaveButton" Grid.Column="4" VerticalAlignment="Top" Margin="0,25,0,0"
+                            Style="{StaticResource SaveAppBarButtonStyle}" Click="editSaveButton_Click"/>
+                    <TextBlock Grid.Column="1" Text="Service Details" Margin="10,5,20,0" Padding="0,35" Style="{StaticResource SubheaderTextStyle}"/>
+                    <Grid Grid.Column="2" Margin="20,20,20,25">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Name:" Margin="0,0,0,5" Style="{StaticResource BasicTextStyle}"/>
+                        <TextBox x:Name="serviceName" Width="250" HorizontalAlignment="Left" Grid.Row="1" TextChanged="serviceName_TextChanged" />
+                        <TextBlock Text="URL:" Margin="0,0,0,5" Style="{StaticResource BasicTextStyle}" Grid.Row="2"/>
+                        <TextBox x:Name="serviceUrl" Width="500" Grid.Row="3" InputScope="Url" TextChanged="serviceUrl_TextChanged"/>
+                        <TextBlock Text="Description:" Margin="0,0,0,5" Grid.Row="4" Style="{StaticResource BasicTextStyle}" />
+                        <TextBox x:Name="serviceDescription" Grid.Row="5" Width="500" AcceptsReturn="True" TextChanged="serviceDescription_TextChanged" />
+                    </Grid>
+                    <Grid Grid.Column="3" Margin="20,20,20,25">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="80"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </Grid>
+
+            </Border>
+        </Popup>
 
         <VisualStateManager.VisualStateGroups>
 

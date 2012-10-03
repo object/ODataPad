@@ -71,6 +71,18 @@ namespace ODataPad.DataModel
             return null;
         }
 
+        public static void AddServiceItem(ServiceInfo service)
+        {
+            _serviceDataSource.CreateServiceItem(service);
+        }
+
+        public static void UpdateServiceItem(DataItem serviceItem, ServiceInfo service)
+        {
+            serviceItem.Title = service.Name;
+            serviceItem.Subtitle = service.Uri;
+            serviceItem.Description = service.Description;
+        }
+
         private ServiceDataSource()
         {
             _rootItem = new DataItem("",

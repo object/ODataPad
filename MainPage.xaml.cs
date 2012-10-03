@@ -26,6 +26,8 @@ namespace ODataPad
     /// </summary>
     public sealed partial class MainPage : ODataPad.Common.LayoutAwarePage
     {
+        private DataItem _editedItem;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -44,7 +46,7 @@ namespace ODataPad
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            var item = ServiceDataSource.GetItem((String)navigationParameter);
+            var item = App.GetDataItemFromNavigationParameter(navigationParameter);
             if (item == null)
                 return;
 
@@ -54,12 +56,6 @@ namespace ODataPad
             if (pageState == null)
             {
                 this.itemListView.SelectedItem = null;
-                // When this is a new page, select the first item automatically unless logical page
-                // navigation is being used (see the logical page navigation #region below.)
-                if (!this.UsingLogicalPageNavigation() && this.itemsViewSource.View != null)
-                {
-                    this.itemsViewSource.View.MoveCurrentToFirst();
-                }
             }
             else
             {
@@ -113,22 +109,6 @@ namespace ODataPad
             if (viewState == null) viewState = ApplicationView.Value;
             return viewState == ApplicationViewState.FullScreenPortrait ||
                 viewState == ApplicationViewState.Snapped;
-        }
-
-        /// <summary>
-        /// Invoked when an item within the list is selected.
-        /// </summary>
-        /// <param name="sender">The GridView (or ListView when the application is Snapped)
-        /// displaying the selected item.</param>
-        /// <param name="e">Event data that describes how the selection was changed.</param>
-        void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Invalidate the view state when logical page navigation is in effect, as a change
-            // in selection may cause a corresponding change in the current logical page.  When
-            // an item is selected this has the effect of changing from displaying the item list
-            // to showing the selected item's details.  When the selection is cleared this has the
-            // opposite effect.
-            if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
         }
 
         /// <summary>
@@ -202,34 +182,112 @@ namespace ODataPad
             }
         }
 
+        private void bottomAppBar_Closed(object sender, object e)
+        {
+        }
+
+        void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
+
+            this.bottomAppBar.IsOpen = e.AddedItems.Count > 0;
+        }
+
+        private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
+
+            this.bottomAppBar.IsOpen = e.AddedItems.Count > 0;
+        }
+
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = (e.OriginalSource as Button);
-
+            this.bottomAppBar.Visibility = Visibility.Collapsed;
+            _editedItem = null;
+            this.editPopup.IsOpen = true;
+            RefreshSaveButtonState();
         }
 
         private void removeButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = (e.OriginalSource as Button);
-
+            this.bottomAppBar.Visibility = Visibility.Collapsed;
         }
 
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = (e.OriginalSource as Button);
-
+            this.bottomAppBar.Visibility = Visibility.Collapsed;
+            _editedItem = this.itemListView.SelectedItem as DataItem;
+            this.serviceName.Text = _editedItem.Title;
+            this.serviceUrl.Text = _editedItem.Subtitle;
+            this.serviceDescription.Text = _editedItem.Description;
+            this.editPopup.IsOpen = true;
+            RefreshSaveButtonState();
         }
 
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = (e.OriginalSource as Button);
-
+            this.bottomAppBar.Visibility = Visibility.Collapsed;
         }
 
         private void dataButton_Click(object sender, RoutedEventArgs e)
         {
+            this.bottomAppBar.Visibility = Visibility.Collapsed;
             var selectedCollection = itemCollection.SelectedItem as DataItem;
             this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
+        }
+
+        private void editBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.editPopup.IsOpen = false;
+        }
+
+        private void editSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_editedItem == null)
+            {
+                ServiceDataSource.AddServiceItem(
+                                                    new ServiceInfo()
+                                                    {
+                                                        Name = this.serviceName.Text,
+                                                        Uri = this.serviceUrl.Text,
+                                                        Description = this.serviceDescription.Text
+                                                    });
+            }
+            else
+            {
+                ServiceDataSource.UpdateServiceItem(_editedItem,
+                                                    new ServiceInfo()
+                                                    {
+                                                        Name = this.serviceName.Text,
+                                                        Uri = this.serviceUrl.Text,
+                                                        Description = this.serviceDescription.Text
+                                                    });
+            }
+
+            this.editPopup.IsOpen = false;
+        }
+
+        private void serviceName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RefreshSaveButtonState();
+        }
+
+        private void serviceUrl_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RefreshSaveButtonState();
+        }
+
+        private void serviceDescription_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RefreshSaveButtonState();
+        }
+
+        private void RefreshSaveButtonState()
+        {
+            this.editSaveButton.IsEnabled =
+                !string.IsNullOrEmpty(this.serviceName.Text) &&
+                !string.IsNullOrEmpty(this.serviceUrl.Text) &&
+                !string.IsNullOrEmpty(this.serviceDescription.Text);
         }
     }
 }
