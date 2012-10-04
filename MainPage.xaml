@@ -25,7 +25,7 @@
                     <!--Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/-->
                     <Button Style="{StaticResource EditAppBarButtonStyle}" Click="editButton_Click"/>
                     <Button Style="{StaticResource RemoveAppBarButtonStyle}" Click="removeButton_Click"/>
-                    <Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="refreshButton_Click"/>
+                    <!--Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="refreshButton_Click"/-->
                 </StackPanel>
                 <StackPanel x:Name="rightStackPanel" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource AddAppBarButtonStyle}" Click="addButton_Click"/>

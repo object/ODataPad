@@ -73,14 +73,23 @@ namespace ODataPad.DataModel
 
         public static void AddServiceItem(ServiceInfo service)
         {
+            if (service.MetadataCache == null)
+            {
+                RefreshMetadataCache(service);
+            }
             _serviceDataSource.RootItem.Elements.Add(_serviceDataSource.CreateServiceItem(service));
         }
 
         public static void UpdateServiceItem(DataItem serviceItem, ServiceInfo service)
         {
+            if (service.MetadataCache == null)
+            {
+                RefreshMetadataCache(service);
+            }
             serviceItem.Title = service.Name;
             serviceItem.Subtitle = service.Uri;
             serviceItem.Description = service.Description;
+            serviceItem.Content = service.Uri;
         }
 
         private ServiceDataSource()
@@ -171,6 +180,12 @@ namespace ODataPad.DataModel
                 null,
                 null);
             return item;
+        }
+
+        private static void RefreshMetadataCache(ServiceInfo service)
+        {
+            var metadata = ODataClient.GetSchemaAsString(service.Uri);
+            service.MetadataCache = metadata;
         }
     }
 }

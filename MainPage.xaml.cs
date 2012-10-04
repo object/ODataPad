@@ -59,6 +59,7 @@ namespace ODataPad
             if (pageState == null)
             {
                 this.itemListView.SelectedItem = null;
+                this.itemsViewSource.View.MoveCurrentToFirst();
             }
             else
             {
@@ -294,8 +295,6 @@ namespace ODataPad
                                           Description = this.serviceDescription.Text,
                                           Logo = "Custom"
                                       };
-                var metadata = ODataClient.GetSchemaAsString(serviceInfo.Uri);
-                serviceInfo.MetadataCache = metadata;
                 ServiceDataSource.AddServiceItem(serviceInfo);
             }
         }
@@ -310,8 +309,7 @@ namespace ODataPad
             };
             if (_editedItem.Subtitle != serviceInfo.Uri)
             {
-                var metadata = ODataClient.GetSchemaAsString(serviceInfo.Uri);
-                serviceInfo.MetadataCache = metadata;
+                serviceInfo.MetadataCache = null;
             }
             ServiceDataSource.UpdateServiceItem(_editedItem, serviceInfo);
         }
