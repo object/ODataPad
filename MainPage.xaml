@@ -143,7 +143,7 @@
 
         </Grid>
 
-        <Popup x:Name="editPopup" HorizontalAlignment="Center">
+        <Popup x:Name="editPopup" HorizontalAlignment="Center" IsLightDismissEnabled="True">
             <Border x:Name="editBorder" Background="RoyalBlue">
 
                 <Grid x:Name="editPanel">
@@ -176,9 +176,9 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" Margin="0,0,0,5" Style="{StaticResource BasicTextStyle}"/>
                         <TextBox x:Name="serviceName" Width="250" HorizontalAlignment="Left" Grid.Row="1" TextChanged="serviceName_TextChanged" />
-                        <TextBlock Text="URL:" Margin="0,0,0,5" Style="{StaticResource BasicTextStyle}" Grid.Row="2"/>
+                        <TextBlock Text="URL:" Margin="0,5,0,5" Style="{StaticResource BasicTextStyle}" Grid.Row="2"/>
                         <TextBox x:Name="serviceUrl" Width="500" Grid.Row="3" InputScope="Url" TextChanged="serviceUrl_TextChanged"/>
-                        <TextBlock Text="Description:" Margin="0,0,0,5" Grid.Row="4" Style="{StaticResource BasicTextStyle}" />
+                        <TextBlock Text="Description:" Margin="0,5,0,5" Grid.Row="4" Style="{StaticResource BasicTextStyle}" />
                         <TextBox x:Name="serviceDescription" Grid.Row="5" Width="500" AcceptsReturn="True" TextChanged="serviceDescription_TextChanged" />
                     </Grid>
                     <Grid Grid.Column="3" Margin="20,20,20,25">

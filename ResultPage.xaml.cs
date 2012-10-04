@@ -52,7 +52,7 @@ namespace ODataPad
             this.DefaultViewModel["Item"] = item;
             this.DefaultViewModel["ItemElements"] = item.Elements;
 
-            var serviceItem = ServiceDataSource.GetItem(itemId.Split('/').First());
+            var serviceItem = DataSource.Instance.GetItem(itemId.Split('/').First());
             var odataClient = new ODataClient(serviceItem.Subtitle);
             var results = (odataClient.FindEntries(itemId.Split('/').Last()).Take(10));
 

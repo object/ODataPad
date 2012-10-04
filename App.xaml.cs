@@ -137,7 +137,7 @@ namespace ODataPad
                 null :
                 navigationParameter is DataItem ?
                 navigationParameter as DataItem :
-                ServiceDataSource.GetItem(navigationParameter.ToString());
+                DataSource.Instance.GetItem(navigationParameter.ToString());
         }
     }
 }

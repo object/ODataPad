@@ -29,7 +29,8 @@ namespace ODataPad
     /// </summary>
     public sealed partial class MainPage : ODataPad.Common.LayoutAwarePage
     {
-        private DataItem _editedItem;
+        private ServiceDataItem _editedItem;
+        private bool _movingToFirst = false;
 
         public MainPage()
         {
@@ -59,14 +60,16 @@ namespace ODataPad
             if (pageState == null)
             {
                 this.itemListView.SelectedItem = null;
+                _movingToFirst = true;
                 this.itemsViewSource.View.MoveCurrentToFirst();
+                _movingToFirst = false;
             }
             else
             {
                 // Restore the previously saved state associated with this page
                 if (pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null)
                 {
-                    var selectedItem = ServiceDataSource.GetItem((String)pageState["SelectedItem"]);
+                    var selectedItem = DataSource.Instance.GetItem((String)pageState["SelectedItem"]);
                     this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
@@ -82,7 +85,7 @@ namespace ODataPad
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (DataItem)this.itemsViewSource.View.CurrentItem;
+                var selectedItem = (ServiceDataItem)this.itemsViewSource.View.CurrentItem;
                 if (selectedItem != null) pageState["SelectedItem"] = selectedItem.UniqueId;
             }
         }
@@ -190,7 +193,7 @@ namespace ODataPad
         {
             if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
 
-            this.bottomAppBar.IsOpen = e.AddedItems.Count > 0;
+            this.bottomAppBar.IsOpen = e.AddedItems.Count > 0 && !_movingToFirst;
         }
 
         private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -220,7 +223,7 @@ namespace ODataPad
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
-            _editedItem = this.itemListView.SelectedItem as DataItem;
+            _editedItem = this.itemListView.SelectedItem as ServiceDataItem;
             this.serviceName.Text = _editedItem.Title;
             this.serviceUrl.Text = _editedItem.Subtitle;
             this.serviceDescription.Text = _editedItem.Description;
@@ -236,7 +239,7 @@ namespace ODataPad
         private void dataButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
-            var selectedCollection = itemCollection.SelectedItem as DataItem;
+            var selectedCollection = itemCollection.SelectedItem as ServiceDataItem;
             this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
         }
 
@@ -280,7 +283,7 @@ namespace ODataPad
 
         private void AddService()
         {
-            var item = ServiceDataSource.GetItem(this.serviceName.Text);
+            var item = DataSource.Instance.GetItem(this.serviceName.Text);
             if (item != null)
             {
                 var dialog = new MessageDialog("A service with this name already exists.");
@@ -295,7 +298,7 @@ namespace ODataPad
                                           Description = this.serviceDescription.Text,
                                           Logo = "Custom"
                                       };
-                ServiceDataSource.AddServiceItem(serviceInfo);
+                DataSource.Instance.AddServiceDataItem(serviceInfo);
             }
         }
 
@@ -311,7 +314,7 @@ namespace ODataPad
             {
                 serviceInfo.MetadataCache = null;
             }
-            ServiceDataSource.UpdateServiceItem(_editedItem, serviceInfo);
+            DataSource.Instance.UpdateServiceDataItem(_editedItem, serviceInfo);
         }
 
         private static void RemoveService()
