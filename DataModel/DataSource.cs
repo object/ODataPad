@@ -123,7 +123,7 @@ namespace ODataPad.DataModel
         public async Task<bool> RemoveServiceDataItemAsync(ServiceDataItem serviceItem)
         {
             _rootItem.Elements.Remove(serviceItem);
-            return true;
+            return await App.AppData.SaveServicesAsync();
         }
 
         private ServiceDataItem CreateServiceDataItem(ServiceInfo service)

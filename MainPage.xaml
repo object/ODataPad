@@ -207,7 +207,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="ItemTemplate">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Standard80ItemTemplate}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="Padding">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="60,0,66,0"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
@@ -223,7 +223,7 @@
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
 
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Visibility">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Padding">
@@ -251,19 +251,19 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.Row)">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="(Grid.Row)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.RowSpan)">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="(Grid.RowSpan)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="Margin">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanelGrid" Storyboard.TargetProperty="Margin">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,60"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="Padding">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="100,0,90,0"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
@@ -282,10 +282,10 @@
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
 
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
+                        <!--ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="320"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Visibility">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="ItemTemplate">
@@ -293,7 +293,7 @@
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Padding">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="20,0,0,0"/>
-                        </ObjectAnimationUsingKeyFrames>
+                        </ObjectAnimationUsingKeyFrames-->
                     </Storyboard>
                 </VisualState>
 
@@ -315,16 +315,16 @@
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
 
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
+                        <!--ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.Row)">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="(Grid.Row)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.RowSpan)">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="(Grid.RowSpan)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
@@ -336,7 +336,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Column)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailPanel" Storyboard.TargetProperty="Padding">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="20,0,20,0"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="Margin">
@@ -350,7 +350,7 @@
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemUri" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource CaptionTextStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
+                        </ObjectAnimationUsingKeyFrames-->
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>

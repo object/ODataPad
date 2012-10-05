@@ -366,12 +366,13 @@ namespace ODataPad
 
         private async void RemoveServiceAsync()
         {
+            var dataItem = this.itemListView.SelectedItem as ServiceDataItem;
             var serviceInfo = new ServiceInfo()
             {
-                Name = _editedItem.Title,
+                Name = dataItem.Title,
             };
             App.AppData.DeleteService(serviceInfo);
-            await DataSource.Instance.RemoveServiceDataItemAsync(_editedItem);
+            await DataSource.Instance.RemoveServiceDataItemAsync(dataItem);
         }
     }
 }

@@ -49,6 +49,12 @@ namespace ODataPad.DataModel
                 }
             }
 
+            foreach (var kv in localSettings.Containers[ServicesKey].Values
+                .Where(x => !this.Services.Any(y => x.Key == y.Name)))
+            {
+                localSettings.Containers[ServicesKey].Values.Remove(kv);
+            }
+
             return true;
         }
 
