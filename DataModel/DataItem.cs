@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Simple.OData.Client;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;

@@ -7,12 +7,12 @@ namespace ODataPad.DataModel
     public class PropertyDataItem : DataItem
     {
         public PropertyDataItem(ServiceInfo service, Table table, Column column)
-            : base(GetUniqueId(service, table, column), column.ActualName, GetColumnSummary(column), null, null)
+            : base(GetUniqueId(service.Name, table.ActualName, column.ActualName), column.ActualName, GetColumnSummary(column), null, null)
         {
         }
 
         public PropertyDataItem(ServiceInfo service, Table table, Association association)
-            : base(GetUniqueId(service, table, association), association.ActualName, GetAssociationSummary(association), null, null)
+            : base(GetUniqueId(service.Name, table.ActualName, association.ActualName), association.ActualName, GetAssociationSummary(association), null, null)
         {
         }
 

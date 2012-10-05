@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using ODataPad.DataModel;
 using Simple.OData.Client;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -72,9 +75,9 @@ namespace ODataPad.DataModel
             if (itemLevels == parentLevels + 1)
             {
                 var matches = parent.Elements.Where(x => x.UniqueId.Equals(itemId));
-                if (matches.Count() == 1) 
+                if (matches.Count() == 1)
                     return matches.First();
-                else 
+                else
                     return null;
             }
             else
@@ -85,7 +88,6 @@ namespace ODataPad.DataModel
                 else
                     return null;
             }
-            return null;
         }
 
         private void Initialize()
@@ -94,33 +96,35 @@ namespace ODataPad.DataModel
 
             if (App.AppData.Services != null)
             {
-                foreach (var service in App.AppData.Services)
+                foreach (var serviceInfo in App.AppData.Services)
                 {
-                    var item = CreateServiceDataItem(service);
+                    var item = CreateServiceDataItem(serviceInfo);
                     _rootItem.Elements.Add(item);
                 }
             }
         }
 
-        public void AddServiceDataItem(ServiceInfo service)
+        public async Task<bool> AddServiceDataItemAsync(ServiceInfo service)
         {
             if (service.MetadataCache == null)
             {
-                RefreshMetadataCache(service);
+                await RefreshMetadataCacheAsync(service);
             }
             _rootItem.Elements.Add(this.CreateServiceDataItem(service));
+            return await App.AppData.SaveServicesAsync();
         }
 
-        public void UpdateServiceDataItem(ServiceDataItem serviceItem, ServiceInfo service)
+        public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ServiceInfo service)
         {
-            if (service.MetadataCache == null)
-            {
-                RefreshMetadataCache(service);
-            }
             serviceItem.Title = service.Name;
             serviceItem.Subtitle = service.Uri;
             serviceItem.Description = service.Description;
-            serviceItem.MetadataCache = service.Uri;
+            serviceItem.MetadataCache = service.MetadataCache;
+            if (service.MetadataCache == null)
+            {
+                await RefreshMetadataCacheAsync(service);
+            }
+            return await App.AppData.SaveServicesAsync();
         }
 
         private ServiceDataItem CreateServiceDataItem(ServiceInfo service)
@@ -151,10 +155,25 @@ namespace ODataPad.DataModel
             return item;
         }
 
-        private void RefreshMetadataCache(ServiceInfo service)
+        private async Task<bool> RefreshMetadataCacheAsync(ServiceInfo service)
         {
-            var metadata = ODataClient.GetSchemaAsString(service.Uri);
+            var metadata = await LoadServiceMetadataAsync(service);
             service.MetadataCache = metadata;
+            service.CacheUpdated = DateTimeOffset.UtcNow;
+            var serviceItem = GetItem(service.Name) as ServiceDataItem;
+            serviceItem.MetadataCache = service.MetadataCache;
+            await AppData.SaveServiceMetadataCacheAsync(service);
+            return true;
+        }
+
+        private async Task<string> LoadServiceMetadataAsync(ServiceInfo service)
+        {
+            var task = Task<string>.Factory.StartNew(() =>
+            {
+                var metadata = ODataClient.GetSchemaAsString(service.Uri);
+                return metadata;
+            });
+            return task.Result;
         }
     }
 }

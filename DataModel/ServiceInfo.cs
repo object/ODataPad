@@ -10,5 +10,7 @@ namespace ODataPad.DataModel
         public string Logo { get; set; }
         public string MetadataCache { get; set; }
         public DateTimeOffset? CacheUpdated { get; set; }
+        public string MetadataCacheFilename { get { return this.Name + ".edmx"; } }
+        public int Index { get; set; }
     }
 }

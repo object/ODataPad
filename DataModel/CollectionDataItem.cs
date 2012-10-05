@@ -8,7 +8,7 @@ namespace ODataPad.DataModel
     public class CollectionDataItem : DataItem
     {
         public CollectionDataItem(ServiceInfo service, Table table)
-            : base(GetUniqueId(service, table), table.ActualName, GetCollectionSummary(table), null, null)
+            : base(GetUniqueId(service.Name, table.ActualName), table.ActualName, GetCollectionSummary(table), null, null)
         {
         }
 

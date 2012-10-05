@@ -10,7 +10,7 @@ namespace ODataPad.DataModel
     public class ServiceDataItem : DataItem
     {
         public ServiceDataItem(ServiceInfo service)
-            : base(GetUniqueId(service), service.Name, service.Uri, GetImagePath(service), service.Description)
+            : base(GetUniqueId(service.Name), service.Name, service.Uri, GetImagePath(service), service.Description)
         {
             _metadataCache = service.MetadataCache;
         }

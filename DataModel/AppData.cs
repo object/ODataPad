@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Storage;
+using Windows.Storage.Search;
 
 namespace ODataPad.DataModel
 {
@@ -14,40 +15,82 @@ namespace ODataPad.DataModel
     {
         public const int CurrentVersion = 2;
         public const string ServicesKey = "Services";
-        public IEnumerable<ServiceInfo> Services { get; set; }
+        public IList<ServiceInfo> Services { get; set; }
 
         public async Task<IEnumerable<ServiceInfo>> LoadServicesAsync()
         {
             var servicesWithMetadata = new List<ServiceInfo>();
             var localSettings = ApplicationData.Current.LocalSettings;
-            var xml = localSettings.Values[ServicesKey] as string;
-            if (string.IsNullOrEmpty(xml))
+            GetOrCreateContainer(ServicesKey);
+            foreach (var kv in localSettings.Containers[ServicesKey].Values)
             {
-                bool ok = await CreateSampleServicesAsync();
-                if (ok)
-                {
-                    xml = localSettings.Values[ServicesKey] as string;
-                }
-            }
-
-            var services = ParseServiceInfo(xml);
-            foreach (var serviceInfo in services)
-            {
+                var serviceInfo = ParseServiceInfo(kv.Value as string);
                 var serviceInfoWithMetadata = serviceInfo;
-                serviceInfoWithMetadata.MetadataCache = await LoadSettingFromFileAsync(serviceInfo.Name + ".edmx");
+                serviceInfoWithMetadata.MetadataCache = await LoadSettingFromFileAsync(serviceInfo.MetadataCacheFilename);
                 servicesWithMetadata.Add(serviceInfoWithMetadata);
             }
-            this.Services = servicesWithMetadata;
 
+            this.Services = servicesWithMetadata.OrderBy(x => x.Index).Select(x => x).ToList();
             return this.Services;
         }
 
-        public async Task<bool> ClearServicesAsync()
+        public async Task<bool> SaveServicesAsync()
+        {
+            var localSettings = ApplicationData.Current.LocalSettings;
+            GetOrCreateContainer(ServicesKey);
+
+            foreach (var serviceInfo in this.Services)
+            {
+                var xml = FormatServiceInfo(serviceInfo);
+                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = xml;
+                if (!string.IsNullOrEmpty(serviceInfo.MetadataCache))
+                {
+                    await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                }
+            }
+
+            return true;
+        }
+
+        public void ClearServicesAsync()
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values.Clear();
-            this.Services = new ServiceInfo[] {};
-            return true;
+            if (localSettings.Containers.ContainsKey(ServicesKey))
+            {
+                localSettings.DeleteContainer(ServicesKey);
+            }
+            this.Services = new ServiceInfo[] { };
+        }
+
+        public void AddService(ServiceInfo serviceInfo)
+        {
+            serviceInfo.Index = this.Services.Count;
+            this.Services.Add(serviceInfo);
+        }
+
+        public void UpdateService(string serviceName, ServiceInfo serviceInfo)
+        {
+            var originalService = this.Services.Where(x => x.Name == serviceName).Single();
+            originalService.Name = serviceInfo.Name;
+            originalService.Uri = serviceInfo.Uri;
+            originalService.Description = serviceInfo.Description;
+            originalService.Logo = serviceInfo.Logo;
+            originalService.MetadataCache = serviceInfo.MetadataCache;
+            originalService.CacheUpdated = serviceInfo.CacheUpdated;
+        }
+
+        public void DeleteService(ServiceInfo serviceInfo)
+        {
+            var originalService = this.Services.Where(x => x.Name == serviceInfo.Name).SingleOrDefault();
+            if (originalService != null)
+            {
+                this.Services.Remove(originalService);
+            }
+            for (int index = 0; index < this.Services.Count; index++)
+            {
+                this.Services[index].Index = index;
+            }
         }
 
         public async Task<bool> CreateSampleServicesAsync()
@@ -56,30 +99,57 @@ namespace ODataPad.DataModel
             var file = await resourceMap.GetSubtree("Files/Samples").GetValue("SampleServices.xml").GetValueAsFileAsync();
             var xml = await FileIO.ReadTextAsync(file);
 
-            var services = await CreateSampleServicesMetadataAsync(ParseServiceInfo(xml));
+            var services = await CreateSampleServicesMetadataAsync(ParseSampleServicesInfo(xml));
 
             var localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values[ServicesKey] = xml;
+            GetOrCreateContainer(ServicesKey);
+            int index = 0;
             foreach (var serviceInfo in services)
             {
-                await SaveSettingToFileAsync(serviceInfo.Name + ".edmx", serviceInfo.MetadataCache);
+                serviceInfo.Index = index;
+                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = FormatServiceInfo(serviceInfo);
+                await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                ++index;
             }
             return true;
         }
 
-        public static IEnumerable<ServiceInfo> ParseServiceInfo(string xml)
+        public static IEnumerable<ServiceInfo> ParseSampleServicesInfo(string xml)
         {
             XElement element = XElement.Parse(xml);
             var services = from e in element.Elements("Service")
-                   select new ServiceInfo()
-                   {
-                       Name = e.Element("Name").Value,
-                       Description = e.Element("Description").Value,
-                       Uri = e.Element("Uri").Value,
-                       MetadataCache = TryGetElementValue<string>(e, "MetadataCache"),
-                       CacheUpdated = TryGetElementValue<DateTimeOffset?>(e, "CacheUpdated")
-                   };
+                           select new ServiceInfo()
+                           {
+                               Name = e.Element("Name").Value,
+                               Description = e.Element("Description").Value,
+                               Uri = e.Element("Uri").Value,
+                               CacheUpdated = TryGetDateTimeValue(e, "CacheUpdated"),
+                           };
             return services;
+        }
+
+        public static ServiceInfo ParseServiceInfo(string xml)
+        {
+            XElement element = XElement.Parse(xml);
+                return new ServiceInfo()
+                {
+                    Name = element.Element("Name").Value,
+                    Description = element.Element("Description").Value,
+                    Uri = element.Element("Uri").Value,
+                    CacheUpdated = TryGetDateTimeValue(element, "CacheUpdated"),
+                    Index = TryGetIntValue(element, "Index"),
+                };
+        }
+
+        public static string FormatServiceInfo(ServiceInfo serviceInfo)
+        {
+            var element = new XElement("Service");
+            element.Add(new XElement("Name", serviceInfo.Name));
+            element.Add(new XElement("Uri", serviceInfo.Uri));
+            element.Add(new XElement("Description", serviceInfo.Description));
+            element.Add(new XElement("CacheUpdated", serviceInfo.CacheUpdated));
+            element.Add(new XElement("Index", serviceInfo.Index));
+            return element.ToString();
         }
 
         private async Task<IEnumerable<ServiceInfo>> CreateSampleServicesMetadataAsync(IEnumerable<ServiceInfo> services)
@@ -88,28 +158,54 @@ namespace ODataPad.DataModel
             var resourceMap = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap;
             foreach (var serviceInfo in services)
             {
-                var serviceInfoWithMetadata = serviceInfo;
-                var file = await resourceMap.GetSubtree("Files/Samples").GetValue(serviceInfo.Name + ".edmx").GetValueAsFileAsync();
-                serviceInfoWithMetadata.MetadataCache = await FileIO.ReadTextAsync(file);
-                serviceInfoWithMetadata.CacheUpdated = new DateTimeOffset(new DateTime(2012, 10, 1));
-                servicesWithMetadata.Add(serviceInfoWithMetadata);
+                var serviceWithMetadata = serviceInfo;
+                var file = await resourceMap.GetSubtree("Files/Samples").GetValue(serviceInfo.MetadataCacheFilename).GetValueAsFileAsync();
+                serviceWithMetadata.MetadataCache = await FileIO.ReadTextAsync(file);
+                serviceWithMetadata.CacheUpdated = new DateTimeOffset(new DateTime(2012, 10, 1));
+                servicesWithMetadata.Add(serviceWithMetadata);
             }
             return servicesWithMetadata;
         }
 
-        private static T TryGetElementValue<T>(XElement parent, string elementName)
+        private void GetOrCreateContainer(string containerName)
         {
-            var element = parent.Element(elementName);
-            return element == null ? default(T) : (T)Convert.ChangeType(element.Value, typeof(T));
+            var localSettings = ApplicationData.Current.LocalSettings;
+            if (!localSettings.Containers.ContainsKey(containerName))
+            {
+                localSettings.CreateContainer(ServicesKey, ApplicationDataCreateDisposition.Always);
+            }
         }
 
-        private async Task<string> LoadSettingFromFileAsync(string filename)
+        public async static Task<bool> SaveServiceMetadataCacheAsync(ServiceInfo serviceInfo)
+        {
+            return await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+        }
+
+        private static DateTimeOffset? TryGetDateTimeValue(XElement parent, string elementName)
+        {
+            var element = parent.Element(elementName);
+            return element == null ? 
+                null : string.IsNullOrEmpty(element.Value) ?
+                null :
+                new DateTimeOffset?(DateTimeOffset.Parse(element.Value));
+        }
+
+        private static int TryGetIntValue(XElement parent, string elementName)
+        {
+            var element = parent.Element(elementName);
+            return element == null ?
+                0 : string.IsNullOrEmpty(element.Value) ?
+                0 :
+                int.Parse(element.Value);
+        }
+
+        private static async Task<string> LoadSettingFromFileAsync(string filename)
         {
             StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             return await FileIO.ReadTextAsync(file);
         }
 
-        private async Task<bool> SaveSettingToFileAsync(string filename, string text)
+        private static async Task<bool> SaveSettingToFileAsync(string filename, string text)
         {
             StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, text);

@@ -110,18 +110,23 @@ namespace ODataPad
         private async Task<bool> LoadAppDataAsync()
         {
             AppData = new AppData();
-            await ApplicationData.Current.SetVersionAsync(AppData.CurrentVersion, SetVersionHandler);
-            await AppData.LoadServicesAsync();
+            await ApplicationData.Current.SetVersionAsync(AppData.CurrentVersion, SetVersionHandlerAsync);
+            var services = await AppData.LoadServicesAsync();
+            if (services.Count() == 0)
+            {
+                await AppData.CreateSampleServicesAsync();
+                await AppData.LoadServicesAsync();
+            }
             return true;
         }
 
-        private async void SetVersionHandler(SetVersionRequest request)
+        private async void SetVersionHandlerAsync(SetVersionRequest request)
         {
             SetVersionDeferral deferral = request.GetDeferral();
 
             if (request.DesiredVersion == 1)
             {
-                await AppData.ClearServicesAsync();
+                AppData.ClearServicesAsync();
             }
             else if (request.CurrentVersion == 1 && request.DesiredVersion > 1)
             {
