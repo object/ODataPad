@@ -10,7 +10,7 @@ namespace ODataPad.DataModel
     public class ServiceDataItem : DataItem
     {
         public ServiceDataItem(ServiceInfo service)
-            : base(GetUniqueId(service.Name), service.Name, service.Uri, GetImagePath(service), service.Description)
+            : base(GetUniqueId(service.Name), service.Name, service.Url, GetImagePath(service), service.Description)
         {
             _metadataCache = service.MetadataCache;
         }
@@ -24,7 +24,7 @@ namespace ODataPad.DataModel
 
         private static string GetImagePath(ServiceInfo service)
         {
-            return "Samples/" + (service.Logo ?? service.Name) + ".png";
+            return "Samples/" + (string.IsNullOrEmpty(service.Logo) ? service.Name : service.Logo) + ".png";
         }
     }
 }

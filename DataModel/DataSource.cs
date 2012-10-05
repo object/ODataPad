@@ -106,10 +106,7 @@ namespace ODataPad.DataModel
 
         public async Task<bool> AddServiceDataItemAsync(ServiceInfo service)
         {
-            if (service.MetadataCache == null)
-            {
-                await RefreshMetadataCacheAsync(service);
-            }
+            await RefreshMetadataCacheAsync(service);
             _rootItem.Elements.Add(this.CreateServiceDataItem(service));
             return await App.AppData.SaveServicesAsync();
         }
@@ -117,14 +114,16 @@ namespace ODataPad.DataModel
         public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ServiceInfo service)
         {
             serviceItem.Title = service.Name;
-            serviceItem.Subtitle = service.Uri;
+            serviceItem.Subtitle = service.Url;
             serviceItem.Description = service.Description;
-            serviceItem.MetadataCache = service.MetadataCache;
-            if (service.MetadataCache == null)
-            {
-                await RefreshMetadataCacheAsync(service);
-            }
+            await RefreshMetadataCacheAsync(service);
             return await App.AppData.SaveServicesAsync();
+        }
+
+        public async Task<bool> RemoveServiceDataItemAsync(ServiceDataItem serviceItem)
+        {
+            _rootItem.Elements.Remove(serviceItem);
+            return true;
         }
 
         private ServiceDataItem CreateServiceDataItem(ServiceInfo service)
@@ -161,7 +160,10 @@ namespace ODataPad.DataModel
             service.MetadataCache = metadata;
             service.CacheUpdated = DateTimeOffset.UtcNow;
             var serviceItem = GetItem(service.Name) as ServiceDataItem;
-            serviceItem.MetadataCache = service.MetadataCache;
+            if (serviceItem != null)
+            {
+                serviceItem.MetadataCache = service.MetadataCache;
+            }
             await AppData.SaveServiceMetadataCacheAsync(service);
             return true;
         }
@@ -170,7 +172,7 @@ namespace ODataPad.DataModel
         {
             var task = Task<string>.Factory.StartNew(() =>
             {
-                var metadata = ODataClient.GetSchemaAsString(service.Uri);
+                var metadata = ODataClient.GetSchemaAsString(service.Url);
                 return metadata;
             });
             return task.Result;

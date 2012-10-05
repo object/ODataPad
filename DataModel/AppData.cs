@@ -73,7 +73,7 @@ namespace ODataPad.DataModel
         {
             var originalService = this.Services.Where(x => x.Name == serviceName).Single();
             originalService.Name = serviceInfo.Name;
-            originalService.Uri = serviceInfo.Uri;
+            originalService.Url = serviceInfo.Url;
             originalService.Description = serviceInfo.Description;
             originalService.Logo = serviceInfo.Logo;
             originalService.MetadataCache = serviceInfo.MetadataCache;
@@ -121,8 +121,8 @@ namespace ODataPad.DataModel
                            select new ServiceInfo()
                            {
                                Name = e.Element("Name").Value,
+                               Url = e.Element("Url").Value,
                                Description = e.Element("Description").Value,
-                               Uri = e.Element("Uri").Value,
                                CacheUpdated = TryGetDateTimeValue(e, "CacheUpdated"),
                            };
             return services;
@@ -134,8 +134,9 @@ namespace ODataPad.DataModel
                 return new ServiceInfo()
                 {
                     Name = element.Element("Name").Value,
+                    Url = element.Element("Url").Value,
                     Description = element.Element("Description").Value,
-                    Uri = element.Element("Uri").Value,
+                    Logo = element.Element("Logo").Value,
                     CacheUpdated = TryGetDateTimeValue(element, "CacheUpdated"),
                     Index = TryGetIntValue(element, "Index"),
                 };
@@ -145,8 +146,9 @@ namespace ODataPad.DataModel
         {
             var element = new XElement("Service");
             element.Add(new XElement("Name", serviceInfo.Name));
-            element.Add(new XElement("Uri", serviceInfo.Uri));
+            element.Add(new XElement("Url", serviceInfo.Url));
             element.Add(new XElement("Description", serviceInfo.Description));
+            element.Add(new XElement("Logo", serviceInfo.Logo));
             element.Add(new XElement("CacheUpdated", serviceInfo.CacheUpdated));
             element.Add(new XElement("Index", serviceInfo.Index));
             return element.ToString();

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ODataPad.Common;
 using ODataPad.DataModel;
 using Simple.OData.Client;
@@ -198,9 +200,6 @@ namespace ODataPad
 
         private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
-
-            //this.bottomAppBar.IsOpen = e.AddedItems.Count > 0;
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
@@ -214,10 +213,15 @@ namespace ODataPad
             RefreshSaveButtonState();
         }
 
-        private void removeButton_Click(object sender, RoutedEventArgs e)
+        private async void removeButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
-            RemoveServiceAsync();
+            bool ok = await ServiceCanBeRemoved();
+            if (ok)
+            {
+                var dispatcher = Window.Current.Dispatcher;
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, RemoveServiceAsync);
+            }
         }
 
         private void editButton_Click(object sender, RoutedEventArgs e)
@@ -248,14 +252,21 @@ namespace ODataPad
             this.editPopup.IsOpen = false;
         }
 
-        private void editSaveButton_Click(object sender, RoutedEventArgs e)
+        private async void editSaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_editedItem == null)
-                AddServiceAsync();
-            else
-                UpdateServiceAsync();
+            bool ok = _editedItem == null ? await ServiceCanBeAdded() : await ServiceCanBeUpdated();
+            if (ok)
+            {
+                DispatchedHandler action;
+                if (_editedItem == null)
+                    action = AddServiceAsync;
+                else
+                    action = UpdateServiceAsync;
+                var dispatcher = Window.Current.Dispatcher;
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, action);
 
-            this.editPopup.IsOpen = false;
+                this.editPopup.IsOpen = false;
+            }
         }
 
         private void serviceName_TextChanged(object sender, TextChangedEventArgs e)
@@ -281,26 +292,60 @@ namespace ODataPad
                 !string.IsNullOrEmpty(this.serviceDescription.Text);
         }
 
-        private async void AddServiceAsync()
+        private async Task<bool> ServiceCanBeAdded()
         {
             var item = DataSource.Instance.GetItem(this.serviceName.Text);
             if (item != null)
             {
                 var dialog = new MessageDialog("A service with this name already exists.");
                 await dialog.ShowAsync();
+                return false;
             }
-            else
+            else if (!IsValidUrl(this.serviceUrl.Text))
             {
-                var serviceInfo = new ServiceInfo()
-                                      {
-                                          Name = this.serviceName.Text,
-                                          Uri = this.serviceUrl.Text,
-                                          Description = this.serviceDescription.Text,
-                                          Logo = "Custom"
-                                      };
-                App.AppData.AddService(serviceInfo);
-                await DataSource.Instance.AddServiceDataItemAsync(serviceInfo);
+                var dialog = new MessageDialog("Invalid service URL.");
+                await dialog.ShowAsync();
+                return false;
             }
+            return true;
+        }
+
+        private async Task<bool> ServiceCanBeUpdated()
+        {
+            if (!IsValidUrl(this.serviceUrl.Text))
+            {
+                var dialog = new MessageDialog("Invalid service URL.");
+                await dialog.ShowAsync();
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ServiceCanBeRemoved()
+        {
+            var dialog = new MessageDialog("Are you sure you want to delete this service?");
+            dialog.Commands.Add(new UICommand("Yes", command => { }));
+            dialog.Commands.Add(new UICommand("No", command => { }));
+            var cmd = await dialog.ShowAsync();
+            return cmd.Label == "Yes";
+        }
+
+        private bool IsValidUrl(string url)
+        {
+            return Regex.IsMatch(url, @"(http|https)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?");
+        }
+
+        private async void AddServiceAsync()
+        {
+            var serviceInfo = new ServiceInfo()
+            {
+                Name = this.serviceName.Text,
+                Url = this.serviceUrl.Text,
+                Description = this.serviceDescription.Text,
+                Logo = "Custom"
+            };
+            App.AppData.AddService(serviceInfo);
+            await DataSource.Instance.AddServiceDataItemAsync(serviceInfo);
         }
 
         private async void UpdateServiceAsync()
@@ -308,10 +353,10 @@ namespace ODataPad
             var serviceInfo = new ServiceInfo()
             {
                 Name = this.serviceName.Text,
-                Uri = this.serviceUrl.Text,
+                Url = this.serviceUrl.Text,
                 Description = this.serviceDescription.Text
             };
-            if (_editedItem.Subtitle != serviceInfo.Uri)
+            if (_editedItem.Subtitle != serviceInfo.Url)
             {
                 serviceInfo.MetadataCache = null;
             }
@@ -319,12 +364,14 @@ namespace ODataPad
             await DataSource.Instance.UpdateServiceDataItemAsync(_editedItem, serviceInfo);
         }
 
-        private async static void RemoveServiceAsync()
+        private async void RemoveServiceAsync()
         {
-            var dialog = new MessageDialog("Are you sure you want to delete this service?");
-            dialog.Commands.Add(new UICommand("Yes", command => { }));
-            dialog.Commands.Add(new UICommand("No", command => { }));
-            await dialog.ShowAsync();
+            var serviceInfo = new ServiceInfo()
+            {
+                Name = _editedItem.Title,
+            };
+            App.AppData.DeleteService(serviceInfo);
+            await DataSource.Instance.RemoveServiceDataItemAsync(_editedItem);
         }
     }
 }
