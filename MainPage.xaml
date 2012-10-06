@@ -34,120 +34,122 @@
         </AppBar>
     </common:LayoutAwarePage.BottomAppBar>
 
-    <!--
+        <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    <Grid x:Name="rootPanel"
-        Style="{StaticResource LayoutRootStyle}"
-        DataContext="{Binding Item}" >
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="primaryColumn" Width="610"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <!-- Back button and page title -->
-        <Grid x:Name="titlePanel">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button
-                x:Name="backButton"
-                Click="GoBack"
-                IsEnabled="{Binding DefaultViewModel.CanGoBack, ElementName=pageRoot}"
-                Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="ODataPad" Style="{StaticResource PageHeaderTextStyle}"/>
-        </Grid>
-
-        <!-- Vertical scrolling item list -->
-        <ListView
-            Grid.RowSpan="2"
-            x:Name="itemListView"
-            AutomationProperties.AutomationId="ItemsListView"
-            AutomationProperties.Name="Items"
-            TabIndex="1"
-            Margin="-10,128,0,0"
-            Padding="120,0,0,60"
-            ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
-            IsSwipeEnabled="False"
-            SelectionChanged="ItemListView_SelectionChanged"
-            ItemTemplate="{StaticResource Standard130ItemTemplate}" SelectionMode="Single" />
-
-        <!-- Details for selected item -->
-        <ScrollViewer VerticalScrollBarVisibility="Disabled"
-            x:Name="itemDetail"
-            Grid.Column="1"
-            Grid.RowSpan="2">
-
-            <Grid
-            x:Name="itemDetailGrid" 
-            Margin="20,40,0,0"
-            DataContext="{Binding SelectedItem, ElementName=itemListView}">
+        <Grid x:Name="rootPanel"
+            Style="{StaticResource LayoutRootStyle}"
+            DataContext="{Binding Item}" >
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="140"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="primaryColumn" Width="610"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
 
-            <Grid 
-                x:Name="itemHeaderGrid" 
-                Grid.ColumnSpan="2"
-                Margin="20,0,0,0" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <!-- Back button and page title -->
+            <Grid x:Name="titlePanel">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <Border x:Name="itemDetailImage" Background="Transparent"  Width="110" Height="110"  Margin="0,0,10,0">
-                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                </Border>
-                <StackPanel x:Name="itemDetailTitlePanel" Grid.Column="1">
-                    <TextBlock x:Name="itemTitle" Margin="0,0,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
-                    <TextBlock x:Name="itemSubtitle" Margin="0,0,0,0" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
-                    <TextBlock x:Name="itemDescription" Margin="0,0,0,0" Text="{Binding Description}" Style="{StaticResource SubtitleTextStyle}"/>
-                </StackPanel>
+                <Button
+                x:Name="backButton"
+                Click="GoBack"
+                IsEnabled="{Binding DefaultViewModel.CanGoBack, ElementName=pageRoot}"
+                Style="{StaticResource BackButtonStyle}"/>
+                <TextBlock x:Name="pageTitle" Grid.Column="1" Text="ODataPad" Style="{StaticResource PageHeaderTextStyle}"/>
             </Grid>
 
-            <StackPanel Orientation="Horizontal"
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                >
-                <ListView 
-                x:Name="itemCollection"
-                TabIndex="2"
-                SelectionChanged="ItemCollection_SelectionChanged"
-                ItemsSource="{Binding Elements}"
-                ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" SelectionMode="Single" />
+            <!-- Vertical scrolling item list -->
+            <ListView
+                Grid.RowSpan="2"
+                x:Name="itemListView"
+                AutomationProperties.AutomationId="ItemsListView"
+                AutomationProperties.Name="Items"
+                TabIndex="1"
+                Margin="-10,128,0,0"
+                Padding="120,0,0,60"
+                ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
+                IsSwipeEnabled="False"
+                SelectionChanged="ItemListView_SelectionChanged"
+                ItemTemplate="{StaticResource Standard130ItemTemplate}" SelectionMode="Single" />
 
-                <ListView 
-                x:Name="itemSubcollection"
-                TabIndex="3"
-                DataContext="{Binding SelectedItem, ElementName=itemCollection}"
-                ItemsSource="{Binding Elements}" 
-                ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
-                SelectionMode="None" />
-            </StackPanel>
+            <!-- Details for selected item -->
+            <ScrollViewer VerticalScrollBarVisibility="Disabled" 
+                x:Name="itemDetail"
+                Grid.Column="1"
+                Grid.RowSpan="2">
 
-    </Grid>
-        </ScrollViewer>
+            <Grid
+                x:Name="itemDetailGrid" 
+                Margin="20,40,0,0"
+                DataContext="{Binding SelectedItem, ElementName=itemListView}">
 
-        <Popup x:Name="editPopup" HorizontalAlignment="Center" IsLightDismissEnabled="True">
-            <Border x:Name="editBorder" Background="RoyalBlue">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid 
+                    x:Name="itemHeaderGrid" 
+                    Grid.ColumnSpan="2"
+                    Margin="20,0,0,0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border x:Name="itemDetailImage" Background="Transparent"  Width="110" Height="110"  Margin="0,0,10,0">
+                            <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                        </Border>
+                        <StackPanel x:Name="itemDetailTitlePanel" Grid.Column="1">
+                            <TextBlock x:Name="itemTitle" Margin="0,0,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
+                            <TextBlock x:Name="itemSubtitle" Margin="0,0,0,0" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
+                            <TextBlock x:Name="itemDescription" Margin="0,0,0,0" Text="{Binding Description}" Style="{StaticResource SubtitleTextStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                        <ListView 
+                        x:Name="itemCollection"
+                            Grid.Row="1"
+                        TabIndex="2"
+                        SelectionChanged="ItemCollection_SelectionChanged"
+                        ItemsSource="{Binding Elements}"
+                        ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" SelectionMode="Single" />
+
+                        <ListView 
+                        x:Name="itemSubcollection"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                        TabIndex="3"
+                        DataContext="{Binding SelectedItem, ElementName=itemCollection}"
+                        ItemsSource="{Binding Elements}" 
+                        ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
+                        SelectionMode="None" />
+
+                </Grid>
+
+            </ScrollViewer>
+            
+            <Popup x:Name="editPopup" 
+                HorizontalAlignment="Center"
+                IsLightDismissEnabled="True">
+                
+                <Border x:Name="editBorder" Background="RoyalBlue">
 
                 <Grid x:Name="editPanel">
                     <Grid.RowDefinitions>
@@ -160,10 +162,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button x:Name="editBackButton" 
-                        Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top" Margin="30,35,20,0"
-                            Click="editBackButton_Click" />
+                    Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top" Margin="30,35,20,0"
+                        Click="editBackButton_Click" />
                     <Button x:Name="editSaveButton" Grid.Column="4" VerticalAlignment="Top" Margin="0,25,0,0"
-                            Style="{StaticResource SaveAppBarButtonStyle}" Click="editSaveButton_Click"/>
+                        Style="{StaticResource SaveAppBarButtonStyle}" Click="editSaveButton_Click"/>
                     <TextBlock Grid.Column="1" Text="Service Details" Margin="10,5,20,0" Padding="0,35" Style="{StaticResource SubheaderTextStyle}"/>
                     <Grid Grid.Column="2" Margin="20,20,20,25">
                         <Grid.RowDefinitions>
@@ -184,124 +186,118 @@
                         <TextBlock Text="Description:" Margin="0,5,0,5" Grid.Row="4" Style="{StaticResource BasicTextStyle}" />
                         <TextBox x:Name="serviceDescription" Grid.Row="5" Width="500" AcceptsReturn="True" TextChanged="serviceDescription_TextChanged" />
                     </Grid>
-                    <Grid Grid.Column="3" Margin="20,20,20,25">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="80"/>
-                        </Grid.RowDefinitions>
-                    </Grid>
                 </Grid>
 
             </Border>
-        </Popup>
+            </Popup>
 
-        <VisualStateManager.VisualStateGroups>
+            <VisualStateManager.VisualStateGroups>
 
-            <!-- Visual states reflect the application's view state -->
-            <VisualStateGroup x:Name="ApplicationViewStates">
-                <VisualState x:Name="FullScreenLandscapeOrWide"/>
+                <!-- Visual states reflect the application's view state -->
+                <VisualStateGroup x:Name="ApplicationViewStates">
+                    <VisualState x:Name="FullScreenLandscapeOrWide"/>
 
-                <!-- Filled uses a simpler list format in a narrower column -->
-                <VisualState x:Name="FilledOrNarrow">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="420"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="ItemTemplate">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Standard80ItemTemplate}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="60,0,66,0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
+                    <!-- Filled uses a simpler list format in a narrower column -->
+                    <VisualState x:Name="FilledOrNarrow">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="420"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="ItemTemplate">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Standard80ItemTemplate}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="60,0,66,0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
 
-                <!--
+                    <!--
                     The page respects the narrower 100-pixel margin convention for portrait, and the page
                     initially hides details to show only the list of items
                 -->
-                <VisualState x:Name="FullScreenPortrait">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
+                    <VisualState x:Name="FullScreenPortrait">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
+                            </ObjectAnimationUsingKeyFrames>
 
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Padding">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="100,0,90,60"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Padding">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="100,0,90,60"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
 
-                <!--
+                    <!--
                     When an item is selected in portrait the details display requires more extensive changes:
                      * Hide the master list and the column is was in
                      * Move item details down a row to make room for the title
                      * Move the title directly above the details
                      * Adjust margins and padding for details
                  -->
-                <VisualState x:Name="FullScreenPortrait_Detail">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
+                    <VisualState x:Name="FullScreenPortrait_Detail">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
+                            </ObjectAnimationUsingKeyFrames>
 
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.Row)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.RowSpan)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="Margin">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,60"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="100,0,90,0"/>
-                        </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.Row)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.RowSpan)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="Margin">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,60"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="100,0,90,0"/>
+                            </ObjectAnimationUsingKeyFrames>
 
-                    </Storyboard>
-                </VisualState>
+                        </Storyboard>
+                    </VisualState>
 
-                <!--
+                    <!--
                     The back button and title have different styles when snapped, and the page
                     initially hides details to show only the list of items
                 -->
-                <VisualState x:Name="Snapped">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
+                    <VisualState x:Name="Snapped">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
+                            </ObjectAnimationUsingKeyFrames>
 
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="320"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="ItemTemplate">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Standard130ItemTemplate}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Padding">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="20,0,0,0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="320"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="ItemTemplate">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Standard130ItemTemplate}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Padding">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="20,0,0,0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
 
-                <!--
+                    <!--
                     When snapped and an item is selected the details display requires more extensive changes:
                      * Hide the master list and the column is was in
                      * Move item details down a row to make room for the title
@@ -310,60 +306,64 @@
                      * Use a different font for title and subtitle
                      * Adjust margins below subtitle
                  -->
-                <VisualState x:Name="Snapped_Detail">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
+                    <VisualState x:Name="Snapped_Detail">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
+                            </ObjectAnimationUsingKeyFrames>
 
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.Row)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.RowSpan)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Column)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Row)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="20,0,20,0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="Margin">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,60"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemCollection" Storyboard.TargetProperty="SelectionMode">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="None"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="primaryColumn" Storyboard.TargetProperty="Width">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.Row)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="(Grid.RowSpan)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Column)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Row)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="20,0,20,0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="Margin">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,60"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemCollection" Storyboard.TargetProperty="SelectionMode">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="None"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemCollection" Storyboard.TargetProperty="(Grid.ColumnSpan)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemSubcollection" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemTitle" Storyboard.TargetProperty="Margin">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemSubtitle" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDescription" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-    </Grid>
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemTitle" Storyboard.TargetProperty="Margin">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemSubtitle" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDescription" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Grid>
+    
 </common:LayoutAwarePage>
