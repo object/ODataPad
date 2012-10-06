@@ -1862,24 +1862,6 @@
         </Grid>
     </DataTemplate>
 
-    <!-- List-appropriate 130 pixel high item template as seen in the SplitPage -->
-    <DataTemplate x:Key="Custom130ItemTemplate">
-        <Grid Height="110" Margin="6">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110">
-                <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
-            </Border>
-            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                <TextBlock Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}" TextWrapping="NoWrap"/>
-                <TextBlock Text="{Binding Subtitle}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
-                <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
-            </StackPanel>
-        </Grid>
-    </DataTemplate>
-
     <!--
         List-appropriate 80 pixel high item template as seen in the SplitPage when Filled, and
         the following pages when snapped: GroupedItemsPage, GroupDetailPage, and ItemsPage
@@ -1900,15 +1882,15 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:Key="Custom80ItemTemplate">
+    <DataTemplate x:Key="Standard80ItemNoImageTemplate">
         <Grid Margin="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                <TextBlock Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}" MaxHeight="40"/>
-                <TextBlock Text="{Binding Subtitle}" Style="{StaticResource BasicTextStyle}" TextWrapping="NoWrap"/>
+                <TextBlock Text="{Binding Title}" Style="{StaticResource ItemTextStyle}" MaxHeight="40"/>
+                <TextBlock Text="{Binding Subtitle}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
             </StackPanel>
         </Grid>
     </DataTemplate>
@@ -1946,18 +1928,6 @@
                 <TextBlock Text="{Binding Subtitle}" Style="{StaticResource BodyTextStyle}" Foreground="{StaticResource ApplicationSecondaryForegroundThemeBrush}" TextWrapping="NoWrap"/>
                 <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextStyle}" Foreground="{StaticResource ApplicationSecondaryForegroundThemeBrush}" TextWrapping="NoWrap"/>
             </StackPanel>
-        </Grid>
-    </DataTemplate>
-
-    <!-- List-appropriate 70 pixel high item template as seen in the SearchResultsPage when Snapped -->
-    <DataTemplate x:Key="Custom70ItemTemplate">
-        <Grid Margin="6">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Title}" Style="{StaticResource BodyTextStyle}" TextWrapping="NoWrap"/>
-            <TextBlock Text="{Binding Subtitle}" Style="{StaticResource BodyTextStyle}" TextWrapping="NoWrap"/>
         </Grid>
     </DataTemplate>
 

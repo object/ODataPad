@@ -79,7 +79,7 @@
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             IsSwipeEnabled="False"
             SelectionChanged="ItemListView_SelectionChanged"
-            ItemTemplate="{StaticResource Custom130ItemTemplate}" SelectionMode="Single" />
+            ItemTemplate="{StaticResource Standard130ItemTemplate}" SelectionMode="Single" />
 
         <!-- Details for selected item -->
         <ScrollViewer VerticalScrollBarVisibility="Disabled"
@@ -117,8 +117,8 @@
 
                 <Image Grid.Row="1" Margin="0,0,20,0" Width="180" Height="180" Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
                 <StackPanel x:Name="itemDetailTitlePanel" Grid.Row="1" Grid.Column="1">
-                    <TextBlock x:Name="itemName" Margin="0,10,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
-                    <TextBlock x:Name="itemUrl" Margin="0,20,0,20" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
+                    <TextBlock x:Name="itemTitle" Margin="0,10,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
+                    <TextBlock x:Name="itemSubtitle" Margin="0,20,0,20" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
                     <TextBlock x:Name="itemDescription" Margin="0,0,0,20" Text="{Binding Description}" Style="{StaticResource SubtitleTextStyle}"/>
                 </StackPanel>
             </Grid>
@@ -133,14 +133,15 @@
                 Margin="20,0,0,0"
                 SelectionChanged="ItemCollection_SelectionChanged"
                 ItemsSource="{Binding Elements}"
-                ItemTemplate="{StaticResource Custom80ItemTemplate}" SelectionMode="Single" />
+                ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" SelectionMode="Single" />
 
                 <ListView 
+                x:Name="itemSubcollection"
                 TabIndex="3"
                 Margin="20,0,0,0"
                 DataContext="{Binding SelectedItem, ElementName=itemCollection}"
                 ItemsSource="{Binding Elements}" 
-                ItemTemplate="{StaticResource Custom80ItemTemplate}" 
+                ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
                 SelectionMode="None" />
             </StackPanel>
 
@@ -270,6 +271,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Padding">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="100,0,90,0"/>
                         </ObjectAnimationUsingKeyFrames>
+
                     </Storyboard>
                 </VisualState>
 
@@ -293,7 +295,7 @@
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="ItemTemplate">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Standard80ItemTemplate}"/>
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Standard130ItemTemplate}"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Padding">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="20,0,0,0"/>
@@ -346,14 +348,14 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="Margin">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,60"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemName" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource TitleTextStyle}"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemTitle" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SubheaderTextStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemName" Storyboard.TargetProperty="Margin">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemTitle" Storyboard.TargetProperty="Margin">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemUrl" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource CaptionTextStyle}"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemSubtitle" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource TitleTextStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
