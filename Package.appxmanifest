@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="c1fcceb0-05a7-40aa-bc5c-3ee24399b3d5" Publisher="CN=Vagif" Version="0.1.0.0" />
+  <Identity Name="38686VagifAbilov.ODataPad" Publisher="CN=CE9070F2-E124-4E6A-82A4-E894D391B188" Version="0.1.0.0" />
   <Properties>
     <DisplayName>ODataPad</DisplayName>
     <PublisherDisplayName>Vagif Abilov</PublisherDisplayName>
