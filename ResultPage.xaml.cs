@@ -48,7 +48,7 @@ namespace ODataPad
             }
 
             var itemId = navigationParameter.ToString();
-            var item = App.GetDataItemFromNavigationParameter(navigationParameter);
+            var item = DataSource.Instance.GetItem(navigationParameter.ToString());
             this.DefaultViewModel["Item"] = item;
             this.DefaultViewModel["ItemElements"] = item.Elements;
 

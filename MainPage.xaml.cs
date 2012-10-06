@@ -52,7 +52,7 @@ namespace ODataPad
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            var item = App.GetDataItemFromNavigationParameter(navigationParameter);
+            var item = DataSource.Instance.GetItem(navigationParameter.ToString());
             if (item == null)
                 return;
 
@@ -206,6 +206,7 @@ namespace ODataPad
         {
             this.bottomAppBar.IsOpen = false;
             _editedItem = null;
+
             this.serviceName.Text = string.Empty;
             this.serviceUrl.Text = string.Empty;
             this.serviceDescription.Text = string.Empty;

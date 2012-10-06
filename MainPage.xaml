@@ -145,8 +145,7 @@
 
             </ScrollViewer>
             
-            <Popup x:Name="editPopup" 
-                HorizontalAlignment="Center"
+            <Popup x:Name="editPopup" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="620" HorizontalAlignment="Center"
                 IsLightDismissEnabled="True">
                 
                 <Border x:Name="editBorder" Background="RoyalBlue">
@@ -157,35 +156,24 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="editBackButton" 
-                    Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top" Margin="30,35,20,0"
+                    <StackPanel>
+                        <Button x:Name="editBackButton" 
+                    Style="{StaticResource BackButtonStyle}" HorizontalAlignment="Center" Margin="20,15,20,0"
                         Click="editBackButton_Click" />
-                    <Button x:Name="editSaveButton" Grid.Column="4" VerticalAlignment="Top" Margin="0,25,0,0"
+                        <Button x:Name="editSaveButton" HorizontalAlignment="Center" Margin="0,120,0,0"
                         Style="{StaticResource SaveAppBarButtonStyle}" Click="editSaveButton_Click"/>
-                    <TextBlock Grid.Column="1" Text="Service Details" Margin="10,5,20,0" Padding="0,35" Style="{StaticResource SubheaderTextStyle}"/>
-                    <Grid Grid.Column="2" Margin="20,20,20,25">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="0,10,20,20">
+                        <TextBlock Grid.Column="1" Text="Service Details" Margin="0,0,0,15" Style="{StaticResource SubheaderTextStyle}"/>
                         <TextBlock Text="Name:" Margin="0,0,0,5" Style="{StaticResource BasicTextStyle}"/>
-                        <TextBox x:Name="serviceName" Width="250" HorizontalAlignment="Left" Grid.Row="1" TextChanged="serviceName_TextChanged" />
-                        <TextBlock Text="URL:" Margin="0,5,0,5" Style="{StaticResource BasicTextStyle}" Grid.Row="2"/>
-                        <TextBox x:Name="serviceUrl" Width="500" Grid.Row="3" InputScope="Url" TextChanged="serviceUrl_TextChanged"/>
-                        <TextBlock Text="Description:" Margin="0,5,0,5" Grid.Row="4" Style="{StaticResource BasicTextStyle}" />
-                        <TextBox x:Name="serviceDescription" Grid.Row="5" Width="500" AcceptsReturn="True" TextChanged="serviceDescription_TextChanged" />
-                    </Grid>
+                        <TextBox x:Name="serviceName" Width="250" HorizontalAlignment="Left" TextChanged="serviceName_TextChanged" />
+                        <TextBlock Text="URL:" Margin="0,5,0,5" Style="{StaticResource BasicTextStyle}" />
+                        <TextBox x:Name="serviceUrl" Width="500" InputScope="Url" TextChanged="serviceUrl_TextChanged"/>
+                        <TextBlock Text="Description:" Margin="0,5,0,5" Style="{StaticResource BasicTextStyle}" />
+                        <TextBox x:Name="serviceDescription" Width="500" AcceptsReturn="True" TextChanged="serviceDescription_TextChanged" />
+                    </StackPanel>
                 </Grid>
 
             </Border>
