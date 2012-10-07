@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using ODataPad.DataModel;
 using Simple.OData.Client;
 using Windows.ApplicationModel.Resources.Core;
@@ -104,38 +105,62 @@ namespace ODataPad.DataModel
             }
         }
 
-        public async Task<bool> AddServiceDataItemAsync(ServiceInfo service)
+        public async Task<bool> AddServiceDataItemAsync(ServiceInfo serviceInfo)
         {
-            await RefreshMetadataCacheAsync(service);
-            _rootItem.Elements.Add(this.CreateServiceDataItem(service));
-            return await App.AppData.SaveServicesAsync();
+            _rootItem.Elements.Add(this.CreateServiceDataItem(serviceInfo));
+            bool ok = await RefreshMetadataCacheAsync(serviceInfo);
+            if (ok)
+            {
+                App.AppData.AddService(serviceInfo);
+                ok = await App.AppData.SaveServicesAsync();
+            }
+            return ok;
         }
 
-        public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ServiceInfo service)
+        public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ServiceInfo serviceInfo)
         {
-            serviceItem.Title = service.Name;
-            serviceItem.Subtitle = service.Url;
-            serviceItem.Description = service.Description;
-            await RefreshMetadataCacheAsync(service);
-            return await App.AppData.SaveServicesAsync();
+            serviceItem.Title = serviceInfo.Name;
+            serviceItem.Subtitle = serviceInfo.Url;
+            serviceItem.Description = serviceInfo.Description;
+            bool ok = await RefreshMetadataCacheAsync(serviceInfo);
+            if (ok)
+            {
+                App.AppData.UpdateService(serviceItem.Title, serviceInfo);
+                ok = await App.AppData.SaveServicesAsync();
+            }
+            return ok;
         }
 
         public async Task<bool> RemoveServiceDataItemAsync(ServiceDataItem serviceItem)
         {
             _rootItem.Elements.Remove(serviceItem);
-            return await App.AppData.SaveServicesAsync();
+            var serviceInfo = new ServiceInfo() { Name = serviceItem.Title };
+            App.AppData.DeleteService(serviceInfo);
+            bool ok = await App.AppData.SaveServicesAsync();
+            return ok;
         }
 
         private ServiceDataItem CreateServiceDataItem(ServiceInfo service)
         {
-            var metadata = service.MetadataCache;
-            var schema = ODataClient.ParseSchemaString(metadata);
             var item = new ServiceDataItem(service);
-
-            foreach (var table in schema.Tables)
+            var metadata = service.MetadataCache;
+            if (!string.IsNullOrEmpty(metadata))
             {
-                var subitem = CreateCollectionDataItem(service, table);
-                item.Elements.Add(subitem);
+                var element = XElement.Parse(metadata);
+                if (element.Name == "Error")
+                {
+                    var errorItem = CreateErrorDataItem(service, element);
+                    item.Elements.Add(errorItem);
+                }
+                else
+                {
+                    var schema = ODataClient.ParseSchemaString(metadata);
+                    foreach (var table in schema.Tables)
+                    {
+                        var collectionItem = CreateCollectionDataItem(service, table);
+                        item.Elements.Add(collectionItem);
+                    }
+                }
             }
             return item;
         }
@@ -151,6 +176,12 @@ namespace ODataPad.DataModel
             {
                 item.Elements.Add(new PropertyDataItem(service, table, association));
             }
+            return item;
+        }
+
+        private ErrorDataItem CreateErrorDataItem(ServiceInfo service, XElement element)
+        {
+            var item = new ErrorDataItem(service, element);
             return item;
         }
 
@@ -172,8 +203,16 @@ namespace ODataPad.DataModel
         {
             var task = Task<string>.Factory.StartNew(() =>
             {
-                var metadata = ODataClient.GetSchemaAsString(service.Url);
-                return metadata;
+                try
+                {
+                    return ODataClient.GetSchemaAsString(service.Url);
+                }
+                catch (Exception exception)
+                {
+                    var element = new XElement("Error");
+                    element.Add(new XElement("Message", exception.Message));
+                    return element.ToString();
+                }
             });
             return task.Result;
         }

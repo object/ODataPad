@@ -49,8 +49,14 @@ namespace ODataPad.DataModel
             set { this.SetProperty(ref this._description, value); }
         }
 
-        private ImageSource _image = null;
         private String _imagePath = null;
+        public string ImagePath
+        {
+            get { return this._imagePath; }
+            set { this.SetProperty(ref this._imagePath, value); }
+        }
+
+        private ImageSource _image = null;
         public ImageSource Image
         {
             get

@@ -106,6 +106,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel\AppData.cs" />
+    <Compile Include="DataModel\ErrorDataItem.cs" />
     <Compile Include="DataModel\PropertyDataItem.cs" />
     <Compile Include="DataModel\CollectionDataItem.cs" />
     <Compile Include="DataModel\DataItem.cs" />

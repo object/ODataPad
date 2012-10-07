@@ -43,10 +43,7 @@ namespace ODataPad.DataModel
             {
                 var xml = FormatServiceInfo(serviceInfo);
                 localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = xml;
-                if (!string.IsNullOrEmpty(serviceInfo.MetadataCache))
-                {
-                    await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
-                }
+                await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
 
             foreach (var kv in localSettings.Containers[ServicesKey].Values
@@ -137,15 +134,15 @@ namespace ODataPad.DataModel
         public static ServiceInfo ParseServiceInfo(string xml)
         {
             XElement element = XElement.Parse(xml);
-                return new ServiceInfo()
-                {
-                    Name = element.Element("Name").Value,
-                    Url = element.Element("Url").Value,
-                    Description = element.Element("Description").Value,
-                    Logo = element.Element("Logo").Value,
-                    CacheUpdated = TryGetDateTimeValue(element, "CacheUpdated"),
-                    Index = TryGetIntValue(element, "Index"),
-                };
+            return new ServiceInfo()
+            {
+                Name = element.Element("Name").Value,
+                Url = element.Element("Url").Value,
+                Description = element.Element("Description").Value,
+                Logo = element.Element("Logo").Value,
+                CacheUpdated = TryGetDateTimeValue(element, "CacheUpdated"),
+                Index = TryGetIntValue(element, "Index"),
+            };
         }
 
         public static string FormatServiceInfo(ServiceInfo serviceInfo)
@@ -192,7 +189,7 @@ namespace ODataPad.DataModel
         private static DateTimeOffset? TryGetDateTimeValue(XElement parent, string elementName)
         {
             var element = parent.Element(elementName);
-            return element == null ? 
+            return element == null ?
                 null : string.IsNullOrEmpty(element.Value) ?
                 null :
                 new DateTimeOffset?(DateTimeOffset.Parse(element.Value));
@@ -215,8 +212,16 @@ namespace ODataPad.DataModel
 
         private static async Task<bool> SaveSettingToFileAsync(string filename, string text)
         {
-            StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(file, text);
+            if (!string.IsNullOrEmpty(text))
+            {
+                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file, text);
+            }
+            else
+            {
+                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                await file.DeleteAsync();
+            }
             return true;
         }
     }
