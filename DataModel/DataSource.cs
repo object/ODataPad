@@ -107,10 +107,12 @@ namespace ODataPad.DataModel
 
         public async Task<bool> AddServiceDataItemAsync(ServiceInfo serviceInfo)
         {
-            _rootItem.Elements.Add(this.CreateServiceDataItem(serviceInfo));
+            var serviceItem = this.CreateServiceDataItem(serviceInfo);
+            _rootItem.Elements.Add(serviceItem);
             bool ok = await RefreshMetadataCacheAsync(serviceInfo);
             if (ok)
             {
+                RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 App.AppData.AddService(serviceInfo);
                 ok = await App.AppData.SaveServicesAsync();
             }
@@ -119,13 +121,15 @@ namespace ODataPad.DataModel
 
         public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ServiceInfo serviceInfo)
         {
+            var originalTitle = serviceItem.Title;
             serviceItem.Title = serviceInfo.Name;
             serviceItem.Subtitle = serviceInfo.Url;
             serviceItem.Description = serviceInfo.Description;
             bool ok = await RefreshMetadataCacheAsync(serviceInfo);
             if (ok)
             {
-                App.AppData.UpdateService(serviceItem.Title, serviceInfo);
+                RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+                App.AppData.UpdateService(originalTitle, serviceInfo);
                 ok = await App.AppData.SaveServicesAsync();
             }
             return ok;
@@ -143,10 +147,16 @@ namespace ODataPad.DataModel
         private ServiceDataItem CreateServiceDataItem(ServiceInfo service)
         {
             var item = new ServiceDataItem(service);
-            var metadata = service.MetadataCache;
-            if (!string.IsNullOrEmpty(metadata))
+            RefreshServiceCollectionsFromMetadataCache(item, service);
+            return item;
+        }
+
+        private void RefreshServiceCollectionsFromMetadataCache(ServiceDataItem item, ServiceInfo service)
+        {
+            item.Elements.Clear();
+            if (!string.IsNullOrEmpty(service.MetadataCache))
             {
-                var element = XElement.Parse(metadata);
+                var element = XElement.Parse(service.MetadataCache);
                 if (element.Name == "Error")
                 {
                     var errorItem = CreateErrorDataItem(service, element);
@@ -154,7 +164,7 @@ namespace ODataPad.DataModel
                 }
                 else
                 {
-                    var schema = ODataClient.ParseSchemaString(metadata);
+                    var schema = ODataClient.ParseSchemaString(service.MetadataCache);
                     foreach (var table in schema.Tables)
                     {
                         var collectionItem = CreateCollectionDataItem(service, table);
@@ -162,7 +172,6 @@ namespace ODataPad.DataModel
                     }
                 }
             }
-            return item;
         }
 
         private CollectionDataItem CreateCollectionDataItem(ServiceInfo service, Table table)
