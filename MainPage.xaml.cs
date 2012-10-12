@@ -196,14 +196,10 @@ namespace ODataPad
 
         void MainPage_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
         {
-            var cmdWebSite = new SettingsCommand("WebSite", "ODataPad on GitHub", (x) =>
-            {
-                Windows.System.Launcher.LaunchUriAsync(new Uri("http://object.github.com/ODataPad/"));
-            });
-            var cmdPrivacyPolicy = new SettingsCommand("PrivacePolicy", "Privacy Policy", (x) =>
-            {
-                Windows.System.Launcher.LaunchUriAsync(new Uri("http://object.github.com/ODataPad/"));
-            });
+            var cmdWebSite = new SettingsCommand("WebSite", "ODataPad on GitHub", 
+                (x) => Windows.System.Launcher.LaunchUriAsync(new Uri("http://object.github.com/ODataPad/index.html")));
+            var cmdPrivacyPolicy = new SettingsCommand("PrivacePolicy", "Privacy Policy", 
+                (x) => Windows.System.Launcher.LaunchUriAsync(new Uri("http://object.github.com/ODataPad/privacy_policy.html")));
 
             args.Request.ApplicationCommands.Add(cmdWebSite);
             args.Request.ApplicationCommands.Add(cmdPrivacyPolicy);
