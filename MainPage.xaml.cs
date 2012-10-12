@@ -10,6 +10,7 @@ using Simple.OData.Client;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
@@ -37,6 +38,8 @@ namespace ODataPad
         public MainPage()
         {
             this.InitializeComponent();
+
+            SettingsPane.GetForCurrentView().CommandsRequested += MainPage_CommandsRequested;
         }
 
         #region Page state management
@@ -191,6 +194,20 @@ namespace ODataPad
         {
         }
 
+        void MainPage_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            var cmdWebSite = new SettingsCommand("WebSite", "ODataPad on GitHub", (x) =>
+            {
+                Windows.System.Launcher.LaunchUriAsync(new Uri("http://object.github.com/ODataPad/"));
+            });
+            var cmdPrivacyPolicy = new SettingsCommand("PrivacePolicy", "Privacy Policy", (x) =>
+            {
+                Windows.System.Launcher.LaunchUriAsync(new Uri("http://object.github.com/ODataPad/"));
+            });
+
+            args.Request.ApplicationCommands.Add(cmdWebSite);
+            args.Request.ApplicationCommands.Add(cmdPrivacyPolicy);
+        }
         void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
