@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Simple.OData.Client;
 
@@ -7,7 +8,7 @@ namespace ODataPad.DataModel
     public class PropertyDataItem : DataItem
     {
         public PropertyDataItem(ServiceInfo service, Table table, Column column)
-            : base(GetUniqueId(service.Name, table.ActualName, column.ActualName), column.ActualName, GetColumnSummary(column), null, null)
+            : base(GetUniqueId(service.Name, table.ActualName, column.ActualName), column.ActualName, GetColumnSummary(column, table.GetKeyNames()), null, null)
         {
         }
 
@@ -16,9 +17,17 @@ namespace ODataPad.DataModel
         {
         }
 
-        private static string GetColumnSummary(Column column)
+        private static string GetColumnSummary(Column column, IEnumerable<string> keys)
         {
-            return column.PropertyType.ToString().Split('.').Last() + (column.IsNullable ? ("(null)") : null);
+            var summary = column.PropertyType.ToString().Split('.').Last();
+            var items = new List<string>();
+            if (keys.Contains(column.ActualName))
+                items.Add("key");
+            if (column.IsNullable)
+                items.Add("null");
+            if (items.Any())
+                summary += " (" + string.Join(",", items) + ")";
+            return summary;
         }
 
         private static string GetAssociationSummary(Association association)

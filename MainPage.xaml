@@ -99,7 +99,7 @@
 
             <Grid 
                 x:Name="itemHeaderGrid" 
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="1"
                 Margin="20,0,0,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -120,6 +120,17 @@
                 </StackPanel>
             </Grid>
 
+            <ComboBox 
+                x:Name="collectionMode" 
+                    Grid.Column="2" Margin="10" 
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="Auto" SelectedIndex="0" 
+                    Background="{StaticResource ApplicationPageBackgroundThemeBrush}" 
+                    Foreground="{StaticResource ApplicationForegroundThemeBrush}" 
+                    BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" SelectionChanged="collectionMode_SelectionChanged">
+                <ComboBoxItem Content="Show collection properties"/>
+                <ComboBoxItem Content="Show collection data"/>
+            </ComboBox>
+
             <ListView 
                     x:Name="itemCollection"
                         Grid.Row="1"
@@ -129,14 +140,26 @@
                     ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" SelectionMode="Single" />
 
             <ListView 
-                    x:Name="itemSubcollection"
-                        Grid.Row="1"
-                        Grid.Column="2"
-                    TabIndex="3"
-                    DataContext="{Binding SelectedItem, ElementName=itemCollection}"
-                    ItemsSource="{Binding Elements}" 
-                    ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
-                    SelectionMode="None" />
+                x:Name="itemProperties"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                TabIndex="3"
+                Visibility="Visible"
+                DataContext="{Binding SelectedItem, ElementName=itemCollection}"
+                ItemsSource="{Binding Elements}" 
+                ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
+                SelectionMode="None" />
+
+            <ListView 
+                x:Name="itemData"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                TabIndex="3"
+                Visibility="Collapsed"
+                DataContext="{Binding SelectedItem, ElementName=itemCollection}"
+                ItemsSource="{Binding Results}"
+                ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
+                SelectionMode="None" />
 
         </Grid>
 
@@ -265,6 +288,9 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="bottomAppBar" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="collectionMode" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -328,7 +354,10 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemCollection" Storyboard.TargetProperty="(Grid.ColumnSpan)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemSubcollection" Storyboard.TargetProperty="Visibility">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="collectionMode" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemProperties" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemTitle" Storyboard.TargetProperty="Margin">

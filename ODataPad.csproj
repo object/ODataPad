@@ -110,6 +110,7 @@
     <Compile Include="DataModel\PropertyDataItem.cs" />
     <Compile Include="DataModel\CollectionDataItem.cs" />
     <Compile Include="DataModel\DataItem.cs" />
+    <Compile Include="DataModel\ResultDataItem.cs" />
     <Compile Include="DataModel\RootDataItem.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
     <Compile Include="DataModel\ServiceInfo.cs" />

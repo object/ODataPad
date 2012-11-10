@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -61,6 +62,7 @@ namespace ODataPad
 
             this.DefaultViewModel["Item"] = item;
             this.DefaultViewModel["ItemElements"] = item.Elements;
+            //this.DefaultViewModel["ItemResults"] = item.Results;
 
             if (pageState == null)
             {
@@ -213,6 +215,18 @@ namespace ODataPad
 
         private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var collection = this.itemCollection.SelectedItem as CollectionDataItem;
+            if (collection != null)
+            {
+                if (this.collectionMode.SelectedIndex == 0)
+                {
+                    collection.Results = null;
+                }
+                else
+                {
+                    RequestCollectionData();
+                }
+            }
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
@@ -299,6 +313,27 @@ namespace ODataPad
             RefreshSaveButtonState();
         }
 
+        private void collectionMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.collectionMode == null)
+                return;
+
+            if (this.collectionMode.SelectedIndex == 0)
+            {
+                this.itemProperties.Visibility = Visibility.Visible;
+                this.itemData.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.itemProperties.Visibility = Visibility.Collapsed;
+                this.itemData.Visibility = Visibility.Visible;
+                if (this.itemCollection.SelectedItem != null)
+                {
+                    RequestCollectionData();
+                }
+            }
+        }
+
         private void RefreshSaveButtonState()
         {
             this.editSaveButton.IsEnabled =
@@ -375,6 +410,30 @@ namespace ODataPad
         {
             var dataItem = this.itemListView.SelectedItem as ServiceDataItem;
             await DataSource.Instance.RemoveServiceDataItemAsync(dataItem);
+        }
+
+        private void RequestCollectionData()
+        {
+            var dispatcher = Window.Current.Dispatcher;
+            /*await*/
+            dispatcher.RunAsync(CoreDispatcherPriority.Normal, LoadCollectionDataAsync);
+        }
+
+        private async void LoadCollectionDataAsync()
+        {
+            var results = await DataSource.Instance.LoadCollectionDataAsync(
+                (this.itemListView.SelectedItem as ServiceDataItem).Subtitle,
+                (this.itemCollection.SelectedItem as CollectionDataItem).Title);
+
+            var collection = new ObservableCollection<ResultDataItem>();
+            if (results != null)
+            {
+                foreach (var result in results)
+                {
+                    collection.Add(new ResultDataItem(result, (this.itemCollection.SelectedItem as CollectionDataItem).Table));
+                }
+                (this.itemCollection.SelectedItem as CollectionDataItem).Results = collection;
+            }
         }
     }
 }

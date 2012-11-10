@@ -6,18 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ODataPad.DataModel;
 using Simple.OData.Client;
-using Windows.ApplicationModel.Resources.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using System.Collections.Specialized;
 
 // The data model defined by this file serves as a representative example of a strongly-typed
 // model that supports notification when members are added, removed, or modified.  The property
@@ -223,7 +212,24 @@ namespace ODataPad.DataModel
                     return element.ToString();
                 }
             });
-            return task.Result;
+            return await task;
+        }
+
+        public async Task<IEnumerable<IDictionary<string, object>>> LoadCollectionDataAsync(string serviceUrl, string collectionName)
+        {
+            var task = Task<IEnumerable<IDictionary<string, object>>>.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var odataClient = new ODataClient(serviceUrl);
+                    return odataClient.From(collectionName).Top(100).FindEntries();
+                }
+                catch (Exception exception)
+                {
+                    return null;
+                }
+            });
+            return await task;
         }
     }
 }

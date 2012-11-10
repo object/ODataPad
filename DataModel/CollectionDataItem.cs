@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Simple.OData.Client;
 
@@ -10,10 +11,13 @@ namespace ODataPad.DataModel
         public CollectionDataItem(ServiceInfo service, Table table)
             : base(GetUniqueId(service.Name, table.ActualName), table.ActualName, GetCollectionSummary(table), null, null)
         {
+            this.Table = table;
         }
 
-        private IEnumerable<IDictionary<string, object>> _results;
-        public IEnumerable<IDictionary<string, object>> Results
+        public Table Table { get; private set; }
+
+        private ObservableCollection<ResultDataItem> _results;
+        public ObservableCollection<ResultDataItem> Results
         {
             get { return this._results; }
             set { this.SetProperty(ref this._results, value); }
