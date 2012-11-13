@@ -14,6 +14,10 @@ namespace ODataPad.DataModel
             {
                 {3,  new List<string>(){"Pluralsight"}},
             };
+        private static readonly Dictionary<int, List<string>> UpdatedSamples = new Dictionary<int, List<string>>
+            {
+                {3,  new List<string>(){"Stack Overflow"}},
+            };
         private static readonly Dictionary<int, List<string>> ExpiredSample = new Dictionary<int, List<string>>
             {
                 {3,  new List<string>(){"DBpedia"}},
@@ -22,34 +26,51 @@ namespace ODataPad.DataModel
         private const string SamplesFolder = "Files/Samples";
         private static readonly DateTime SampleCreationTime = new DateTime(2012, 11, 10);
 
-        public async Task<IEnumerable<ServiceInfo>> CreateAllSamplesAsync(uint currentVersion, uint desiredVersion)
+        public async Task<IEnumerable<ServiceInfo>> GetAllSamplesAsync(uint currentVersion, uint desiredVersion)
         {
             var xml = await LoadSamplesXmlAsync();
             var allServices = ParseSamplesXml(xml);
 
-            var services = GetCurrentSampleServices(allServices, currentVersion, desiredVersion);
-            var servicesWithMetadata = await CreateSamplesMetadataAsync(services);
+            var services = NewSamples.Where(sample => sample.Key > desiredVersion)
+                .Aggregate(allServices, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
+            services = ExpiredSample.Where(sample => sample.Key <= desiredVersion)
+                .Aggregate(services, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
+            var servicesWithMetadata = await GetSamplesMetadataAsync(services);
 
             return servicesWithMetadata;
         }
 
-        public async Task<IEnumerable<ServiceInfo>> CreateNewSamplesAsync(uint currentVersion, uint desiredVersion)
+        public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync(uint currentVersion, uint desiredVersion)
         {
             var xml = await LoadSamplesXmlAsync();
             var allServices = ParseSamplesXml(xml);
 
-            var newServices = GetNewSampleServices(allServices, currentVersion, desiredVersion);
-            var newServicesWithMetadata = await CreateSamplesMetadataAsync(newServices);
+            var newServices = NewSamples.Where(sample => sample.Key > currentVersion && sample.Key <= desiredVersion)
+                .SelectMany(x => allServices.Where(y => x.Value.Contains(y.Name)));
+            var newServicesWithMetadata = await GetSamplesMetadataAsync(newServices);
 
             return newServicesWithMetadata;
         }
 
-        public async Task<IEnumerable<ServiceInfo>> DeleteExpiredSamplesAsync(uint currentVersion, uint desiredVersion)
+        public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync(uint currentVersion, uint desiredVersion)
         {
             var xml = await LoadSamplesXmlAsync();
             var allServices = ParseSamplesXml(xml);
 
-            var expiredServices = GetExpiredSampleServices(allServices, currentVersion, desiredVersion);
+            var updatedServices = UpdatedSamples.Where(sample => sample.Key > currentVersion && sample.Key <= desiredVersion)
+                .SelectMany(x => allServices.Where(y => x.Value.Contains(y.Name)));
+            var updatedServicesWithMetadata = await GetSamplesMetadataAsync(updatedServices);
+
+            return updatedServicesWithMetadata;
+        }
+
+        public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync(uint currentVersion, uint desiredVersion)
+        {
+            var xml = await LoadSamplesXmlAsync();
+            var allServices = ParseSamplesXml(xml);
+
+            var expiredServices = ExpiredSample.Where(sample => sample.Key > currentVersion && sample.Key <= desiredVersion)
+                .SelectMany(x => allServices.Where(y => x.Value.Contains(y.Name)));
             return expiredServices;
         }
 
@@ -68,30 +89,7 @@ namespace ODataPad.DataModel
             return services;
         }
 
-        private IEnumerable<ServiceInfo> GetCurrentSampleServices(IEnumerable<ServiceInfo> allServices, uint currentVersion, uint desiredVersion)
-        {
-            var services = NewSamples.Where(sample => sample.Key > desiredVersion)
-                .Aggregate(allServices, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
-            services = ExpiredSample.Where(sample => sample.Key <= desiredVersion)
-                .Aggregate(services, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
-            return services;
-        }
-
-        private IEnumerable<ServiceInfo> GetNewSampleServices(IEnumerable<ServiceInfo> allServices, uint currentVersion, uint desiredVersion)
-        {
-            var newSamples = NewSamples.Where(sample => sample.Key > currentVersion && sample.Key <= desiredVersion)
-                .SelectMany(x => allServices.Where(y => x.Value.Contains(y.Name)));
-            return newSamples;
-        }
-
-        private IEnumerable<ServiceInfo> GetExpiredSampleServices(IEnumerable<ServiceInfo> allServices, uint currentVersion, uint desiredVersion)
-        {
-            var expiredSamples = ExpiredSample.Where(sample => sample.Key > currentVersion && sample.Key <= desiredVersion)
-                .SelectMany(x => allServices.Where(y => x.Value.Contains(y.Name)));
-            return expiredSamples;
-        }
-
-        private async Task<IEnumerable<ServiceInfo>> CreateSamplesMetadataAsync(IEnumerable<ServiceInfo> services)
+        private async Task<IEnumerable<ServiceInfo>> GetSamplesMetadataAsync(IEnumerable<ServiceInfo> services)
         {
             var servicesWithMetadata = new List<ServiceInfo>();
             var resourceMap = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap;

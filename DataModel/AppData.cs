@@ -101,8 +101,7 @@ namespace ODataPad.DataModel
             GetOrCreateContainer(ServicesKey);
             var sampleStore = new SampleStore();
 
-            var services = await sampleStore.CreateAllSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
-
+            var services = await sampleStore.GetAllSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
             int index = 0;
             foreach (var serviceInfo in services)
             {
@@ -120,8 +119,7 @@ namespace ODataPad.DataModel
             GetOrCreateContainer(ServicesKey);
             var sampleStore = new SampleStore();
 
-            var newServices = await sampleStore.CreateNewSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
-
+            var newServices = await sampleStore.GetNewSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
             int index = localSettings.Containers[ServicesKey].Values.Count;
             foreach (var serviceInfo in newServices)
             {
@@ -131,7 +129,16 @@ namespace ODataPad.DataModel
                 ++index;
             }
 
-            var expiredServices = await sampleStore.DeleteExpiredSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+            var updatedServices = await sampleStore.GetUpdatedSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+            foreach (var serviceInfo in updatedServices)
+            {
+                if (localSettings.Containers[ServicesKey].Values.ContainsKey(serviceInfo.Name))
+                {
+                    await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                }
+            }
+
+            var expiredServices = await sampleStore.GetExpiredSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
             foreach (var kv in localSettings.Containers[ServicesKey].Values
                 .Where(x => expiredServices.Any(y => x.Key == y.Name)))
             {
