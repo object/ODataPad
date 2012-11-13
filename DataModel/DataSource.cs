@@ -27,6 +27,7 @@ namespace ODataPad.DataModel
     {
         private static DataSource _instance;
         private RootDataItem _rootItem;
+        private const int ResultPageSize = 100;
 
         private DataSource()
         {
@@ -210,23 +211,6 @@ namespace ODataPad.DataModel
                     var element = new XElement("Error");
                     element.Add(new XElement("Message", exception.Message));
                     return element.ToString();
-                }
-            });
-            return await task;
-        }
-
-        public async Task<IEnumerable<IDictionary<string, object>>> LoadCollectionDataAsync(string serviceUrl, string collectionName)
-        {
-            var task = Task<IEnumerable<IDictionary<string, object>>>.Factory.StartNew(() =>
-            {
-                try
-                {
-                    var odataClient = new ODataClient(serviceUrl);
-                    return odataClient.From(collectionName).Top(100).FindEntries();
-                }
-                catch (Exception exception)
-                {
-                    return null;
                 }
             });
             return await task;

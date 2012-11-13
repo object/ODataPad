@@ -16,8 +16,8 @@ namespace ODataPad.DataModel
 
         public Table Table { get; private set; }
 
-        private ObservableCollection<ResultDataItem> _results;
-        public ObservableCollection<ResultDataItem> Results
+        private ObservableResultCollection _results;
+        public ObservableResultCollection Results
         {
             get { return this._results; }
             set { this.SetProperty(ref this._results, value); }

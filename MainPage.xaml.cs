@@ -5,9 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ODataPad.Common;
-using ODataPad.DataModel;
-using Simple.OData.Client;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
@@ -22,6 +19,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using ODataPad.Common;
+using ODataPad.DataModel;
 
 // The Split Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234234
 
@@ -215,17 +214,18 @@ namespace ODataPad
 
         private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var collection = this.itemCollection.SelectedItem as CollectionDataItem;
-            if (collection != null)
+            if (e.RemovedItems.Count == 1)
             {
+                var collectionItem = e.RemovedItems.First() as CollectionDataItem;
+                collectionItem.Results = null;
+            }
+            if (e.AddedItems.Count == 1)
+            {
+                var collectionItem = e.AddedItems.First() as CollectionDataItem;
                 if (this.collectionMode.SelectedIndex == 0)
-                {
-                    collection.Results = null;
-                }
+                    collectionItem.Results = null;
                 else
-                {
-                    RequestCollectionData();
-                }
+                    RequestCollectionData(collectionItem);
             }
         }
 
@@ -329,7 +329,7 @@ namespace ODataPad
                 this.itemData.Visibility = Visibility.Visible;
                 if (this.itemCollection.SelectedItem != null)
                 {
-                    RequestCollectionData();
+                    RequestCollectionData(this.itemCollection.SelectedItem as CollectionDataItem);
                 }
             }
         }
@@ -412,28 +412,17 @@ namespace ODataPad
             await DataSource.Instance.RemoveServiceDataItemAsync(dataItem);
         }
 
-        private void RequestCollectionData()
+        private void RequestCollectionData(CollectionDataItem collectionItem)
         {
-            var dispatcher = Window.Current.Dispatcher;
-            /*await*/
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, LoadCollectionDataAsync);
+            if (collectionItem.Results == null)
+                collectionItem.Results = new ObservableResultCollection(
+                    (this.itemListView.SelectedItem as ServiceDataItem).Subtitle,
+                    collectionItem.Title, collectionItem.Table, this);
         }
 
-        private async void LoadCollectionDataAsync()
+        public void EnableResultProgressBar(bool enabled)
         {
-            var results = await DataSource.Instance.LoadCollectionDataAsync(
-                (this.itemListView.SelectedItem as ServiceDataItem).Subtitle,
-                (this.itemCollection.SelectedItem as CollectionDataItem).Title);
-
-            var collection = new ObservableCollection<ResultDataItem>();
-            if (results != null)
-            {
-                foreach (var result in results)
-                {
-                    collection.Add(new ResultDataItem(result, (this.itemCollection.SelectedItem as CollectionDataItem).Table));
-                }
-                (this.itemCollection.SelectedItem as CollectionDataItem).Results = collection;
-            }
+            this.resultProgress.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

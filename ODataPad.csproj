@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="DataModel\AppData.cs" />
     <Compile Include="DataModel\ErrorDataItem.cs" />
+    <Compile Include="DataModel\ObservableResultCollection.cs" />
     <Compile Include="DataModel\PropertyDataItem.cs" />
     <Compile Include="DataModel\CollectionDataItem.cs" />
     <Compile Include="DataModel\DataItem.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="DataModel\SampleStore.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
     <Compile Include="DataModel\ServiceInfo.cs" />
+    <Compile Include="ResultLoader.cs" />
     <Compile Include="ResultPage.xaml.cs">
       <DependentUpon>ResultPage.xaml</DependentUpon>
     </Compile>

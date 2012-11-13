@@ -120,16 +120,19 @@
                 </StackPanel>
             </Grid>
 
-            <ComboBox 
-                x:Name="collectionMode" 
-                    Grid.Column="2" Margin="10" 
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="Auto" SelectedIndex="0" 
-                    Background="{StaticResource ApplicationPageBackgroundThemeBrush}" 
-                    Foreground="{StaticResource ApplicationForegroundThemeBrush}" 
-                    BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" SelectionChanged="collectionMode_SelectionChanged">
-                <ComboBoxItem Content="Show collection properties"/>
-                <ComboBoxItem Content="Show collection data"/>
-            </ComboBox>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="2" >
+                <ProgressBar x:Name="resultProgress" IsIndeterminate="True"  Visibility="Collapsed" />
+                <ComboBox 
+                    x:Name="collectionMode" 
+                        Margin="10" 
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="Auto" SelectedIndex="0" 
+                        Background="{StaticResource ApplicationPageBackgroundThemeBrush}" 
+                        Foreground="{StaticResource ApplicationForegroundThemeBrush}" 
+                        BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" SelectionChanged="collectionMode_SelectionChanged">
+                    <ComboBoxItem Content="Show collection properties"/>
+                    <ComboBoxItem Content="Show collection data"/>
+                </ComboBox>
+            </StackPanel>
 
             <ListView 
                     x:Name="itemCollection"
