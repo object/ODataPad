@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Storage;
-using Windows.Storage.Search;
 
 namespace ODataPad.DataModel
 {
     public class AppData
     {
-        public const int CurrentVersion = 2;
+        public static uint CurrentVersion;
+        public const uint DesiredVersion = 3;
         public const string ServicesKey = "Services";
         public IList<ServiceInfo> Services { get; set; }
 
@@ -47,7 +46,7 @@ namespace ODataPad.DataModel
             }
 
             foreach (var kv in localSettings.Containers[ServicesKey].Values
-                .Where(x => !this.Services.Any(y => x.Key == y.Name)))
+                .Where(x => this.Services.All(y => x.Key != y.Name)))
             {
                 localSettings.Containers[ServicesKey].Values.Remove(kv);
             }
@@ -74,7 +73,7 @@ namespace ODataPad.DataModel
 
         public void UpdateService(string serviceName, ServiceInfo serviceInfo)
         {
-            var originalService = this.Services.Where(x => x.Name == serviceName).Single();
+            var originalService = this.Services.Single(x => x.Name == serviceName);
             originalService.Name = serviceInfo.Name;
             originalService.Url = serviceInfo.Url;
             originalService.Description = serviceInfo.Description;
@@ -85,7 +84,7 @@ namespace ODataPad.DataModel
 
         public void DeleteService(ServiceInfo serviceInfo)
         {
-            var originalService = this.Services.Where(x => x.Name == serviceInfo.Name).SingleOrDefault();
+            var originalService = this.Services.SingleOrDefault(x => x.Name == serviceInfo.Name);
             if (originalService != null)
             {
                 this.Services.Remove(originalService);
@@ -98,14 +97,12 @@ namespace ODataPad.DataModel
 
         public async Task<bool> CreateSampleServicesAsync()
         {
-            var resourceMap = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap;
-            var file = await resourceMap.GetSubtree("Files/Samples").GetValue("SampleServices.xml").GetValueAsFileAsync();
-            var xml = await FileIO.ReadTextAsync(file);
-
-            var services = await CreateSampleServicesMetadataAsync(ParseSampleServicesInfo(xml));
-
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
+            var sampleStore = new SampleStore();
+
+            var services = await sampleStore.CreateAllSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+
             int index = 0;
             foreach (var serviceInfo in services)
             {
@@ -117,31 +114,48 @@ namespace ODataPad.DataModel
             return true;
         }
 
-        public static IEnumerable<ServiceInfo> ParseSampleServicesInfo(string xml)
+        public async Task<bool> UpdateSampleServicesAsync()
         {
-            XElement element = XElement.Parse(xml);
-            var services = from e in element.Elements("Service")
-                           select new ServiceInfo()
-                           {
-                               Name = e.Element("Name").Value,
-                               Url = e.Element("Url").Value,
-                               Description = e.Element("Description").Value,
-                               CacheUpdated = TryGetDateTimeValue(e, "CacheUpdated"),
-                           };
-            return services;
+            var localSettings = ApplicationData.Current.LocalSettings;
+            GetOrCreateContainer(ServicesKey);
+            var sampleStore = new SampleStore();
+
+            var newServices = await sampleStore.CreateNewSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+
+            int index = localSettings.Containers[ServicesKey].Values.Count;
+            foreach (var serviceInfo in newServices)
+            {
+                serviceInfo.Index = index;
+                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = FormatServiceInfo(serviceInfo);
+                await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                ++index;
+            }
+
+            var expiredServices = await sampleStore.DeleteExpiredSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+            foreach (var kv in localSettings.Containers[ServicesKey].Values
+                .Where(x => expiredServices.Any(y => x.Key == y.Name)))
+            {
+                localSettings.Containers[ServicesKey].Values.Remove(kv);
+            }
+
+            return true;
         }
 
         public static ServiceInfo ParseServiceInfo(string xml)
         {
-            XElement element = XElement.Parse(xml);
+            return ParseServiceInfo(XElement.Parse(xml));
+        }
+
+        public static ServiceInfo ParseServiceInfo(XElement element)
+        {
             return new ServiceInfo()
             {
-                Name = element.Element("Name").Value,
-                Url = element.Element("Url").Value,
-                Description = element.Element("Description").Value,
-                Logo = element.Element("Logo").Value,
-                CacheUpdated = TryGetDateTimeValue(element, "CacheUpdated"),
-                Index = TryGetIntValue(element, "Index"),
+                Name = Utils.TryGetStringValue(element, "Name"),
+                Url = Utils.TryGetStringValue(element, "Url"),
+                Description = Utils.TryGetStringValue(element, "Description"),
+                Logo = Utils.TryGetStringValue(element, "Logo"),
+                CacheUpdated = Utils.TryGetDateTimeValue(element, "CacheUpdated"),
+                Index = Utils.TryGetIntValue(element, "Index"),
             };
         }
 
@@ -157,21 +171,6 @@ namespace ODataPad.DataModel
             return element.ToString();
         }
 
-        private async Task<IEnumerable<ServiceInfo>> CreateSampleServicesMetadataAsync(IEnumerable<ServiceInfo> services)
-        {
-            var servicesWithMetadata = new List<ServiceInfo>();
-            var resourceMap = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap;
-            foreach (var serviceInfo in services)
-            {
-                var serviceWithMetadata = serviceInfo;
-                var file = await resourceMap.GetSubtree("Files/Samples").GetValue(serviceInfo.MetadataCacheFilename).GetValueAsFileAsync();
-                serviceWithMetadata.MetadataCache = await FileIO.ReadTextAsync(file);
-                serviceWithMetadata.CacheUpdated = new DateTimeOffset(new DateTime(2012, 10, 1));
-                servicesWithMetadata.Add(serviceWithMetadata);
-            }
-            return servicesWithMetadata;
-        }
-
         private void GetOrCreateContainer(string containerName)
         {
             var localSettings = ApplicationData.Current.LocalSettings;
@@ -184,24 +183,6 @@ namespace ODataPad.DataModel
         public async static Task<bool> SaveServiceMetadataCacheAsync(ServiceInfo serviceInfo)
         {
             return await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
-        }
-
-        private static DateTimeOffset? TryGetDateTimeValue(XElement parent, string elementName)
-        {
-            var element = parent.Element(elementName);
-            return element == null ?
-                null : string.IsNullOrEmpty(element.Value) ?
-                null :
-                new DateTimeOffset?(DateTimeOffset.Parse(element.Value));
-        }
-
-        private static int TryGetIntValue(XElement parent, string elementName)
-        {
-            var element = parent.Element(elementName);
-            return element == null ?
-                0 : string.IsNullOrEmpty(element.Value) ?
-                0 :
-                int.Parse(element.Value);
         }
 
         private static async Task<string> LoadSettingFromFileAsync(string filename)

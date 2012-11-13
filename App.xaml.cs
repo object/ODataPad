@@ -13,12 +13,6 @@ using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 
 // The Grid App template is documented at http://go.microsoft.com/fwlink/?LinkId=234226
 
@@ -111,9 +105,9 @@ namespace ODataPad
         private async Task<bool> LoadAppDataAsync()
         {
             AppData = new AppData();
-            await ApplicationData.Current.SetVersionAsync(AppData.CurrentVersion, SetVersionHandlerAsync);
+            await ApplicationData.Current.SetVersionAsync(AppData.DesiredVersion, SetVersionHandlerAsync);
             var services = await AppData.LoadServicesAsync();
-            if (services.Count() == 0)
+            if (!services.Any() && AppData.DesiredVersion == 2)
             {
                 await AppData.CreateSampleServicesAsync();
                 await AppData.LoadServicesAsync();
@@ -124,6 +118,7 @@ namespace ODataPad
         private async void SetVersionHandlerAsync(SetVersionRequest request)
         {
             SetVersionDeferral deferral = request.GetDeferral();
+            AppData.CurrentVersion = request.CurrentVersion;
 
             if (request.DesiredVersion == 1)
             {
@@ -132,6 +127,10 @@ namespace ODataPad
             else if (request.CurrentVersion == 1 && request.DesiredVersion > 1)
             {
                 await AppData.CreateSampleServicesAsync();
+            }
+            else if (request.CurrentVersion == 2 && request.DesiredVersion > 2)
+            {
+                await AppData.UpdateSampleServicesAsync();
             }
 
             deferral.Complete();

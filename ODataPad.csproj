@@ -112,6 +112,7 @@
     <Compile Include="DataModel\DataItem.cs" />
     <Compile Include="DataModel\ResultDataItem.cs" />
     <Compile Include="DataModel\RootDataItem.cs" />
+    <Compile Include="DataModel\SampleStore.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
     <Compile Include="DataModel\ServiceInfo.cs" />
     <Compile Include="ResultPage.xaml.cs">
@@ -128,11 +129,13 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Samples\Pluralsight.edmx" />
     <None Include="ODataPad_StoreKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Samples\Custom.png" />
@@ -147,6 +150,7 @@
     <Content Include="Samples\NuGet.edmx" />
     <Content Include="Samples\Nuget.png" />
     <Content Include="Samples\OData.org.png" />
+    <Content Include="Samples\Pluralsight.png" />
     <Content Include="Samples\Stack Overflow.png" />
     <Content Include="Samples\twitpic.edmx" />
     <Content Include="Samples\twitpic.png" />
