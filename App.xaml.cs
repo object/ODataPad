@@ -124,7 +124,7 @@ namespace ODataPad
             {
                 AppData.ClearServicesAsync();
             }
-            else if (request.CurrentVersion == 1 && request.DesiredVersion > 1)
+            else if (request.CurrentVersion <= 1 && request.DesiredVersion > 1)
             {
                 await AppData.CreateSampleServicesAsync();
             }
