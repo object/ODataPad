@@ -16,6 +16,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -332,6 +333,35 @@ namespace ODataPad
                     RequestCollectionData(this.itemCollection.SelectedItem as CollectionDataItem);
                 }
             }
+        }
+
+        private void itemData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.itemData.SelectedItem != null)
+            {
+                this.itemData.Visibility = Visibility.Collapsed;
+
+                ResultDataItem item = this.itemData.SelectedItem as ResultDataItem;
+                var properties = string.Join(Environment.NewLine + Environment.NewLine,
+                    item.Results
+                        .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
+
+                var block = new Paragraph();
+                block.Inlines.Add(new Run() { Text = properties });
+                this.itemText.Blocks.Add(block);
+
+                this.itemText.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void itemText_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.itemText.Blocks.Clear();
+            this.itemText.Visibility = Visibility.Collapsed;
+
+            this.itemData.SelectedItem = null;
+            this.itemData.Visibility = Visibility.Visible;
+            this.itemData.Focus(FocusState.Pointer);
         }
 
         private void RefreshSaveButtonState()

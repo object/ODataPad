@@ -12,7 +12,12 @@ namespace ODataPad.DataModel
         public ResultDataItem(IDictionary<string, object> results, Table table)
             : base(Guid.NewGuid().ToString(), GetKeySummary(results, table.GetKeyNames()), GetResultSummary(results, table.GetKeyNames()), null, null)
         {
+            this.Keys = table.GetKeyNames();
+            this.Results = results;
         }
+
+        public IEnumerable<string> Keys { get; private set; }
+        public IDictionary<string, object> Results { get; private set; }
 
         private static string GetKeySummary(IDictionary<string, object> results, IEnumerable<string> keys)
         {

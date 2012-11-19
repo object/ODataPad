@@ -162,7 +162,16 @@
                 DataContext="{Binding SelectedItem, ElementName=itemCollection}"
                 ItemsSource="{Binding Results}"
                 ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
-                SelectionMode="None" />
+                SelectionMode="Single" SelectionChanged="itemData_SelectionChanged" />
+            
+            <RichTextBlock
+                x:Name="itemText"
+                    Grid.Row="1"
+                    Grid.Column="2"  
+                Margin="10,10" 
+                Padding="10,0"
+                Style="{StaticResource ItemRichTextStyle}" 
+                Visibility="Collapsed" Tapped="itemText_Tapped" IsTextSelectionEnabled="False"/>
 
         </Grid>
 
@@ -361,6 +370,12 @@
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemProperties" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemData" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemText" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemTitle" Storyboard.TargetProperty="Margin">
