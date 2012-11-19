@@ -93,7 +93,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="itemDetailFirstColumn" Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -113,14 +113,14 @@
                 <Border x:Name="itemDetailImage" Background="Transparent"  Width="110" Height="110"  Margin="0,0,10,0">
                     <Image Source="{Binding Image}" Stretch="UniformToFill"/>
                 </Border>
-                <StackPanel x:Name="itemDetailTitlePanel" Grid.Column="1">
+                <StackPanel x:Name="itemDetailTitlePanel" Grid.Column="1" >
                     <TextBlock x:Name="itemTitle" Margin="0,0,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
                     <TextBlock x:Name="itemSubtitle" Margin="0,0,0,0" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
-                    <TextBlock x:Name="itemDescription" Margin="0,0,0,0" Text="{Binding Description}" Style="{StaticResource SubtitleTextStyle}"/>
+                    <TextBlock x:Name="itemDescription" Margin="0,0,0,10" Padding="0,0,0,2" Text="{Binding Description}" Style="{StaticResource SubtitleTextStyle}"/>
                 </StackPanel>
             </Grid>
 
-            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="2" >
+            <StackPanel x:Name="modeAndProgress" Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="1" >
                 <ProgressBar x:Name="resultProgress" IsIndeterminate="True"  Visibility="Collapsed" />
                 <ComboBox 
                     x:Name="collectionMode" 
@@ -134,18 +134,36 @@
                 </ComboBox>
             </StackPanel>
 
-            <ListView 
+            <Grid x:Name="itemDetailRearrange" Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition x:Name="itemGridLineRow" Height="0"/>
+                    <RowDefinition x:Name="itemDetailRow" Height="0"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition x:Name="itemDetailSecondColumn" Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ListView 
                     x:Name="itemCollection"
-                        Grid.Row="1"
+                        Grid.Row="0"
+                        Grid.Column="0"
                     TabIndex="2"
                     SelectionChanged="ItemCollection_SelectionChanged"
                     ItemsSource="{Binding Elements}"
                     ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" SelectionMode="Single" />
 
-            <ListView 
-                x:Name="itemProperties"
+                <Rectangle x:Name="itemGridLine"
                     Grid.Row="1"
-                    Grid.Column="2"
+                    Grid.Column="0"
+                    Height="1" VerticalAlignment="Center" 
+                    Fill="{StaticResource ApplicationForegroundThemeBrush}" />
+
+                <ListView 
+                x:Name="itemProperties"
+                    Grid.Row="0"
+                    Grid.Column="1"
                 TabIndex="3"
                 Visibility="Visible"
                 DataContext="{Binding SelectedItem, ElementName=itemCollection}"
@@ -155,8 +173,8 @@
 
             <ListView 
                 x:Name="itemData"
-                    Grid.Row="1"
-                    Grid.Column="2"
+                    Grid.Row="0"
+                    Grid.Column="1"
                 TabIndex="3"
                 Visibility="Collapsed"
                 DataContext="{Binding SelectedItem, ElementName=itemCollection}"
@@ -166,13 +184,15 @@
             
             <RichTextBlock
                 x:Name="itemText"
-                    Grid.Row="1"
-                    Grid.Column="2"  
+                    Grid.Row="0"
+                    Grid.Column="1"  
                 Margin="10,10" 
                 Padding="10,0"
                 Style="{StaticResource ItemRichTextStyle}" 
                 Visibility="Collapsed" Tapped="itemText_Tapped" IsTextSelectionEnabled="False"/>
 
+            </Grid>
+            
         </Grid>
 
         <Popup x:Name="editPopup" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="620" HorizontalAlignment="Center"
@@ -351,35 +371,53 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Column)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Row)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetail" Storyboard.TargetProperty="Margin">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,60"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemCollection" Storyboard.TargetProperty="SelectionMode">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="None"/>
-                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemCollection" Storyboard.TargetProperty="(Grid.ColumnSpan)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="collectionMode" Storyboard.TargetProperty="Visibility">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="modeAndProgress" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemProperties" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemProperties" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemData" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemProperties" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemText" Storyboard.TargetProperty="Visibility">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemData" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemData" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemText" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemText" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemTitle" Storyboard.TargetProperty="Margin">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailRow" Storyboard.TargetProperty="Height">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="*"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailFirstColumn" Storyboard.TargetProperty="Width">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Auto"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailSecondColumn" Storyboard.TargetProperty="Width">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemGridLineRow" Storyboard.TargetProperty="Height">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemSubtitle" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
