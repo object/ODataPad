@@ -16,36 +16,57 @@ namespace ODataPad.DataModel
 
         private static string GetKeySummary(IDictionary<string, object> results, IEnumerable<string> keys)
         {
-            var sb = new StringBuilder();
-            foreach (var result in results)
+            if (IsError(results, keys))
             {
-                if (!keys.Contains(result.Key))
-                    continue;
-
-                if (sb.Length > 0)
-                    sb.Append(" | ");
-                var text = result.Value.ToString();
-                sb.Append(text);
+                return results.Keys.First();
             }
-            return sb.ToString();
+            else
+            {
+                var sb = new StringBuilder();
+                foreach (var result in results)
+                {
+                    if (!keys.Contains(result.Key))
+                        continue;
+
+                    if (sb.Length > 0)
+                        sb.Append(" | ");
+                    var text = result.Value.ToString();
+                    sb.Append(text);
+                }
+                return sb.ToString();
+            }
         }
 
         private static string GetResultSummary(IDictionary<string, object> results, IEnumerable<string> keys)
         {
-            var sb = new StringBuilder();
-            foreach (var result in results)
+            if (IsError(results, keys))
             {
-                if (keys.Contains(result.Key))
-                    continue;
-
-                if (sb.Length > 0)
-                    sb.Append(" | ");
-                var text = result.Value == null ? "(null)" : result.Value.ToString();
-                if (text.Length > 30)
-                    text = text.Substring(0, 30) + "...";
-                sb.Append(text);
+                return results.Values.First().ToString();
             }
-            return sb.ToString();
+            else
+            {
+                var sb = new StringBuilder();
+                foreach (var result in results)
+                {
+                    if (keys.Contains(result.Key))
+                        continue;
+
+                    if (sb.Length > 0)
+                        sb.Append(" | ");
+                    var text = result.Value == null ? "(null)" : result.Value.ToString();
+                    if (text.Length > 30)
+                        text = text.Substring(0, 30) + "...";
+                    sb.Append(text);
+                }
+                return sb.ToString();
+            }
+        }
+
+        private static bool IsError(IDictionary<string, object> results, IEnumerable<string> keys)
+        {
+            return results.Count == 1 && 
+                results.Keys.First() == "Error" && 
+                !keys.Contains(results.Keys.First());
         }
     }
 }

@@ -24,6 +24,7 @@ namespace ODataPad
 
         public async Task LoadResults(ObservableResultCollection collection, uint count)
         {
+            bool loadFailed = false;
             var task = Task<IEnumerable<IDictionary<string, object>>>.Factory.StartNew(() =>
             {
                 try
@@ -37,7 +38,15 @@ namespace ODataPad
                 }
                 catch (Exception exception)
                 {
-                    return null;
+                    loadFailed = true;
+                    var error = new Dictionary<string, object>()
+                                    { {
+                                            "Error",
+                                            exception.InnerException == null ?
+                                            exception.Message :
+                                            exception.InnerException.Message
+                                    } };
+                    return new List<IDictionary<string, object>> {error};
                 }
             });
 
@@ -47,7 +56,7 @@ namespace ODataPad
 
             if (results != null)
             {
-                collection.HasMoreItems = results.Any();
+                collection.HasMoreItems = results.Any() && !loadFailed;
                 foreach (var result in results)
                 {
                     collection.Add(new ResultDataItem(result, collection.Table));
