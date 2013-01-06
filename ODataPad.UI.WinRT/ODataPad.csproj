@@ -194,11 +194,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Simple.OData\Simple.OData.Client\Simple.OData.Client.Core.csproj">
+    <ProjectReference Include="..\..\Simple.OData\Simple.OData.Client\Simple.OData.Client.Core.csproj">
       <Project>{361868b8-a63e-4c74-aa87-b70e1ab22313}</Project>
       <Name>Simple.OData.Client.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="ODataPad.Core\ODataPad.Core.csproj">
+    <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
       <Name>ODataPad.Core</Name>
     </ProjectReference>
