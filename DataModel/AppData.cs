@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Windows.Storage;
+using ODataPad.Core.Models;
+using ODataPad.Core.Services;
 
 namespace ODataPad.DataModel
 {
@@ -14,16 +15,16 @@ namespace ODataPad.DataModel
         public static uint CurrentVersion;
         public const uint DesiredVersion = 3;
         public const string ServicesKey = "Services";
-        public IList<ServiceInfo> Services { get; set; }
+        public IList<ODataServiceInfo> Services { get; set; }
 
-        public async Task<IEnumerable<ServiceInfo>> LoadServicesAsync()
+        public async Task<IEnumerable<ODataServiceInfo>> LoadServicesAsync()
         {
-            var servicesWithMetadata = new List<ServiceInfo>();
+            var servicesWithMetadata = new List<ODataServiceInfo>();
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
             foreach (var kv in localSettings.Containers[ServicesKey].Values)
             {
-                var serviceInfo = ParseServiceInfo(kv.Value as string);
+                var serviceInfo = ODataServiceInfo.Parse(kv.Value as string);
                 var serviceInfoWithMetadata = serviceInfo;
                 serviceInfoWithMetadata.MetadataCache = await LoadSettingFromFileAsync(serviceInfo.MetadataCacheFilename);
                 servicesWithMetadata.Add(serviceInfoWithMetadata);
@@ -40,7 +41,7 @@ namespace ODataPad.DataModel
 
             foreach (var serviceInfo in this.Services)
             {
-                var xml = FormatServiceInfo(serviceInfo);
+                var xml = serviceInfo.Format();
                 localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = xml;
                 await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
@@ -62,16 +63,16 @@ namespace ODataPad.DataModel
             {
                 localSettings.DeleteContainer(ServicesKey);
             }
-            this.Services = new ServiceInfo[] { };
+            this.Services = new ODataServiceInfo[] { };
         }
 
-        public void AddService(ServiceInfo serviceInfo)
+        public void AddService(ODataServiceInfo serviceInfo)
         {
             serviceInfo.Index = this.Services.Count;
             this.Services.Add(serviceInfo);
         }
 
-        public void UpdateService(string serviceName, ServiceInfo serviceInfo)
+        public void UpdateService(string serviceName, ODataServiceInfo serviceInfo)
         {
             var originalService = this.Services.Single(x => x.Name == serviceName);
             originalService.Name = serviceInfo.Name;
@@ -82,7 +83,7 @@ namespace ODataPad.DataModel
             originalService.CacheUpdated = serviceInfo.CacheUpdated;
         }
 
-        public void DeleteService(ServiceInfo serviceInfo)
+        public void DeleteService(ODataServiceInfo serviceInfo)
         {
             var originalService = this.Services.SingleOrDefault(x => x.Name == serviceInfo.Name);
             if (originalService != null)
@@ -99,14 +100,14 @@ namespace ODataPad.DataModel
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
-            var sampleStore = new SampleStore();
+            var sampleStore = CreateSampleService();
 
-            var services = await sampleStore.GetAllSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+            var services = await sampleStore.GetAllSamplesAsync();
             int index = 0;
             foreach (var serviceInfo in services)
             {
                 serviceInfo.Index = index;
-                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = FormatServiceInfo(serviceInfo);
+                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = serviceInfo.Format();
                 await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
                 ++index;
             }
@@ -117,19 +118,19 @@ namespace ODataPad.DataModel
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
-            var sampleStore = new SampleStore();
+            var sampleStore = CreateSampleService();
 
-            var newServices = await sampleStore.GetNewSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+            var newServices = await sampleStore.GetNewSamplesAsync();
             int index = localSettings.Containers[ServicesKey].Values.Count;
             foreach (var serviceInfo in newServices)
             {
                 serviceInfo.Index = index;
-                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = FormatServiceInfo(serviceInfo);
+                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = serviceInfo.Format();
                 await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
                 ++index;
             }
 
-            var updatedServices = await sampleStore.GetUpdatedSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+            var updatedServices = await sampleStore.GetUpdatedSamplesAsync();
             foreach (var serviceInfo in updatedServices)
             {
                 if (localSettings.Containers[ServicesKey].Values.ContainsKey(serviceInfo.Name))
@@ -138,7 +139,7 @@ namespace ODataPad.DataModel
                 }
             }
 
-            var expiredServices = await sampleStore.GetExpiredSamplesAsync(AppData.CurrentVersion, AppData.DesiredVersion);
+            var expiredServices = await sampleStore.GetExpiredSamplesAsync();
             foreach (var kv in localSettings.Containers[ServicesKey].Values
                 .Where(x => expiredServices.Any(y => x.Key == y.Name)))
             {
@@ -146,36 +147,6 @@ namespace ODataPad.DataModel
             }
 
             return true;
-        }
-
-        public static ServiceInfo ParseServiceInfo(string xml)
-        {
-            return ParseServiceInfo(XElement.Parse(xml));
-        }
-
-        public static ServiceInfo ParseServiceInfo(XElement element)
-        {
-            return new ServiceInfo()
-            {
-                Name = Utils.TryGetStringValue(element, "Name"),
-                Url = Utils.TryGetStringValue(element, "Url"),
-                Description = Utils.TryGetStringValue(element, "Description"),
-                Logo = Utils.TryGetStringValue(element, "Logo"),
-                CacheUpdated = Utils.TryGetDateTimeValue(element, "CacheUpdated"),
-                Index = Utils.TryGetIntValue(element, "Index"),
-            };
-        }
-
-        public static string FormatServiceInfo(ServiceInfo serviceInfo)
-        {
-            var element = new XElement("Service");
-            element.Add(new XElement("Name", serviceInfo.Name));
-            element.Add(new XElement("Url", serviceInfo.Url));
-            element.Add(new XElement("Description", serviceInfo.Description));
-            element.Add(new XElement("Logo", serviceInfo.Logo));
-            element.Add(new XElement("CacheUpdated", serviceInfo.CacheUpdated));
-            element.Add(new XElement("Index", serviceInfo.Index));
-            return element.ToString();
         }
 
         private void GetOrCreateContainer(string containerName)
@@ -187,7 +158,7 @@ namespace ODataPad.DataModel
             }
         }
 
-        public async static Task<bool> SaveServiceMetadataCacheAsync(ServiceInfo serviceInfo)
+        public async static Task<bool> SaveServiceMetadataCacheAsync(ODataServiceInfo serviceInfo)
         {
             return await SaveSettingToFileAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
         }
@@ -211,6 +182,13 @@ namespace ODataPad.DataModel
                 await file.DeleteAsync();
             }
             return true;
+        }
+
+        private ISamplesService CreateSampleService()
+        {
+            return new SamplesService(new ResourceLoader(), 
+                "Files/Samples", "SampleServices.xml", 
+                (int)AppData.CurrentVersion, (int)AppData.DesiredVersion);
         }
     }
 }

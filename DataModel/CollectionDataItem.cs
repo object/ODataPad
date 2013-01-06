@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ODataPad.Core.Models;
 using Simple.OData.Client;
 
 namespace ODataPad.DataModel
 {
     public class CollectionDataItem : DataItem
     {
-        public CollectionDataItem(ServiceInfo service, Table table)
+        public CollectionDataItem(ODataServiceInfo service, Table table)
             : base(GetUniqueId(service.Name, table.ActualName), table.ActualName, GetCollectionSummary(table), null, null)
         {
             this.Table = table;

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ODataPad.Core.Models;
 using Simple.OData.Client;
 
 // The data model defined by this file serves as a representative example of a strongly-typed
@@ -95,7 +96,7 @@ namespace ODataPad.DataModel
             }
         }
 
-        public async Task<bool> AddServiceDataItemAsync(ServiceInfo serviceInfo)
+        public async Task<bool> AddServiceDataItemAsync(ODataServiceInfo serviceInfo)
         {
             var serviceItem = this.CreateServiceDataItem(serviceInfo);
             _rootItem.Elements.Add(serviceItem);
@@ -109,7 +110,7 @@ namespace ODataPad.DataModel
             return ok;
         }
 
-        public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ServiceInfo serviceInfo)
+        public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ODataServiceInfo serviceInfo)
         {
             var originalTitle = serviceItem.Title;
             serviceItem.Title = serviceInfo.Name;
@@ -128,20 +129,20 @@ namespace ODataPad.DataModel
         public async Task<bool> RemoveServiceDataItemAsync(ServiceDataItem serviceItem)
         {
             _rootItem.Elements.Remove(serviceItem);
-            var serviceInfo = new ServiceInfo() { Name = serviceItem.Title };
+            var serviceInfo = new ODataServiceInfo() { Name = serviceItem.Title };
             App.AppData.DeleteService(serviceInfo);
             bool ok = await App.AppData.SaveServicesAsync();
             return ok;
         }
 
-        private ServiceDataItem CreateServiceDataItem(ServiceInfo service)
+        private ServiceDataItem CreateServiceDataItem(ODataServiceInfo service)
         {
             var item = new ServiceDataItem(service);
             RefreshServiceCollectionsFromMetadataCache(item, service);
             return item;
         }
 
-        private void RefreshServiceCollectionsFromMetadataCache(ServiceDataItem item, ServiceInfo service)
+        private void RefreshServiceCollectionsFromMetadataCache(ServiceDataItem item, ODataServiceInfo service)
         {
             item.Elements.Clear();
             if (!string.IsNullOrEmpty(service.MetadataCache))
@@ -164,7 +165,7 @@ namespace ODataPad.DataModel
             }
         }
 
-        private CollectionDataItem CreateCollectionDataItem(ServiceInfo service, Table table)
+        private CollectionDataItem CreateCollectionDataItem(ODataServiceInfo service, Table table)
         {
             var item = new CollectionDataItem(service, table);
             foreach (var column in table.Columns)
@@ -178,13 +179,13 @@ namespace ODataPad.DataModel
             return item;
         }
 
-        private ErrorDataItem CreateErrorDataItem(ServiceInfo service, XElement element)
+        private ErrorDataItem CreateErrorDataItem(ODataServiceInfo service, XElement element)
         {
             var item = new ErrorDataItem(service, element);
             return item;
         }
 
-        private async Task<bool> RefreshMetadataCacheAsync(ServiceInfo service)
+        private async Task<bool> RefreshMetadataCacheAsync(ODataServiceInfo service)
         {
             var metadata = await LoadServiceMetadataAsync(service);
             service.MetadataCache = metadata;
@@ -198,7 +199,7 @@ namespace ODataPad.DataModel
             return true;
         }
 
-        private async Task<string> LoadServiceMetadataAsync(ServiceInfo service)
+        private async Task<string> LoadServiceMetadataAsync(ODataServiceInfo service)
         {
             var task = Task<string>.Factory.StartNew(() =>
             {

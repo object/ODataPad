@@ -1,10 +1,11 @@
 ﻿using System.Xml.Linq;
+using ODataPad.Core.Models;
 
 namespace ODataPad.DataModel
 {
     public class ErrorDataItem : DataItem
     {
-        public ErrorDataItem(ServiceInfo service, XElement element)
+        public ErrorDataItem(ODataServiceInfo service, XElement element)
             : base(GetUniqueId(service.Name, element.Name), element.Name.ToString(), "Unable to load service metadata", null, GetErrorDescription(element))
         {
         }

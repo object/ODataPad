@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ODataPad.Core.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
@@ -413,7 +414,7 @@ namespace ODataPad
 
         private async void AddServiceAsync()
         {
-            var serviceInfo = new ServiceInfo()
+            var serviceInfo = new ODataServiceInfo()
             {
                 Name = this.serviceName.Text,
                 Url = this.serviceUrl.Text,
@@ -425,7 +426,7 @@ namespace ODataPad
 
         private async void UpdateServiceAsync()
         {
-            var serviceInfo = new ServiceInfo()
+            var serviceInfo = new ODataServiceInfo()
             {
                 Name = this.serviceName.Text,
                 Url = this.serviceUrl.Text,

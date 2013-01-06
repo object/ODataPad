@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace ODataPad
+namespace ODataPad.Core
 {
     public class Utils
     {

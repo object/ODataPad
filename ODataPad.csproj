@@ -113,9 +113,8 @@
     <Compile Include="DataModel\DataItem.cs" />
     <Compile Include="DataModel\ResultDataItem.cs" />
     <Compile Include="DataModel\RootDataItem.cs" />
-    <Compile Include="DataModel\SampleStore.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
-    <Compile Include="DataModel\ServiceInfo.cs" />
+    <Compile Include="ResourceLoader.cs" />
     <Compile Include="ResultLoader.cs" />
     <Compile Include="ResultPage.xaml.cs">
       <DependentUpon>ResultPage.xaml</DependentUpon>
@@ -131,7 +130,6 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -196,9 +194,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Simple.OData\Simple.OData.Client\Simple.OData.Client.WinRT.csproj">
-      <Project>{fc85ed9b-cc45-4d7d-9436-4c9c9d326dfb}</Project>
-      <Name>Simple.OData.Client.WinRT</Name>
+    <ProjectReference Include="..\Simple.OData\Simple.OData.Client\Simple.OData.Client.Core.csproj">
+      <Project>{361868b8-a63e-4c74-aa87-b70e1ab22313}</Project>
+      <Name>Simple.OData.Client.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="ODataPad.Core\ODataPad.Core.csproj">
+      <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
+      <Name>ODataPad.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
