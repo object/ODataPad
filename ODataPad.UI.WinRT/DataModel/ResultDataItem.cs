@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Simple.OData.Client;
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     public class ResultDataItem : DataItem
     {

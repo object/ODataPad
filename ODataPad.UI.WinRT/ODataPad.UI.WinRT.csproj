@@ -7,8 +7,8 @@
     <ProjectGuid>{91C81852-FA13-4FCA-86CA-2EDDD9929CCA}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ODataPad</RootNamespace>
-    <AssemblyName>ODataPad</AssemblyName>
+    <RootNamespace>ODataPad.UI.WinRT</RootNamespace>
+    <AssemblyName>ODataPad.UI.WinRT</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -114,8 +114,7 @@
     <Compile Include="DataModel\ResultDataItem.cs" />
     <Compile Include="DataModel\RootDataItem.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
-    <Compile Include="ResourceLoader.cs" />
-    <Compile Include="ResultLoader.cs" />
+    <Compile Include="ResultManager.cs" />
     <Compile Include="ResultPage.xaml.cs">
       <DependentUpon>ResultPage.xaml</DependentUpon>
     </Compile>
@@ -135,45 +134,45 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="Samples\Pluralsight.edmx" />
-    <None Include="ODataPad_StoreKey.pfx" />
-    <None Include="Package.StoreAssociation.xml" />
-    <Content Include="Samples\Custom.png" />
     <Content Include="Samples\DBpedia.png" />
     <Content Include="Samples\Devexpress Channel.png" />
-    <Content Include="Samples\ebay.edmx" />
     <Content Include="Samples\ebay.png" />
     <Content Include="Samples\nerddinner.png" />
-    <Content Include="Samples\Netflix.edmx" />
     <Content Include="Samples\Netflix.png" />
     <Content Include="Samples\Northwind Service.png" />
-    <Content Include="Samples\NuGet.edmx" />
     <Content Include="Samples\Nuget.png" />
     <Content Include="Samples\OData.org.png" />
     <Content Include="Samples\Pluralsight.png" />
-    <Content Include="Samples\Stack Overflow.png" />
-    <Content Include="Samples\twitpic.edmx" />
-    <Content Include="Samples\twitpic.png" />
-    <None Include="Common\ReadMe.txt" />
-    <None Include="ODataPad_TemporaryKey.pfx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Logo.png" />
-    <Content Include="Samples\Devexpress Channel.edmx" />
-    <Content Include="Samples\DBpedia.edmx" />
-    <Content Include="Samples\Northwind Service.edmx" />
-    <Content Include="Samples\OData.org.edmx" />
-    <Content Include="Samples\nerddinner.edmx" />
     <Content Include="Samples\SampleServices.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Samples\Stack Overflow.png" />
+    <Content Include="Samples\twitpic.png" />
+    <None Include="ODataPad_StoreKey.pfx" />
+    <None Include="Package.StoreAssociation.xml" />
+    <None Include="Common\ReadMe.txt" />
+    <None Include="ODataPad_TemporaryKey.pfx" />
+    <Content Include="Samples\DBpedia.edmx" />
+    <Content Include="Samples\Devexpress Channel.edmx" />
+    <Content Include="Samples\ebay.edmx" />
+    <Content Include="Samples\nerddinner.edmx" />
+    <Content Include="Samples\Netflix.edmx" />
+    <Content Include="Samples\Northwind Service.edmx" />
+    <Content Include="Samples\NuGet.edmx" />
+    <Content Include="Samples\OData.org.edmx" />
+    <Content Include="Samples\Pluralsight.edmx" />
+    <Content Include="Samples\Stack Overflow.edmx" />
+    <Content Include="Samples\twitpic.edmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
-    <Content Include="Samples\Stack Overflow.edmx" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
+    <Content Include="Samples\Custom.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -201,6 +200,10 @@
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
       <Name>ODataPad.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ODataPad.WinRT\ODataPad.WinRT.csproj">
+      <Project>{ece0cae6-b931-4036-9fb1-63170a811069}</Project>
+      <Name>ODataPad.WinRT</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">

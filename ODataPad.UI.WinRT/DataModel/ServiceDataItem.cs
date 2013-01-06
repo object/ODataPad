@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ODataPad.Core.Models;
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     /// <summary>
     /// Generic item data model.
@@ -25,7 +25,7 @@ namespace ODataPad.DataModel
 
         private static string GetImagePath(ODataServiceInfo service)
         {
-            return "Samples/" + (string.IsNullOrEmpty(service.Logo) ? service.Name : service.Logo) + ".png";
+            return (string.IsNullOrEmpty(service.Logo) ? service.Name : service.Logo) + ".png";
         }
     }
 }

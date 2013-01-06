@@ -1,14 +1,14 @@
 ﻿<common:LayoutAwarePage
     x:Name="pageRoot"
-    x:Class="ODataPad.MainPage"
+    x:Class="ODataPad.UI.WinRT.MainPage"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ODataPad"
-    xmlns:model="using:ODataPad.DataModel"
-    xmlns:common="using:ODataPad.Common"
+    xmlns:local="using:ODataPad.UI.WinRT"
+    xmlns:model="using:ODataPad.UI.WinRT.DataModel"
+    xmlns:common="using:ODataPad.UI.WinRT.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <Page.Resources>

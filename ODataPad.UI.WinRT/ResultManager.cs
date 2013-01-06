@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Simple.OData.Client;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using ODataPad.DataModel;
+using Simple.OData.Client;
+using ODataPad.UI.WinRT.DataModel;
 
-namespace ODataPad
+namespace ODataPad.UI.WinRT
 {
-    public class ResultLoader : IAsyncOperation<LoadMoreItemsResult>
+    public class ResultManager : IAsyncOperation<LoadMoreItemsResult>
     {
         private const int PageSize = 40;
         private AsyncStatus _asyncStatus = AsyncStatus.Started;
         private LoadMoreItemsResult _results;
 
-        public ResultLoader(ObservableResultCollection collection, uint count)
+        public ResultManager(ObservableResultCollection collection, uint count)
         {
             LoadResults(collection, count);
         }

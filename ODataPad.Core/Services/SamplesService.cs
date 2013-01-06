@@ -9,8 +9,9 @@ namespace ODataPad.Core.Services
 {
     public class SamplesService : ISamplesService
     {
-        private readonly IResourceLoader _resourceLoader;
-        private readonly string _samplesFolder;
+        private readonly IResourceManager _resourceLoader;
+        private readonly string _moduleName;
+        private readonly string _folderName;
         private readonly string _samplesFilename;
         private readonly int _currentAppVersion;
         private readonly int _desiredAppVersion;
@@ -30,12 +31,13 @@ namespace ODataPad.Core.Services
 
         private static readonly DateTime SampleCreationTime = new DateTime(2012, 11, 10);
 
-        public SamplesService(IResourceLoader resourceLoader, 
-            string samplesFolder, string samplesFilename,
+        public SamplesService(IResourceManager resourceLoader, 
+            string moduleName, string folderName, string samplesFilename,
             int currentAppVersion, int desiredAppVersion)
         {
             _resourceLoader = resourceLoader;
-            _samplesFolder = samplesFolder;
+            _moduleName = moduleName;
+            _folderName = folderName;
             _samplesFilename = samplesFilename;
             _currentAppVersion = currentAppVersion;
             _desiredAppVersion = desiredAppVersion;
@@ -43,7 +45,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ODataServiceInfo>> GetAllSamplesAsync()
         {
-            var xml = await _resourceLoader.LoadResourceFileAsString(_samplesFolder, _samplesFilename);
+            var xml = await _resourceLoader.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = NewSamples.Where(sample => sample.Key > _desiredAppVersion)
@@ -57,7 +59,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ODataServiceInfo>> GetNewSamplesAsync()
         {
-            var xml = await _resourceLoader.LoadResourceFileAsString(_samplesFolder, _samplesFilename);
+            var xml = await _resourceLoader.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var newSamples = NewSamples
@@ -70,7 +72,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ODataServiceInfo>> GetUpdatedSamplesAsync()
         {
-            var xml = await _resourceLoader.LoadResourceFileAsString(_samplesFolder, _samplesFilename);
+            var xml = await _resourceLoader.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var updatedSamples = UpdatedSamples
@@ -83,7 +85,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ODataServiceInfo>> GetExpiredSamplesAsync()
         {
-            var xml = await _resourceLoader.LoadResourceFileAsString(_samplesFolder, _samplesFilename);
+            var xml = await _resourceLoader.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var expiredSamples = ExpiredSample
@@ -105,8 +107,8 @@ namespace ODataPad.Core.Services
             foreach (var serviceInfo in serviceInfos)
             {
                 var serviceInfoWithMetadata = serviceInfo;
-                serviceInfoWithMetadata.MetadataCache = await _resourceLoader.LoadResourceFileAsString(
-                    _samplesFolder, serviceInfo.MetadataCacheFilename);
+                serviceInfoWithMetadata.MetadataCache = await _resourceLoader.LoadContentAsStringAsync(
+                    _folderName, serviceInfo.MetadataCacheFilename);
                 serviceInfoWithMetadata.CacheUpdated = new DateTimeOffset(SampleCreationTime);
                 samplesWithMetadata.Add(serviceInfoWithMetadata);
             }

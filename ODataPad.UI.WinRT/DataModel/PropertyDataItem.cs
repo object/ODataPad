@@ -4,7 +4,7 @@ using System.Linq;
 using ODataPad.Core.Models;
 using Simple.OData.Client;
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     public class PropertyDataItem : DataItem
     {

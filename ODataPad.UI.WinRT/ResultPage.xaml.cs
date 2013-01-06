@@ -1,9 +1,8 @@
-﻿using ODataPad.DataModel;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ODataPad.UI.WinRT.DataModel;
 using Simple.OData.Client;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -17,13 +16,13 @@ using Windows.UI.Xaml.Navigation;
 
 // The Item Detail Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
-namespace ODataPad
+namespace ODataPad.UI.WinRT
 {
     /// <summary>
     /// A page that displays details for a single item within a group while allowing gestures to
     /// flip through other items belonging to the same group.
     /// </summary>
-    public sealed partial class ItemDetailPage : ODataPad.Common.LayoutAwarePage
+    public sealed partial class ItemDetailPage : ODataPad.UI.WinRT.Common.LayoutAwarePage
     {
         public ItemDetailPage()
         {

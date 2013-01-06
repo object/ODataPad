@@ -1,9 +1,9 @@
 ﻿<Application
-    x:Class="ODataPad.App"
+    x:Class="ODataPad.UI.WinRT.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="ODataPad"
-    xmlns:localData="ODataPad.Model">
+    xmlns:local="ODataPad.UI.WinRT"
+    xmlns:localData="ODataPad.UI.WinRT.Model">
 
     <Application.Resources>
         <ResourceDictionary>

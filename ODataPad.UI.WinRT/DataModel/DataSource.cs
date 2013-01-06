@@ -16,7 +16,7 @@ using Simple.OData.Client;
 // Applications may use this model as a starting point and build on it, or discard it entirely and
 // replace it with something appropriate to their needs.
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     /// <summary>
     /// Creates a collection of groups and items with hard-coded content.

@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
-using ODataPad.Common;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ODataPad.DataModel;
+using ODataPad.UI.WinRT.Common;
+using ODataPad.UI.WinRT.DataModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -16,7 +15,7 @@ using Windows.UI.Xaml.Controls;
 
 // The Grid App template is documented at http://go.microsoft.com/fwlink/?LinkId=234226
 
-namespace ODataPad
+namespace ODataPad.UI.WinRT
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

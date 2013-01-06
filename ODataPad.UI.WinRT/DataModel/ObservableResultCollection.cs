@@ -4,7 +4,7 @@ using Windows.Foundation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     public class ObservableResultCollection : ObservableCollection<ResultDataItem>, ISupportIncrementalLoading
     {
@@ -25,7 +25,7 @@ namespace ODataPad.DataModel
 
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
         {
-            return new ResultLoader(this, count);
+            return new ResultManager(this, count);
         }
 
         public bool HasMoreItems { get; set; }

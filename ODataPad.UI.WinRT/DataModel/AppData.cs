@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using ODataPad.WinRT;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     public class AppData
     {
@@ -186,8 +187,8 @@ namespace ODataPad.DataModel
 
         private ISamplesService CreateSampleService()
         {
-            return new SamplesService(new ResourceLoader(), 
-                "Files/Samples", "SampleServices.xml", 
+            return new SamplesService(new ResourceManager(), 
+                "ODataPad.Core", "Samples", "SampleServices.xml", 
                 (int)AppData.CurrentVersion, (int)AppData.DesiredVersion);
         }
     }

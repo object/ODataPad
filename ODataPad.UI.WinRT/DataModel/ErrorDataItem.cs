@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
 using ODataPad.Core.Models;
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     public class ErrorDataItem : DataItem
     {

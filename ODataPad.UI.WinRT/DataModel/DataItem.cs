@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
+using ODataPad.WinRT;
 using Simple.OData.Client;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace ODataPad.DataModel
+namespace ODataPad.UI.WinRT.DataModel
 {
     [Windows.Foundation.Metadata.WebHostHidden]
-    public abstract class DataItem : ODataPad.Common.BindableBase
+    public abstract class DataItem : ODataPad.UI.WinRT.Common.BindableBase
     {
-        private static Uri _baseUri = new Uri("ms-appx:///");
-
         public DataItem(String uniqueId, String title, String subtitle, String imagePath, String description)
         {
             this._uniqueId = uniqueId;
@@ -61,9 +61,10 @@ namespace ODataPad.DataModel
         {
             get
             {
-                if (this._image == null && this._imagePath != null)
+                if (_image == null && this._imagePath != null)
                 {
-                    this._image = new BitmapImage(new Uri(DataItem._baseUri, this._imagePath));
+                    var resourcePath = new ResourceManager().GetImageResourcePath("Samples", _imagePath);
+                    this._image = new BitmapImage(new Uri(resourcePath));
                 }
                 return this._image;
             }

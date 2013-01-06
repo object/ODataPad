@@ -1,4 +1,4 @@
-﻿namespace ODataPad.DataModel
+﻿namespace ODataPad.UI.WinRT.DataModel
 {
     public class RootDataItem : DataItem
     {

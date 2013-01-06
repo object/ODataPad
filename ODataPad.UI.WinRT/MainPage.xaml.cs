@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ODataPad.Core.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
@@ -21,18 +20,18 @@ using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using ODataPad.Common;
-using ODataPad.DataModel;
+using ODataPad.Core.Models;
+using ODataPad.UI.WinRT.DataModel;
 
 // The Split Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234234
 
-namespace ODataPad
+namespace ODataPad.UI.WinRT
 {
     /// <summary>
     /// A page that displays a group title, a list of items within the group, and details for the
     /// currently selected item.
     /// </summary>
-    public sealed partial class MainPage : ODataPad.Common.LayoutAwarePage
+    public sealed partial class MainPage : ODataPad.UI.WinRT.Common.LayoutAwarePage
     {
         private ServiceDataItem _editedItem;
         private bool _movingToFirst = false;

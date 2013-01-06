@@ -14,7 +14,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ODataPad.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ODataPad.UI.WinRT.App">
       <VisualElements DisplayName="ODataPad" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="ODataPad is a free tool that can be used to inspect OData services metadata. It comes with registered metadata from 10 well-known providers of OData services, and users can extend or modify the service collection." ForegroundText="light" BackgroundColor="#464646">
         <DefaultTile ShowName="allLogos" />
         <SplashScreen Image="Assets\SplashScreen.png" />
