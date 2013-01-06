@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using ODataPad.WinRT;
-using Simple.OData.Client;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using ODataPad.WinRT;
 
 namespace ODataPad.UI.WinRT.DataModel
 {

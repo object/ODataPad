@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ODataPad.Core.Services;
 using ODataPad.UI.WinRT.Common;
 using ODataPad.UI.WinRT.DataModel;
+using ODataPad.WinRT;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -105,11 +107,11 @@ namespace ODataPad.UI.WinRT
         {
             AppData = new AppData();
             await ApplicationData.Current.SetVersionAsync(AppData.DesiredVersion, SetVersionHandlerAsync);
-            var services = await AppData.LoadServicesAsync();
+            var services = await AppData.ServiceRepository.LoadServicesAsync();
             if (!services.Any() && AppData.DesiredVersion == 2)
             {
-                await AppData.CreateSampleServicesAsync();
-                await AppData.LoadServicesAsync();
+                await CreateSamplesService().CreateSamplesAsync(new ServiceLocalStorage());
+                await AppData.ServiceRepository.LoadServicesAsync();
             }
             return true;
         }
@@ -121,18 +123,25 @@ namespace ODataPad.UI.WinRT
 
             if (request.DesiredVersion == 1)
             {
-                AppData.ClearServicesAsync();
+                await AppData.ServiceRepository.ClearServicesAsync();
             }
             else if (request.CurrentVersion <= 1 && request.DesiredVersion > 1)
             {
-                await AppData.CreateSampleServicesAsync();
+                await CreateSamplesService().CreateSamplesAsync(new ServiceLocalStorage());
             }
             else if (request.CurrentVersion == 2 && request.DesiredVersion > 2)
             {
-                await AppData.UpdateSampleServicesAsync();
+                await CreateSamplesService().UpdateSamplesAsync(new ServiceLocalStorage());
             }
 
             deferral.Complete();
+        }
+
+        private SamplesService CreateSamplesService()
+        {
+            return new SamplesService(new ResourceManager(),
+                "ODataPad.Core", "Samples", "SampleServices.xml",
+                (int)AppData.CurrentVersion, (int)AppData.DesiredVersion);
         }
     }
 }

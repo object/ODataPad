@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ODataPad.Core.Models;
+using ODataPad.Core.Services;
+using ODataPad.WinRT;
 using Simple.OData.Client;
+using ODataPad.Core.Models;
 
 // The data model defined by this file serves as a representative example of a strongly-typed
 // model that supports notification when members are added, removed, or modified.  The property
@@ -86,9 +85,9 @@ namespace ODataPad.UI.WinRT.DataModel
         {
             _rootItem = new RootDataItem();
 
-            if (App.AppData.Services != null)
+            if (App.AppData.ServiceRepository.Services != null)
             {
-                foreach (var serviceInfo in App.AppData.Services)
+                foreach (var serviceInfo in App.AppData.ServiceRepository.Services)
                 {
                     var item = CreateServiceDataItem(serviceInfo);
                     _rootItem.Elements.Add(item);
@@ -105,7 +104,7 @@ namespace ODataPad.UI.WinRT.DataModel
             {
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 App.AppData.AddService(serviceInfo);
-                ok = await App.AppData.SaveServicesAsync();
+                ok = await App.AppData.ServiceRepository.SaveServicesAsync();
             }
             return ok;
         }
@@ -116,12 +115,12 @@ namespace ODataPad.UI.WinRT.DataModel
             serviceItem.Title = serviceInfo.Name;
             serviceItem.Subtitle = serviceInfo.Url;
             serviceItem.Description = serviceInfo.Description;
-            bool ok = await RefreshMetadataCacheAsync(serviceInfo);
+            var ok = await RefreshMetadataCacheAsync(serviceInfo);
             if (ok)
             {
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 App.AppData.UpdateService(originalTitle, serviceInfo);
-                ok = await App.AppData.SaveServicesAsync();
+                ok = await App.AppData.ServiceRepository.SaveServicesAsync();
             }
             return ok;
         }
@@ -131,7 +130,7 @@ namespace ODataPad.UI.WinRT.DataModel
             _rootItem.Elements.Remove(serviceItem);
             var serviceInfo = new ODataServiceInfo() { Name = serviceItem.Title };
             App.AppData.DeleteService(serviceInfo);
-            bool ok = await App.AppData.SaveServicesAsync();
+            var ok = await App.AppData.ServiceRepository.SaveServicesAsync();
             return ok;
         }
 
@@ -195,7 +194,7 @@ namespace ODataPad.UI.WinRT.DataModel
             {
                 serviceItem.MetadataCache = service.MetadataCache;
             }
-            await AppData.SaveServiceMetadataCacheAsync(service);
+            await new ServiceLocalStorage().SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
             return true;
         }
 
