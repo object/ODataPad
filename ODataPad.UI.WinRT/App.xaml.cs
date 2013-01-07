@@ -1,12 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ODataPad.Core.Services;
-using ODataPad.UI.WinRT.Common;
-using ODataPad.UI.WinRT.DataModel;
-using ODataPad.WinRT;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -14,6 +8,9 @@ using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using ODataPad.Core;
+using ODataPad.WinRT;
+using ODataPad.UI.WinRT.Common;
 
 // The Grid App template is documented at http://go.microsoft.com/fwlink/?LinkId=234226
 
@@ -24,7 +21,8 @@ namespace ODataPad.UI.WinRT
     /// </summary>
     sealed partial class App : Application
     {
-        public static AppData AppData { get; private set; }
+        public static ODataPadApp theApp { get; private set; }
+        public const uint RequestedVersion = 3;
 
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
@@ -34,6 +32,12 @@ namespace ODataPad.UI.WinRT
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            theApp = new ODataPadApp(
+                new ServiceLocalStorage(),
+                new ResourceManager(),
+                "Samples", 
+                "SampleServices.xml");
 
             LoadAppDataAsync().Wait();
         }
@@ -105,43 +109,16 @@ namespace ODataPad.UI.WinRT
 
         private async Task<bool> LoadAppDataAsync()
         {
-            AppData = new AppData();
-            await ApplicationData.Current.SetVersionAsync(AppData.DesiredVersion, SetVersionHandlerAsync);
-            var services = await AppData.ServiceRepository.LoadServicesAsync();
-            if (!services.Any() && AppData.DesiredVersion == 2)
-            {
-                await CreateSamplesService().CreateSamplesAsync(new ServiceLocalStorage());
-                await AppData.ServiceRepository.LoadServicesAsync();
-            }
+            await ApplicationData.Current.SetVersionAsync(RequestedVersion, SetVersionHandlerAsync);
+            await theApp.InitializeODataServicesAsync();
             return true;
         }
 
         private async void SetVersionHandlerAsync(SetVersionRequest request)
         {
             SetVersionDeferral deferral = request.GetDeferral();
-            AppData.CurrentVersion = request.CurrentVersion;
-
-            if (request.DesiredVersion == 1)
-            {
-                await AppData.ServiceRepository.ClearServicesAsync();
-            }
-            else if (request.CurrentVersion <= 1 && request.DesiredVersion > 1)
-            {
-                await CreateSamplesService().CreateSamplesAsync(new ServiceLocalStorage());
-            }
-            else if (request.CurrentVersion == 2 && request.DesiredVersion > 2)
-            {
-                await CreateSamplesService().UpdateSamplesAsync(new ServiceLocalStorage());
-            }
-
+            await theApp.SetVersionAsync((int)request.CurrentVersion, (int)RequestedVersion);
             deferral.Complete();
-        }
-
-        private SamplesService CreateSamplesService()
-        {
-            return new SamplesService(new ResourceManager(),
-                "ODataPad.Core", "Samples", "SampleServices.xml",
-                (int)AppData.CurrentVersion, (int)AppData.DesiredVersion);
         }
     }
 }

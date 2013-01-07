@@ -85,9 +85,9 @@ namespace ODataPad.UI.WinRT.DataModel
         {
             _rootItem = new RootDataItem();
 
-            if (App.AppData.ServiceRepository.Services != null)
+            if (App.theApp.ServiceRepository.Services != null)
             {
-                foreach (var serviceInfo in App.AppData.ServiceRepository.Services)
+                foreach (var serviceInfo in App.theApp.ServiceRepository.Services)
                 {
                     var item = CreateServiceDataItem(serviceInfo);
                     _rootItem.Elements.Add(item);
@@ -103,8 +103,7 @@ namespace ODataPad.UI.WinRT.DataModel
             if (ok)
             {
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
-                App.AppData.AddService(serviceInfo);
-                ok = await App.AppData.ServiceRepository.SaveServicesAsync();
+                ok = await App.theApp.ServiceRepository.AddServiceAsync(serviceInfo);
             }
             return ok;
         }
@@ -119,8 +118,7 @@ namespace ODataPad.UI.WinRT.DataModel
             if (ok)
             {
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
-                App.AppData.UpdateService(originalTitle, serviceInfo);
-                ok = await App.AppData.ServiceRepository.SaveServicesAsync();
+                ok = await App.theApp.ServiceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
             }
             return ok;
         }
@@ -129,9 +127,7 @@ namespace ODataPad.UI.WinRT.DataModel
         {
             _rootItem.Elements.Remove(serviceItem);
             var serviceInfo = new ODataServiceInfo() { Name = serviceItem.Title };
-            App.AppData.DeleteService(serviceInfo);
-            var ok = await App.AppData.ServiceRepository.SaveServicesAsync();
-            return ok;
+            return await App.theApp.ServiceRepository.DeleteServiceAsync(serviceInfo);
         }
 
         private ServiceDataItem CreateServiceDataItem(ODataServiceInfo service)

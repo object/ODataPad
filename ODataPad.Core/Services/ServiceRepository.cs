@@ -16,6 +16,39 @@ namespace ODataPad.Core.Services
             _localStorage = localStorage;
         }
 
+        public async Task<bool> AddServiceAsync(ODataServiceInfo serviceInfo)
+        {
+            serviceInfo.Index = this.Services.Count;
+            this.Services.Add(serviceInfo);
+            return await SaveServicesAsync();
+        }
+
+        public async Task<bool> UpdateServiceAsync(string serviceName, ODataServiceInfo serviceInfo)
+        {
+            var originalService = this.Services.Single(x => x.Name == serviceName);
+            originalService.Name = serviceInfo.Name;
+            originalService.Url = serviceInfo.Url;
+            originalService.Description = serviceInfo.Description;
+            originalService.Logo = serviceInfo.Logo;
+            originalService.MetadataCache = serviceInfo.MetadataCache;
+            originalService.CacheUpdated = serviceInfo.CacheUpdated;
+            return await SaveServicesAsync();
+        }
+
+        public async Task<bool> DeleteServiceAsync(ODataServiceInfo serviceInfo)
+        {
+            var originalService = this.Services.SingleOrDefault(x => x.Name == serviceInfo.Name);
+            if (originalService != null)
+            {
+                this.Services.Remove(originalService);
+            }
+            for (int index = 0; index < this.Services.Count; index++)
+            {
+                this.Services[index].Index = index;
+            }
+            return await SaveServicesAsync();
+        }
+
         public async Task<IEnumerable<ODataServiceInfo>> LoadServicesAsync()
         {
             var servicesWithMetadata = new List<ODataServiceInfo>();

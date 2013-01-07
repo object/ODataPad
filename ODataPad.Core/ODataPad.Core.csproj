@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models\ODataServiceInfo.cs" />
+    <Compile Include="ODataPadApp.cs" />
     <Compile Include="Services\IResourceManager.cs" />
     <Compile Include="Services\IServiceLocalStorage.cs" />
     <Compile Include="Services\ServiceRepository.cs" />
