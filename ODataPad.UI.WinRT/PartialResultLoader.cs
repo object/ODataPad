@@ -10,13 +10,13 @@ using ODataPad.UI.WinRT.DataModel;
 
 namespace ODataPad.UI.WinRT
 {
-    public class ResultManager : IAsyncOperation<LoadMoreItemsResult>
+    public class PartialResultLoader : IAsyncOperation<LoadMoreItemsResult>
     {
         private const int PageSize = 40;
         private AsyncStatus _asyncStatus = AsyncStatus.Started;
         private LoadMoreItemsResult _results;
 
-        public ResultManager(ObservableResultCollection collection, uint count)
+        public PartialResultLoader(ObservableResultCollection collection, uint count)
         {
             LoadResults(collection, count);
         }

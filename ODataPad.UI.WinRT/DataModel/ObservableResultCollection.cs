@@ -25,7 +25,7 @@ namespace ODataPad.UI.WinRT.DataModel
 
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
         {
-            return new ResultManager(this, count);
+            return new PartialResultLoader(this, count);
         }
 
         public bool HasMoreItems { get; set; }

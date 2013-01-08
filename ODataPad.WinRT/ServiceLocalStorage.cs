@@ -35,14 +35,14 @@ namespace ODataPad.WinRT
             return true;
         }
 
-        public Task<string> LoadServiceMetadataAsync(string filename)
+        public async Task<string> LoadServiceMetadataAsync(string filename)
         {
-            return LoadFromLocalStorageAsync(filename);
+            return await LoadFromLocalStorageAsync(filename);
         }
 
-        public Task<bool> SaveServiceMetadataAsync(string filename, string metadata)
+        public async Task<bool> SaveServiceMetadataAsync(string filename, string metadata)
         {
-            return SaveToLocalStorageAsync(filename, metadata);
+            return await SaveToLocalStorageAsync(filename, metadata);
         }
 
         public async Task<bool> ClearServicesAsync()
@@ -82,14 +82,14 @@ namespace ODataPad.WinRT
             return true;
         }
 
-        private static async Task<string> LoadFromLocalStorageAsync(string filename)
+        private async Task<string> LoadFromLocalStorageAsync(string filename)
         {
             var file = await ApplicationData.Current.LocalFolder
                 .CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             return await FileIO.ReadTextAsync(file);
         }
 
-        private static async Task<bool> SaveToLocalStorageAsync(string filename, string text)
+        private async Task<bool> SaveToLocalStorageAsync(string filename, string text)
         {
             var file = await ApplicationData.Current.LocalFolder
                 .CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);

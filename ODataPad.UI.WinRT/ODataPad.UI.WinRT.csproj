@@ -113,7 +113,7 @@
     <Compile Include="DataModel\ResultDataItem.cs" />
     <Compile Include="DataModel\RootDataItem.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
-    <Compile Include="ResultManager.cs" />
+    <Compile Include="PartialResultLoader.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

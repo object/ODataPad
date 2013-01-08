@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 using ODataPad.WinRT;
+using Windows.Storage;
 
 namespace ODataPad.Tests.WinRT
 {
@@ -25,6 +27,9 @@ namespace ODataPad.Tests.WinRT
             Assert.AreEqual(3, services.Count());
             Assert.IsTrue(services.Any(x => x.Name == "DBpedia"));
             Assert.IsTrue(services.All(x => x.Name != "Pluralsight"));
+            var filename = services.Single(x => x.Name == "OData.org").MetadataCacheFilename;
+            var file = await ApplicationData.Current.LocalFolder.GetFileAsync(filename);
+            Assert.IsNotNull(file);
         }
 
         [TestMethod]
@@ -34,6 +39,9 @@ namespace ODataPad.Tests.WinRT
             Assert.AreEqual(3, services.Count());
             Assert.IsTrue(services.All(x => x.Name != "DBpedia"));
             Assert.IsTrue(services.Any(x => x.Name == "Pluralsight"));
+            var filename = services.Single(x => x.Name == "OData.org").MetadataCacheFilename;
+            var file = await ApplicationData.Current.LocalFolder.GetFileAsync(filename);
+            Assert.IsNotNull(file);
         }
 
         private async Task<IEnumerable<ServiceInfo>> UpdateSamplesAsync(int currentVersion, int requestedVersion)

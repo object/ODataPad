@@ -72,9 +72,8 @@ namespace ODataPad.Core.Services
                 .Aggregate(allSamples, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
             samples = ExpiredSample.Where(sample => sample.Key <= _requestedAppVersion)
                 .Aggregate(samples, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
-            var allSamplesWithMetadata = await GetSamplesMetadataAsync(samples);
 
-            return allSamplesWithMetadata;
+            return samples;
         }
 
         public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync()
@@ -82,12 +81,11 @@ namespace ODataPad.Core.Services
             var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
-            var newSamples = NewSamples
+            var samples = NewSamples
                 .Where(sample => sample.Key > _currentAppVersion && sample.Key <= _requestedAppVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
-            var newSamplesWithMetadata = await GetSamplesMetadataAsync(newSamples);
 
-            return newSamplesWithMetadata;
+            return samples;
         }
 
         public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync()
@@ -95,12 +93,11 @@ namespace ODataPad.Core.Services
             var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
-            var updatedSamples = UpdatedSamples
+            var samples = UpdatedSamples
                 .Where(sample => sample.Key > _currentAppVersion && sample.Key <= _requestedAppVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
-            var updatedSamplesWithMetadata = await GetSamplesMetadataAsync(updatedSamples);
 
-            return updatedSamplesWithMetadata;
+            return samples;
         }
 
         public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync()
@@ -108,10 +105,11 @@ namespace ODataPad.Core.Services
             var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
-            var expiredSamples = ExpiredSample
+            var samples = ExpiredSample
                 .Where(sample => sample.Key > _currentAppVersion && sample.Key <= _requestedAppVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
-            return expiredSamples;
+
+            return samples;
         }
 
         public async Task<bool> CreateSamplesAsync(IServiceLocalStorage localStorage)
@@ -124,7 +122,8 @@ namespace ODataPad.Core.Services
                 ++index;
             }
             await localStorage.SaveServiceInfosAsync(allSamples);
-            foreach (var serviceInfo in allSamples)
+            var samplesWithMetadata = await GetSamplesMetadataAsync(allSamples);
+            foreach (var serviceInfo in samplesWithMetadata)
             {
                 await localStorage.SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
@@ -144,13 +143,23 @@ namespace ODataPad.Core.Services
                 serviceInfo.Index = index;
                 ++index;
             }
+            updatedServices = updatedServices.Where(x => oldServices.Any(y => x.Name == y.Name));
+            foreach (var serviceInfo in updatedServices)
+            {
+                var oldService = oldServices.SingleOrDefault(x => x.Name == serviceInfo.Name);
+                if (oldService != null)
+                {
+                    serviceInfo.Index = oldService.Index;
+                }
+            }
 
             var allServices = oldServices.Where(x => expiredServices.All(y => x.Name != y.Name)).ToList();
             allServices = allServices.Where(x => updatedServices.All(y => x.Name != y.Name)).ToList();
             allServices = allServices.Union(updatedServices).ToList();
             allServices = allServices.Union(newServices).ToList();
             await localStorage.SaveServiceInfosAsync(allServices);
-            foreach (var serviceInfo in allServices)
+            var servicesWithMetadata = await GetSamplesMetadataAsync(allServices);
+            foreach (var serviceInfo in servicesWithMetadata)
             {
                 await localStorage.SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
