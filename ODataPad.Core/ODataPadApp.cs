@@ -40,24 +40,24 @@ namespace ODataPad.Core
             this.CurrentVersion = currentVersion;
             this.RequestedVersion = requestedVersion;
 
-            var samplesService = new SamplesService(
-                _resourceManager, _samplesFolder, _samplesFilename, 
-                this.CurrentVersion, this.RequestedVersion);
+            if (this.CurrentVersion != this.RequestedVersion)
+            {
+                var samplesService = new SamplesService(
+                    _resourceManager, _samplesFolder, _samplesFilename,
+                    this.CurrentVersion, this.RequestedVersion);
 
-            if (this.RequestedVersion == 1)
-            {
-                await this.ServiceRepository.ClearServicesAsync();
-            }
-            else if (this.CurrentVersion <= 1 && this.RequestedVersion > 1)
-            {
-                await samplesService.CreateSamplesAsync(_localStorage);
-            }
-            else if (this.CurrentVersion == 2 && this.RequestedVersion > 2)
-            {
-                await samplesService.UpdateSamplesAsync(_localStorage);
+                if (this.RequestedVersion <= 1)
+                {
+                    await this.ServiceRepository.ClearServicesAsync();
+                }
+                else
+                {
+                    await samplesService.UpdateSamplesAsync(_localStorage);
+                }
+
+                this.CurrentVersion = this.RequestedVersion;
             }
 
-            this.CurrentVersion = this.RequestedVersion;
             return true;
         }
     }

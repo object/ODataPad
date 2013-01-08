@@ -27,6 +27,8 @@ namespace ODataPad.Tests.WinRT
             Assert.AreEqual(3, services.Count());
             Assert.IsTrue(services.Any(x => x.Name == "DBpedia"));
             Assert.IsTrue(services.All(x => x.Name != "Pluralsight"));
+            Assert.AreEqual(0, services.Single(x => x.Name == "OData.org").Index);
+            Assert.AreNotEqual(0, services.Single(x => x.Name == "Stack Overflow").Index);
             var filename = services.Single(x => x.Name == "OData.org").MetadataCacheFilename;
             var file = await ApplicationData.Current.LocalFolder.GetFileAsync(filename);
             Assert.IsNotNull(file);
@@ -39,6 +41,8 @@ namespace ODataPad.Tests.WinRT
             Assert.AreEqual(3, services.Count());
             Assert.IsTrue(services.All(x => x.Name != "DBpedia"));
             Assert.IsTrue(services.Any(x => x.Name == "Pluralsight"));
+            Assert.AreEqual(0, services.Single(x => x.Name == "OData.org").Index);
+            Assert.AreNotEqual(0, services.Single(x => x.Name == "Stack Overflow").Index);
             var filename = services.Single(x => x.Name == "OData.org").MetadataCacheFilename;
             var file = await ApplicationData.Current.LocalFolder.GetFileAsync(filename);
             Assert.IsNotNull(file);

@@ -17,7 +17,7 @@ namespace ODataPad.UI.WinRT
     sealed partial class App : Application
     {
         public static ODataPadApp theApp { get; private set; }
-        public const uint RequestedVersion = 1;
+        public const uint RequestedVersion = 3;
 
         public App()
         {

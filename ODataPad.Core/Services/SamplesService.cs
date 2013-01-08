@@ -73,7 +73,7 @@ namespace ODataPad.Core.Services
             samples = ExpiredSample.Where(sample => sample.Key <= _requestedAppVersion)
                 .Aggregate(samples, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
 
-            return samples;
+            return samples.ToList();
         }
 
         public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync()
@@ -85,7 +85,7 @@ namespace ODataPad.Core.Services
                 .Where(sample => sample.Key > _currentAppVersion && sample.Key <= _requestedAppVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
 
-            return samples;
+            return samples.ToList();
         }
 
         public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync()
@@ -97,7 +97,7 @@ namespace ODataPad.Core.Services
                 .Where(sample => sample.Key > _currentAppVersion && sample.Key <= _requestedAppVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
 
-            return samples;
+            return samples.ToList();
         }
 
         public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync()
@@ -109,7 +109,7 @@ namespace ODataPad.Core.Services
                 .Where(sample => sample.Key > _currentAppVersion && sample.Key <= _requestedAppVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
 
-            return samples;
+            return samples.ToList();
         }
 
         public async Task<bool> CreateSamplesAsync(IServiceLocalStorage localStorage)
@@ -121,13 +121,14 @@ namespace ODataPad.Core.Services
                 serviceInfo.Index = index;
                 ++index;
             }
-            await localStorage.SaveServiceInfosAsync(allSamples);
+            var result = await localStorage.SaveServiceInfosAsync(allSamples);
             var samplesWithMetadata = await GetSamplesMetadataAsync(allSamples);
             foreach (var serviceInfo in samplesWithMetadata)
             {
                 await localStorage.SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
-            return true;
+
+            return result;
         }
 
         public async Task<bool> UpdateSamplesAsync(IServiceLocalStorage localStorage)
@@ -157,14 +158,14 @@ namespace ODataPad.Core.Services
             allServices = allServices.Where(x => updatedServices.All(y => x.Name != y.Name)).ToList();
             allServices = allServices.Union(updatedServices).ToList();
             allServices = allServices.Union(newServices).ToList();
-            await localStorage.SaveServiceInfosAsync(allServices);
+            var result = await localStorage.SaveServiceInfosAsync(allServices);
             var servicesWithMetadata = await GetSamplesMetadataAsync(allServices);
             foreach (var serviceInfo in servicesWithMetadata)
             {
                 await localStorage.SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
 
-            return true;
+            return result;
         }
 
         private IEnumerable<ServiceInfo> ParseSamplesXml(string xml)
