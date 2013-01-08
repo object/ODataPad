@@ -5,7 +5,7 @@ namespace ODataPad.UI.WinRT.DataModel
 {
     public class ErrorDataItem : DataItem
     {
-        public ErrorDataItem(ODataServiceInfo service, XElement element)
+        public ErrorDataItem(ServiceInfo service, XElement element)
             : base(GetUniqueId(service.Name, element.Name), element.Name.ToString(), "Unable to load service metadata", null, GetErrorDescription(element))
         {
         }

@@ -269,13 +269,6 @@ namespace ODataPad.UI.WinRT
             this.bottomAppBar.IsOpen = false;
         }
 
-        private void dataButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.bottomAppBar.IsOpen = false;
-            var selectedCollection = itemCollection.SelectedItem as ServiceDataItem;
-            this.Frame.Navigate(typeof(ItemDetailPage), selectedCollection.UniqueId);
-        }
-
         private void editBackButton_Click(object sender, RoutedEventArgs e)
         {
             this.editPopup.IsOpen = false;
@@ -413,7 +406,7 @@ namespace ODataPad.UI.WinRT
 
         private async void AddServiceAsync()
         {
-            var serviceInfo = new ODataServiceInfo()
+            var serviceInfo = new ServiceInfo()
             {
                 Name = this.serviceName.Text,
                 Url = this.serviceUrl.Text,
@@ -425,7 +418,7 @@ namespace ODataPad.UI.WinRT
 
         private async void UpdateServiceAsync()
         {
-            var serviceInfo = new ODataServiceInfo()
+            var serviceInfo = new ServiceInfo()
             {
                 Name = this.serviceName.Text,
                 Url = this.serviceUrl.Text,

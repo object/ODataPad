@@ -114,9 +114,6 @@
     <Compile Include="DataModel\RootDataItem.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
     <Compile Include="ResultManager.cs" />
-    <Compile Include="ResultPage.xaml.cs">
-      <DependentUpon>ResultPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -178,10 +175,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Common\StandardStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ResultPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

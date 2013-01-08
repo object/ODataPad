@@ -3,10 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ODataPad.Core.Services;
 using ODataPad.WinRT;
-using Simple.OData.Client;
 using ODataPad.Core.Models;
+using Simple.OData.Client;
 
 // The data model defined by this file serves as a representative example of a strongly-typed
 // model that supports notification when members are added, removed, or modified.  The property
@@ -95,7 +94,7 @@ namespace ODataPad.UI.WinRT.DataModel
             }
         }
 
-        public async Task<bool> AddServiceDataItemAsync(ODataServiceInfo serviceInfo)
+        public async Task<bool> AddServiceDataItemAsync(ServiceInfo serviceInfo)
         {
             var serviceItem = this.CreateServiceDataItem(serviceInfo);
             _rootItem.Elements.Add(serviceItem);
@@ -108,7 +107,7 @@ namespace ODataPad.UI.WinRT.DataModel
             return ok;
         }
 
-        public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ODataServiceInfo serviceInfo)
+        public async Task<bool> UpdateServiceDataItemAsync(ServiceDataItem serviceItem, ServiceInfo serviceInfo)
         {
             var originalTitle = serviceItem.Title;
             serviceItem.Title = serviceInfo.Name;
@@ -126,18 +125,18 @@ namespace ODataPad.UI.WinRT.DataModel
         public async Task<bool> RemoveServiceDataItemAsync(ServiceDataItem serviceItem)
         {
             _rootItem.Elements.Remove(serviceItem);
-            var serviceInfo = new ODataServiceInfo() { Name = serviceItem.Title };
+            var serviceInfo = new ServiceInfo() { Name = serviceItem.Title };
             return await App.theApp.ServiceRepository.DeleteServiceAsync(serviceInfo);
         }
 
-        private ServiceDataItem CreateServiceDataItem(ODataServiceInfo service)
+        private ServiceDataItem CreateServiceDataItem(ServiceInfo service)
         {
             var item = new ServiceDataItem(service);
             RefreshServiceCollectionsFromMetadataCache(item, service);
             return item;
         }
 
-        private void RefreshServiceCollectionsFromMetadataCache(ServiceDataItem item, ODataServiceInfo service)
+        private void RefreshServiceCollectionsFromMetadataCache(ServiceDataItem item, ServiceInfo service)
         {
             item.Elements.Clear();
             if (!string.IsNullOrEmpty(service.MetadataCache))
@@ -160,7 +159,7 @@ namespace ODataPad.UI.WinRT.DataModel
             }
         }
 
-        private CollectionDataItem CreateCollectionDataItem(ODataServiceInfo service, Table table)
+        private CollectionDataItem CreateCollectionDataItem(ServiceInfo service, Table table)
         {
             var item = new CollectionDataItem(service, table);
             foreach (var column in table.Columns)
@@ -174,13 +173,13 @@ namespace ODataPad.UI.WinRT.DataModel
             return item;
         }
 
-        private ErrorDataItem CreateErrorDataItem(ODataServiceInfo service, XElement element)
+        private ErrorDataItem CreateErrorDataItem(ServiceInfo service, XElement element)
         {
             var item = new ErrorDataItem(service, element);
             return item;
         }
 
-        private async Task<bool> RefreshMetadataCacheAsync(ODataServiceInfo service)
+        private async Task<bool> RefreshMetadataCacheAsync(ServiceInfo service)
         {
             var metadata = await LoadServiceMetadataAsync(service);
             service.MetadataCache = metadata;
@@ -194,7 +193,7 @@ namespace ODataPad.UI.WinRT.DataModel
             return true;
         }
 
-        private async Task<string> LoadServiceMetadataAsync(ODataServiceInfo service)
+        private async Task<string> LoadServiceMetadataAsync(ServiceInfo service)
         {
             var task = Task<string>.Factory.StartNew(() =>
             {

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.WinRT;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace ODataPad.Tests.WinRT
 {

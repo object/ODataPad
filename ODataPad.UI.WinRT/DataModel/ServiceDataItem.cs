@@ -10,7 +10,7 @@ namespace ODataPad.UI.WinRT.DataModel
     /// </summary>
     public class ServiceDataItem : DataItem
     {
-        public ServiceDataItem(ODataServiceInfo service)
+        public ServiceDataItem(ServiceInfo service)
             : base(GetUniqueId(service.Name), service.Name, service.Url, GetImagePath(service), service.Description)
         {
             _metadataCache = service.MetadataCache;
@@ -23,7 +23,7 @@ namespace ODataPad.UI.WinRT.DataModel
             set { this.SetProperty(ref this._metadataCache, value); }
         }
 
-        private static string GetImagePath(ODataServiceInfo service)
+        private static string GetImagePath(ServiceInfo service)
         {
             return (string.IsNullOrEmpty(service.Logo) ? service.Name : service.Logo) + ".png";
         }

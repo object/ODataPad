@@ -8,12 +8,12 @@ namespace ODataPad.UI.WinRT.DataModel
 {
     public class PropertyDataItem : DataItem
     {
-        public PropertyDataItem(ODataServiceInfo service, Table table, Column column)
+        public PropertyDataItem(ServiceInfo service, Table table, Column column)
             : base(GetUniqueId(service.Name, table.ActualName, column.ActualName), column.ActualName, GetColumnSummary(column, table.GetKeyNames()), null, null)
         {
         }
 
-        public PropertyDataItem(ODataServiceInfo service, Table table, Association association)
+        public PropertyDataItem(ServiceInfo service, Table table, Association association)
             : base(GetUniqueId(service.Name, table.ActualName, association.ActualName), association.ActualName, GetAssociationSummary(association), null, null)
         {
         }

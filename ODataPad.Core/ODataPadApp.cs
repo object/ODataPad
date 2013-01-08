@@ -30,7 +30,7 @@ namespace ODataPad.Core
             _samplesFilename = samplesFilename;
         }
 
-        public async Task<IEnumerable<ODataServiceInfo>> InitializeODataServicesAsync()
+        public async Task<IEnumerable<ServiceInfo>> InitializeODataServicesAsync()
         {
             return await this.ServiceRepository.LoadServicesAsync();
         }

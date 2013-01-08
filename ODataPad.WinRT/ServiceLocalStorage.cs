@@ -12,15 +12,15 @@ namespace ODataPad.WinRT
     {
         private const string ServicesKey = "Services";
 
-        public async Task<IEnumerable<ODataServiceInfo>> LoadServiceInfosAsync()
+        public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
             return localSettings.Containers[ServicesKey].Values
-                .Select(x => ODataServiceInfo.Parse(x.Value as string));
+                .Select(x => ServiceInfo.Parse(x.Value as string));
         }
 
-        public async Task<bool> SaveServiceInfosAsync(IEnumerable<ODataServiceInfo> serviceInfos)
+        public async Task<bool> SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
@@ -47,7 +47,7 @@ namespace ODataPad.WinRT
 
         public async Task<bool> ClearServicesAsync()
         {
-            await PurgeServiceInfosAsync(new List<ODataServiceInfo>());
+            await PurgeServiceInfosAsync(new List<ServiceInfo>());
             var localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values.Clear();
             if (localSettings.Containers.ContainsKey(ServicesKey))
@@ -66,7 +66,7 @@ namespace ODataPad.WinRT
             }
         }
 
-        private async Task<bool> PurgeServiceInfosAsync(IEnumerable<ODataServiceInfo> serviceInfosToKeep)
+        private async Task<bool> PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
@@ -75,7 +75,7 @@ namespace ODataPad.WinRT
                 .Where(x => serviceInfosToKeep.All(y => x.Key != y.Name)))
             {
                 localSettings.Containers[ServicesKey].Values.Remove(kv);
-                var serviceInfo = ODataServiceInfo.Parse(kv.Value as string);
+                var serviceInfo = ServiceInfo.Parse(kv.Value as string);
                 await SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, null);
             }
 

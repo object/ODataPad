@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using ODataPad.Core.Services;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using Simple.OData.Client;
 using ODataPad.UI.WinRT.DataModel;
 
 namespace ODataPad.UI.WinRT
@@ -24,44 +23,24 @@ namespace ODataPad.UI.WinRT
 
         public async Task LoadResults(ObservableResultCollection collection, uint count)
         {
-            bool loadFailed = false;
-            var task = Task<IEnumerable<IDictionary<string, object>>>.Factory.StartNew(() =>
-            {
-                try
-                {
-                    var odataClient = new ODataClient(collection.ServiceUrl);
-                    return odataClient
-                        .From(collection.CollectionName)
-                        .Skip(collection.Count)
-                        .Top(Math.Max((int)count, PageSize))
-                        .FindEntries();
-                }
-                catch (Exception exception)
-                {
-                    loadFailed = true;
-                    var error = new Dictionary<string, object>()
-                                    { {
-                                            "Error",
-                                            exception.InnerException == null ?
-                                            exception.Message :
-                                            exception.InnerException.Message
-                                    } };
-                    return new List<IDictionary<string, object>> {error};
-                }
-            });
+            var queryService = new QueryService();
 
             collection.MainPage.EnableResultProgressBar(true);
-            var results = await task;
+            var result = await queryService.LoadResultsAsync(
+                collection.ServiceUrl,
+                collection.CollectionName,
+                collection.Count,
+                Math.Max((int)count, PageSize));
             collection.MainPage.EnableResultProgressBar(false);
 
-            if (results != null)
+            if (result != null)
             {
-                collection.HasMoreItems = results.Any() && !loadFailed;
-                foreach (var result in results)
+                collection.HasMoreItems = result.Rows.Any() && !result.IsError;
+                foreach (var row in result.Rows)
                 {
-                    collection.Add(new ResultDataItem(result, collection.Table));
+                    collection.Add(new ResultDataItem(row, collection.Table));
                 }
-                _results.Count = (uint)results.Count();
+                _results.Count = (uint)result.Rows.Count();
             }
             else
             {

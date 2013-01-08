@@ -17,15 +17,37 @@ namespace ODataPad.Core.Services
 
         private static readonly Dictionary<int, List<string>> NewSamples = new Dictionary<int, List<string>>
             {
-                {3,  new List<string>(){"Pluralsight"}},
+                {2,  new List<string>()
+                         {
+                             "DBpedia",
+                             "Devexpress Channel",
+                             "ebay.org",
+                             "nerddinner.org",
+                             "Netflix",
+                             "Northwind Service",
+                             "NuGet",
+                             "OData.org",
+                             "Stack Overflow",
+                             "twitpic",
+                         }},
+                {3,  new List<string>()
+                         {
+                             "Pluralsight"
+                         }},
             };
         private static readonly Dictionary<int, List<string>> UpdatedSamples = new Dictionary<int, List<string>>
             {
-                {3,  new List<string>(){"Stack Overflow"}},
+                {3,  new List<string>()
+                         {
+                             "Stack Overflow"
+                         }},
             };
         private static readonly Dictionary<int, List<string>> ExpiredSample = new Dictionary<int, List<string>>
             {
-                {3,  new List<string>(){"DBpedia"}},
+                {3,  new List<string>()
+                         {
+                             "DBpedia"
+                         }},
             };
 
         private static readonly DateTime SampleCreationTime = new DateTime(2012, 11, 10);
@@ -41,7 +63,7 @@ namespace ODataPad.Core.Services
             _requestedAppVersion = requestedAppVersion;
         }
 
-        public async Task<IEnumerable<ODataServiceInfo>> GetAllSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetAllSamplesAsync()
         {
             var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
@@ -55,7 +77,7 @@ namespace ODataPad.Core.Services
             return allSamplesWithMetadata;
         }
 
-        public async Task<IEnumerable<ODataServiceInfo>> GetNewSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync()
         {
             var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
@@ -68,7 +90,7 @@ namespace ODataPad.Core.Services
             return newSamplesWithMetadata;
         }
 
-        public async Task<IEnumerable<ODataServiceInfo>> GetUpdatedSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync()
         {
             var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
@@ -81,7 +103,7 @@ namespace ODataPad.Core.Services
             return updatedSamplesWithMetadata;
         }
 
-        public async Task<IEnumerable<ODataServiceInfo>> GetExpiredSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync()
         {
             var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
@@ -136,16 +158,16 @@ namespace ODataPad.Core.Services
             return true;
         }
 
-        private IEnumerable<ODataServiceInfo> ParseSamplesXml(string xml)
+        private IEnumerable<ServiceInfo> ParseSamplesXml(string xml)
         {
             XElement element = XElement.Parse(xml);
-            var samples = element.Elements("Service").Select(ODataServiceInfo.Parse);
+            var samples = element.Elements("Service").Select(ServiceInfo.Parse);
             return samples;
         }
 
-        private async Task<IEnumerable<ODataServiceInfo>> GetSamplesMetadataAsync(IEnumerable<ODataServiceInfo> serviceInfos)
+        private async Task<IEnumerable<ServiceInfo>> GetSamplesMetadataAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
-            var samplesWithMetadata = new List<ODataServiceInfo>();
+            var samplesWithMetadata = new List<ServiceInfo>();
             foreach (var serviceInfo in serviceInfos)
             {
                 var serviceInfoWithMetadata = serviceInfo;

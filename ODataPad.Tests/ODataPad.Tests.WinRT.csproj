@@ -111,14 +111,39 @@
   <ItemGroup>
     <Compile Include="ResourceManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SamplesServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\DBpedia.edmx">
+      <Link>Samples\DBpedia.edmx</Link>
+    </Content>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\OData.org.edmx">
+      <Link>Samples\OData.org.edmx</Link>
+    </Content>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\Pluralsight.edmx">
+      <Link>Samples\Pluralsight.edmx</Link>
+    </Content>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\Stack Overflow.edmx">
+      <Link>Samples\Stack Overflow.edmx</Link>
+    </Content>
     <None Include="ODataPad.Tests.WinRT_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\DBpedia.png">
+      <Link>Samples\DBpedia.png</Link>
+    </Content>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\OData.org.png">
+      <Link>Samples\OData.org.png</Link>
+    </Content>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\Pluralsight.png">
+      <Link>Samples\Pluralsight.png</Link>
+    </Content>
+    <Content Include="..\ODataPad.UI.WinRT\Samples\Stack Overflow.png">
+      <Link>Samples\Stack Overflow.png</Link>
+    </Content>
     <Content Include="Images\UnitTestLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -132,6 +157,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Samples\ContentSampleServices.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Samples\SampleServices.xml">
       <SubType>Designer</SubType>
     </Content>
     <EmbeddedResource Include="Samples\EmbeddedSampleServices.xml">

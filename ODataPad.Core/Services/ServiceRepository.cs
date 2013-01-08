@@ -9,21 +9,21 @@ namespace ODataPad.Core.Services
     {
         private IServiceLocalStorage _localStorage;
 
-        public IList<ODataServiceInfo> Services { get; set; }
+        public IList<ServiceInfo> Services { get; set; }
 
         public ServiceRepository(IServiceLocalStorage localStorage)
         {
             _localStorage = localStorage;
         }
 
-        public async Task<bool> AddServiceAsync(ODataServiceInfo serviceInfo)
+        public async Task<bool> AddServiceAsync(ServiceInfo serviceInfo)
         {
             serviceInfo.Index = this.Services.Count;
             this.Services.Add(serviceInfo);
             return await SaveServicesAsync();
         }
 
-        public async Task<bool> UpdateServiceAsync(string serviceName, ODataServiceInfo serviceInfo)
+        public async Task<bool> UpdateServiceAsync(string serviceName, ServiceInfo serviceInfo)
         {
             var originalService = this.Services.Single(x => x.Name == serviceName);
             originalService.Name = serviceInfo.Name;
@@ -35,7 +35,7 @@ namespace ODataPad.Core.Services
             return await SaveServicesAsync();
         }
 
-        public async Task<bool> DeleteServiceAsync(ODataServiceInfo serviceInfo)
+        public async Task<bool> DeleteServiceAsync(ServiceInfo serviceInfo)
         {
             var originalService = this.Services.SingleOrDefault(x => x.Name == serviceInfo.Name);
             if (originalService != null)
@@ -49,9 +49,9 @@ namespace ODataPad.Core.Services
             return await SaveServicesAsync();
         }
 
-        public async Task<IEnumerable<ODataServiceInfo>> LoadServicesAsync()
+        public async Task<IEnumerable<ServiceInfo>> LoadServicesAsync()
         {
-            var servicesWithMetadata = new List<ODataServiceInfo>();
+            var servicesWithMetadata = new List<ServiceInfo>();
             var serviceInfos = await _localStorage.LoadServiceInfosAsync();
             foreach (var serviceInfo in serviceInfos)
             {
@@ -77,7 +77,7 @@ namespace ODataPad.Core.Services
         public async Task<bool> ClearServicesAsync()
         {
             await _localStorage.ClearServicesAsync();
-            this.Services = new ODataServiceInfo[] { };
+            this.Services = new ServiceInfo[] { };
             return true;
         }
     }

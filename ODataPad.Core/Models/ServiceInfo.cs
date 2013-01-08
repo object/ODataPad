@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace ODataPad.Core.Models
 {
-    public class ODataServiceInfo
+    public class ServiceInfo
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -14,14 +14,14 @@ namespace ODataPad.Core.Models
         public string MetadataCacheFilename { get { return this.Name + ".edmx"; } }
         public int Index { get; set; }
 
-        public static ODataServiceInfo Parse(string xml)
+        public static ServiceInfo Parse(string xml)
         {
             return Parse(XElement.Parse(xml));
         }
 
-        public static ODataServiceInfo Parse(XElement element)
+        public static ServiceInfo Parse(XElement element)
         {
-            return new ODataServiceInfo()
+            return new ServiceInfo()
             {
                 Name = Utils.TryGetStringValue(element, "Name"),
                 Url = Utils.TryGetStringValue(element, "Url"),

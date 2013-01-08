@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using ODataPad.Core.Models;
 using Simple.OData.Client;
@@ -9,7 +8,7 @@ namespace ODataPad.UI.WinRT.DataModel
 {
     public class CollectionDataItem : DataItem
     {
-        public CollectionDataItem(ODataServiceInfo service, Table table)
+        public CollectionDataItem(ServiceInfo service, Table table)
             : base(GetUniqueId(service.Name, table.ActualName), table.ActualName, GetCollectionSummary(table), null, null)
         {
             this.Table = table;
