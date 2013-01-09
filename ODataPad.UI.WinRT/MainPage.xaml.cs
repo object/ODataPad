@@ -334,9 +334,9 @@ namespace ODataPad.UI.WinRT
             {
                 this.itemData.Visibility = Visibility.Collapsed;
 
-                ResultDataItem item = this.itemData.SelectedItem as ResultDataItem;
+                var row = (this.itemData.SelectedItem as ViewableItem).Data as ResultRow;
                 var properties = string.Join(Environment.NewLine + Environment.NewLine,
-                    item.Results
+                    row.Properties
                         .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
 
                 var block = new Paragraph();

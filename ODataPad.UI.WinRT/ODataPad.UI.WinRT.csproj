@@ -110,7 +110,6 @@
     <Compile Include="DataModel\PropertyDataItem.cs" />
     <Compile Include="DataModel\CollectionDataItem.cs" />
     <Compile Include="DataModel\DataItem.cs" />
-    <Compile Include="DataModel\ResultDataItem.cs" />
     <Compile Include="DataModel\RootDataItem.cs" />
     <Compile Include="DataModel\ServiceDataItem.cs" />
     <Compile Include="PartialResultLoader.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="ViewableItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

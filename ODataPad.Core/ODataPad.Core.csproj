@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\CollectionProperty.cs" />
+    <Compile Include="Models\ResultRow.cs" />
+    <Compile Include="Models\ServiceCollection.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="Models\ServiceInfo.cs" />
     <Compile Include="Models\QueryResult.cs" />
     <Compile Include="ODataPadApp.cs" />

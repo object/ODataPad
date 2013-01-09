@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using ODataPad.Core.Models;
 using Simple.OData.Client;
 using Windows.Foundation;
 using Windows.UI.Xaml.Controls;
@@ -6,7 +7,7 @@ using Windows.UI.Xaml.Data;
 
 namespace ODataPad.UI.WinRT.DataModel
 {
-    public class ObservableResultCollection : ObservableCollection<ResultDataItem>, ISupportIncrementalLoading
+    public class ObservableResultCollection : ObservableCollection<ViewableItem>, ISupportIncrementalLoading
     {
         public string ServiceUrl { get; private set; }
         public string CollectionName { get; private set; }

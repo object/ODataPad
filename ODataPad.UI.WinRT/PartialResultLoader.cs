@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -38,7 +39,7 @@ namespace ODataPad.UI.WinRT
                 collection.HasMoreItems = result.Rows.Any() && !result.IsError;
                 foreach (var row in result.Rows)
                 {
-                    collection.Add(new ResultDataItem(row, collection.Table));
+                    collection.Add(new ViewableItem(new ResultRow(row, collection.Table.GetKeyNames())));
                 }
                 _results.Count = (uint)result.Rows.Count();
             }
