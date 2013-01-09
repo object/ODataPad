@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 using Simple.OData.Client;
 using ODataPad.Core.Models;
 
@@ -34,6 +37,24 @@ namespace ODataPad.Core.Services
                 collections.Add(new ServiceCollection(table.ActualName, properties, associations));
             }
             return collections;
+        }
+
+        public static async Task<string> LoadServiceMetadataAsync(ServiceInfo service)
+        {
+            var task = Task<string>.Factory.StartNew(() =>
+            {
+                try
+                {
+                    return GetSchemaAsString(service.Url);
+                }
+                catch (Exception exception)
+                {
+                    var element = new XElement("Error");
+                    element.Add(new XElement("Message", exception.Message));
+                    return element.ToString();
+                }
+            });
+            return await task;
         }
     }
 }

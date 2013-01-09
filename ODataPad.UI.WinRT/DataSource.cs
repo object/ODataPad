@@ -124,7 +124,7 @@ namespace ODataPad.UI.WinRT
 
         private async Task<bool> RefreshMetadataCacheAsync(ServiceInfo service)
         {
-            var metadata = await LoadServiceMetadataAsync(service);
+            var metadata = await MetadataService.LoadServiceMetadataAsync(service);
             service.MetadataCache = metadata;
             service.CacheUpdated = DateTimeOffset.UtcNow;
             var serviceItem = DataSource.Instance.Services.Single(x => x.Title == service.Name).Data as ServiceInfo;
@@ -134,24 +134,6 @@ namespace ODataPad.UI.WinRT
             }
             await new ServiceLocalStorage().SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
             return true;
-        }
-
-        private async Task<string> LoadServiceMetadataAsync(ServiceInfo service)
-        {
-            var task = Task<string>.Factory.StartNew(() =>
-            {
-                try
-                {
-                    return MetadataService.GetSchemaAsString(service.Url);
-                }
-                catch (Exception exception)
-                {
-                    var element = new XElement("Error");
-                    element.Add(new XElement("Message", exception.Message));
-                    return element.ToString();
-                }
-            });
-            return await task;
         }
     }
 }
