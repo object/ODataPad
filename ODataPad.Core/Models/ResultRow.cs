@@ -15,7 +15,7 @@ namespace ODataPad.Core.Models
         public IEnumerable<string> Keys { get; private set; }
         public IDictionary<string, object> Properties { get; private set; }
         public string KeySummary { get { return GetKeySummary(); } }
-        public string PropertySummary { get { return GetPropertySummary(); } }
+        public string ValueSummary { get { return GetPropertySummary(); } }
 
         private string GetKeySummary()
         {

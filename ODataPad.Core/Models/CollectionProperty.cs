@@ -8,19 +8,24 @@ namespace ODataPad.Core.Models
         public CollectionProperty(string name, string type, bool isKey, bool isNullable)
         {
             this.Name = name;
-            this.Summary = GetPropertySummary(type, isKey, isNullable);
+            this.Type = type;
+            this.IsKey = isKey;
+            this.IsNullable = isNullable;
         }
 
         public string Name { get; private set; }
-        public string Summary { get; private set; }
+        public string Type { get; private set; }
+        public bool IsKey { get; private set; }
+        public bool IsNullable { get; private set; }
+        public string Summary { get { return GetSummary(); } }
 
-        private string GetPropertySummary(string type, bool isKey, bool isNullable)
+        private string GetSummary()
         {
-            var summary = type;
+            var summary = this.Type;
             var items = new List<string>();
-            if (isKey)
+            if (this.IsKey)
                 items.Add("key");
-            if (isNullable)
+            if (this.IsNullable)
                 items.Add("null");
             if (items.Any())
                 summary += " (" + string.Join(",", items) + ")";

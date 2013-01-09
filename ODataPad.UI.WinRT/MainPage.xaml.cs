@@ -217,16 +217,16 @@ namespace ODataPad.UI.WinRT
         {
             if (e.RemovedItems.Count == 1)
             {
-                var collectionItem = e.RemovedItems.First() as CollectionDataItem;
-                collectionItem.Results = null;
+                var collection = (e.RemovedItems.First() as ViewableItem).Data as ServiceCollection;
+                collection.Results = null;
             }
             if (e.AddedItems.Count == 1)
             {
-                var collectionItem = e.AddedItems.First() as CollectionDataItem;
+                var collection = (e.AddedItems.First() as ViewableItem).Data as ServiceCollection;
                 if (this.collectionMode.SelectedIndex == 0)
-                    collectionItem.Results = null;
+                    collection.Results = null;
                 else
-                    RequestCollectionData(collectionItem);
+                    RequestCollectionData(collection);
             }
         }
 
@@ -323,7 +323,7 @@ namespace ODataPad.UI.WinRT
                 this.itemData.Visibility = Visibility.Visible;
                 if (this.itemCollection.SelectedItem != null)
                 {
-                    RequestCollectionData(this.itemCollection.SelectedItem as CollectionDataItem);
+                    RequestCollectionData((this.itemCollection.SelectedItem as ViewableItem).Data as ServiceCollection);
                 }
             }
         }
@@ -435,12 +435,16 @@ namespace ODataPad.UI.WinRT
             await DataSource.Instance.RemoveServiceDataItemAsync(dataItem);
         }
 
-        private void RequestCollectionData(CollectionDataItem collectionItem)
+        private void RequestCollectionData(ServiceCollection serviceCollection)
         {
-            if (collectionItem.Results == null)
-                collectionItem.Results = new ObservableResultCollection(
+            if (serviceCollection.Results == null)
+            {
+                var resultCollection = new ObservableResultCollection(
                     (this.itemListView.SelectedItem as ServiceDataItem).Subtitle,
-                    collectionItem.Title, collectionItem.Table, this);
+                    serviceCollection.Name, serviceCollection.Properties, this);
+                serviceCollection.Results = new ObservableCollection<ResultRow>(
+                    resultCollection.Select(x => x.Data as ResultRow));
+            }
         }
 
         public void EnableResultProgressBar(bool enabled)

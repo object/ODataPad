@@ -23,6 +23,13 @@ namespace ODataPad.UI.WinRT.DataModel
             set { this.SetProperty(ref this._metadataCache, value); }
         }
 
+        private ObservableCollection<ViewableItem> _collections = new ObservableCollection<ViewableItem>();
+        public ObservableCollection<ViewableItem> Collections
+        {
+            get { return this._collections; }
+            set { this.SetProperty(ref this._collections, value); }
+        }
+
         private static string GetImagePath(ServiceInfo service)
         {
             return (string.IsNullOrEmpty(service.Logo) ? service.Name : service.Logo) + ".png";

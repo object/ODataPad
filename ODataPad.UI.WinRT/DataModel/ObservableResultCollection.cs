@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ODataPad.Core.Models;
 using Simple.OData.Client;
 using Windows.Foundation;
@@ -11,14 +12,15 @@ namespace ODataPad.UI.WinRT.DataModel
     {
         public string ServiceUrl { get; private set; }
         public string CollectionName { get; private set; }
-        public Table Table { get; private set; }
+        public IEnumerable<CollectionProperty> CollectionProperties { get; private set; }
         public MainPage MainPage;
 
-        public ObservableResultCollection(string serviceUrl, string collectionName, Table table, MainPage mainPage)
+        public ObservableResultCollection(string serviceUrl,
+            string collectionName, IEnumerable<CollectionProperty> collectionProperties, MainPage mainPage)
         {
             this.ServiceUrl = serviceUrl;
             this.CollectionName = collectionName;
-            this.Table = table;
+            this.CollectionProperties = collectionProperties;
             this.MainPage = mainPage;
 
             this.HasMoreItems = true;

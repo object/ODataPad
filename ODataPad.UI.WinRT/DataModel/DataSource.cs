@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -144,40 +145,36 @@ namespace ODataPad.UI.WinRT.DataModel
                 var element = XElement.Parse(service.MetadataCache);
                 if (element.Name == "Error")
                 {
-                    var errorItem = CreateErrorDataItem(service, element);
-                    item.Elements.Add(errorItem);
+                    item.Elements.Add(new ErrorDataItem(service, element));
                 }
                 else
                 {
                     var schema = ODataClient.ParseSchemaString(service.MetadataCache);
                     foreach (var table in schema.Tables)
                     {
-                        var collectionItem = CreateCollectionDataItem(service, table);
-                        item.Elements.Add(collectionItem);
+                        item.Collections.Add(CreateCollectionItem(table));
                     }
                 }
             }
         }
 
-        private CollectionDataItem CreateCollectionDataItem(ServiceInfo service, Table table)
+        private ViewableItem CreateCollectionItem(Table table)
         {
-            var item = new CollectionDataItem(service, table);
-            foreach (var column in table.Columns)
-            {
-                item.SchemaItems.Add(new ViewableItem(new CollectionProperty(
-                    column.ActualName, column.PropertyType.Name.Split('.').Last(), false, column.IsNullable)));
-            }
-            foreach (var association in table.Associations)
-            {
-                item.SchemaItems.Add(new ViewableItem(new CollectionAssociation(
-                    association.ActualName, association.Multiplicity)));
-            }
-            return item;
-        }
+            var properties = table.Columns.Select(x => 
+                new CollectionProperty(
+                    x.ActualName,
+                    x.PropertyType.Name.Split('.').Last(), 
+                    table.GetKeyNames().Contains(x.ActualName), 
+                    x.IsNullable));
 
-        private ErrorDataItem CreateErrorDataItem(ServiceInfo service, XElement element)
-        {
-            var item = new ErrorDataItem(service, element);
+            var associations = table.Associations.Select(x =>
+                new CollectionAssociation(
+                    x.ActualName,
+                    x.Multiplicity));
+
+            var collection = new ServiceCollection(table.ActualName, properties, associations);
+            var item = new ViewableItem(collection);
+            item.Elements = new ObservableCollection<ViewableItem>(collection.SchemaItems.Select(x => new ViewableItem(x)));
             return item;
         }
 

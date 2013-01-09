@@ -27,12 +27,16 @@ namespace ODataPad.UI.WinRT
         {
             get
             {
+                if (_data is ServiceCollection)
+                    return (_data as ServiceCollection).Name;
                 if (_data is CollectionProperty)
                     return (_data as CollectionProperty).Name;
                 if (_data is CollectionAssociation)
                     return (_data as CollectionAssociation).Name;
                 if (_data is ResultRow)
                     return (_data as ResultRow).KeySummary;
+                if (_data is ViewableItem)
+                    return (_data as ViewableItem).Title;
 
                 return "Unknown";
             }
@@ -43,12 +47,16 @@ namespace ODataPad.UI.WinRT
         {
             get
             {
+                if (_data is ServiceCollection)
+                    return (_data as ServiceCollection).Summary;
                 if (_data is CollectionProperty)
                     return (_data as CollectionProperty).Summary;
                 if (_data is CollectionAssociation)
                     return (_data as CollectionAssociation).Multiplicity;
                 if (_data is ResultRow)
-                    return (_data as ResultRow).PropertySummary;
+                    return (_data as ResultRow).ValueSummary;
+                if (_data is ViewableItem)
+                    return (_data as ViewableItem).Subtitle;
 
                 return "Unknown";
             }
@@ -71,6 +79,13 @@ namespace ODataPad.UI.WinRT
                 return "i";
             }
             //set { this.SetProperty(ref this._imagePath, value); }
+        }
+
+        private ObservableCollection<ViewableItem> _elements = new ObservableCollection<ViewableItem>();
+        public ObservableCollection<ViewableItem> Elements
+        {
+            get { return this._elements; }
+            set { this.SetProperty(ref this._elements, value); }
         }
 
         public override string ToString()
