@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ODataPad.Core.Models;
 using Simple.OData.Client;
+using ODataPad.Core.Models;
 
 namespace ODataPad.Core.Services
 {

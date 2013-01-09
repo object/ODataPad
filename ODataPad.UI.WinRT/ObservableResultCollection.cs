@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ODataPad.Core.Models;
-using Simple.OData.Client;
 using Windows.Foundation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using ODataPad.Core.Models;
 
-namespace ODataPad.UI.WinRT.DataModel
+namespace ODataPad.UI.WinRT
 {
     public class ObservableResultCollection : ObservableCollection<ViewableItem>, ISupportIncrementalLoading
     {

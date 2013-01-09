@@ -40,6 +40,8 @@
     <Compile Include="Models\CollectionProperty.cs" />
     <Compile Include="Models\ResultRow.cs" />
     <Compile Include="Models\ServiceCollection.cs" />
+    <Compile Include="Models\ServiceError.cs" />
+    <Compile Include="Services\MetadataService.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="Models\ServiceInfo.cs" />
     <Compile Include="Models\QueryResult.cs" />

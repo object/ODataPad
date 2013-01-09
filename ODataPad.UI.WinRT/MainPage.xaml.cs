@@ -21,7 +21,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ODataPad.Core.Models;
-using ODataPad.UI.WinRT.DataModel;
 
 // The Split Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234234
 
@@ -33,7 +32,7 @@ namespace ODataPad.UI.WinRT
     /// </summary>
     public sealed partial class MainPage : ODataPad.UI.WinRT.Common.LayoutAwarePage
     {
-        private ServiceDataItem _editedItem;
+        private ViewableItem _editedItem;
         private bool _movingToFirst = false;
 
         public MainPage()
@@ -56,13 +55,12 @@ namespace ODataPad.UI.WinRT
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            var item = DataSource.Instance.GetItem(navigationParameter.ToString());
+            var item = DataSource.Instance.Services.Where(x => x.Title == navigationParameter.ToString());
             if (item == null)
                 return;
 
             this.DefaultViewModel["Item"] = item;
-            this.DefaultViewModel["ItemElements"] = item.Elements;
-            //this.DefaultViewModel["ItemResults"] = item.Results;
+            this.DefaultViewModel["ItemElements"] = DataSource.Instance.Services;
 
             if (pageState == null)
             {
@@ -76,7 +74,7 @@ namespace ODataPad.UI.WinRT
                 // Restore the previously saved state associated with this page
                 if (pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null)
                 {
-                    var selectedItem = DataSource.Instance.GetItem((String)pageState["SelectedItem"]);
+                    var selectedItem = DataSource.Instance.Services.Single(x => x.Title == (String)pageState["SelectedItem"]);
                     this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
@@ -92,8 +90,8 @@ namespace ODataPad.UI.WinRT
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (ServiceDataItem)this.itemsViewSource.View.CurrentItem;
-                if (selectedItem != null) pageState["SelectedItem"] = selectedItem.UniqueId;
+                var selectedItem = (ViewableItem)this.itemsViewSource.View.CurrentItem;
+                if (selectedItem != null) pageState["SelectedItem"] = selectedItem.Title;
             }
         }
 
@@ -256,7 +254,7 @@ namespace ODataPad.UI.WinRT
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
-            _editedItem = this.itemListView.SelectedItem as ServiceDataItem;
+            _editedItem = this.itemListView.SelectedItem as ViewableItem;
             this.serviceName.Text = _editedItem.Title;
             this.serviceUrl.Text = _editedItem.Subtitle;
             this.serviceDescription.Text = _editedItem.Description;
@@ -367,7 +365,7 @@ namespace ODataPad.UI.WinRT
 
         private async Task<bool> ServiceHasUniqueName()
         {
-            var item = DataSource.Instance.GetItem(this.serviceName.Text);
+            var item = DataSource.Instance.Services.Where(x => x.Title == this.serviceName.Text);
             if (item != null)
             {
                 var dialog = new MessageDialog("A service with this name already exists.");
@@ -413,7 +411,7 @@ namespace ODataPad.UI.WinRT
                 Description = this.serviceDescription.Text,
                 Logo = "Custom",
             };
-            await DataSource.Instance.AddServiceDataItemAsync(serviceInfo);
+            await DataSource.Instance.AddServiceItemAsync(serviceInfo);
         }
 
         private async void UpdateServiceAsync()
@@ -426,13 +424,13 @@ namespace ODataPad.UI.WinRT
                 Logo = Path.GetFileNameWithoutExtension(_editedItem.ImagePath),
             };
             serviceInfo.MetadataCache = null;
-            await DataSource.Instance.UpdateServiceDataItemAsync(_editedItem, serviceInfo);
+            await DataSource.Instance.UpdateServiceItemAsync(_editedItem, serviceInfo);
         }
 
         private async void RemoveServiceAsync()
         {
-            var dataItem = this.itemListView.SelectedItem as ServiceDataItem;
-            await DataSource.Instance.RemoveServiceDataItemAsync(dataItem);
+            var item = this.itemListView.SelectedItem as ViewableItem;
+            await DataSource.Instance.RemoveServiceItemAsync(item);
         }
 
         private void RequestCollectionData(ServiceCollection serviceCollection)
@@ -440,7 +438,7 @@ namespace ODataPad.UI.WinRT
             if (serviceCollection.Results == null)
             {
                 var resultCollection = new ObservableResultCollection(
-                    (this.itemListView.SelectedItem as ServiceDataItem).Subtitle,
+                    ((this.itemListView.SelectedItem as ViewableItem).Data as ServiceInfo).Url,
                     serviceCollection.Name, serviceCollection.Properties, this);
                 serviceCollection.Results = new ObservableCollection<ResultRow>(
                     resultCollection.Select(x => x.Data as ResultRow));

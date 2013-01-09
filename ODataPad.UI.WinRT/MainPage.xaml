@@ -151,7 +151,7 @@
                         Grid.Column="0"
                     TabIndex="2"
                     SelectionChanged="ItemCollection_SelectionChanged"
-                    ItemsSource="{Binding Collections}"
+                    ItemsSource="{Binding Elements}"
                     ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" SelectionMode="Single" />
 
                 <Rectangle x:Name="itemGridLine"

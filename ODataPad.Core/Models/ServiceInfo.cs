@@ -43,5 +43,10 @@ namespace ODataPad.Core.Models
             element.Add(new XElement("Index", this.Index));
             return element.ToString();
         }
+
+        public string GetImagePath()
+        {
+            return (string.IsNullOrEmpty(this.Logo) ? this.Name : this.Logo) + ".png";
+        }
     }
 }

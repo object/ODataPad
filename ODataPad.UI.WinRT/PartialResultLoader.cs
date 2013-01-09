@@ -7,7 +7,6 @@ using ODataPad.Core.Services;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using ODataPad.UI.WinRT.DataModel;
 
 namespace ODataPad.UI.WinRT
 {

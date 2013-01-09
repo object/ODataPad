@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using ODataPad.Core.Models;
-using ODataPad.UI.WinRT.Common;
-using ODataPad.WinRT;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using ODataPad.Core.Models;
+using ODataPad.WinRT;
+using ODataPad.UI.WinRT.Common;
 
 namespace ODataPad.UI.WinRT
 {
@@ -27,6 +27,8 @@ namespace ODataPad.UI.WinRT
         {
             get
             {
+                if (_data is ServiceInfo)
+                    return (_data as ServiceInfo).Name;
                 if (_data is ServiceCollection)
                     return (_data as ServiceCollection).Name;
                 if (_data is CollectionProperty)
@@ -35,18 +37,21 @@ namespace ODataPad.UI.WinRT
                     return (_data as CollectionAssociation).Name;
                 if (_data is ResultRow)
                     return (_data as ResultRow).KeySummary;
+                if (_data is ServiceError)
+                    return (_data as ServiceError).ErrorMessage;
                 if (_data is ViewableItem)
                     return (_data as ViewableItem).Title;
 
-                return "Unknown";
+                return string.Empty;
             }
-            //set { this.SetProperty(ref this._title, value); }
         }
 
         public string Subtitle
         {
             get
             {
+                if (_data is ServiceInfo)
+                    return (_data as ServiceInfo).Url;
                 if (_data is ServiceCollection)
                     return (_data as ServiceCollection).Summary;
                 if (_data is CollectionProperty)
@@ -55,20 +60,23 @@ namespace ODataPad.UI.WinRT
                     return (_data as CollectionAssociation).Multiplicity;
                 if (_data is ResultRow)
                     return (_data as ResultRow).ValueSummary;
+                if (_data is ServiceError)
+                    return (_data as ServiceError).ErrorDescription;
                 if (_data is ViewableItem)
                     return (_data as ViewableItem).Subtitle;
 
-                return "Unknown";
+                return string.Empty;
             }
-            //set { this.SetProperty(ref this._subtitle, value); }
         }
 
         public string Description
         {
             get
             {
-                return "d";
-                //set { this.SetProperty(ref this._description, value); }
+                if (_data is ServiceInfo)
+                    return (_data as ServiceInfo).Description;
+
+                return string.Empty;
             }
         }
 
@@ -76,9 +84,25 @@ namespace ODataPad.UI.WinRT
         {
             get
             {
-                return "i";
+                if (_data is ServiceInfo)
+                    return (_data as ServiceInfo).GetImagePath();
+
+                return string.Empty;
             }
-            //set { this.SetProperty(ref this._imagePath, value); }
+        }
+
+        private ImageSource _image = null;
+        public ImageSource Image
+        {
+            get
+            {
+                if (_image == null && this.ImagePath != null)
+                {
+                    var resourcePath = new ResourceManager().GetImageResourcePath("Samples", this.ImagePath);
+                    this._image = new BitmapImage(new Uri(resourcePath));
+                }
+                return this._image;
+            }
         }
 
         private ObservableCollection<ViewableItem> _elements = new ObservableCollection<ViewableItem>();
