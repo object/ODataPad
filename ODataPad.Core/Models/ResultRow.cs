@@ -12,14 +12,12 @@ namespace ODataPad.Core.Models
             this.Properties = data;
         }
 
-        public string Title { get; set; }
-        public string Subtitle { get; set; }
-        public string Description { get; set; }
-
         public IEnumerable<string> Keys { get; private set; }
         public IDictionary<string, object> Properties { get; private set; }
+        public string KeySummary { get { return GetKeySummary(); } }
+        public string PropertySummary { get { return GetPropertySummary(); } }
 
-        public string GetKeySummary()
+        private string GetKeySummary()
         {
             if (IsError())
             {
@@ -42,7 +40,7 @@ namespace ODataPad.Core.Models
             }
         }
 
-        public string GetResultSummary()
+        private string GetPropertySummary()
         {
             if (IsError())
             {

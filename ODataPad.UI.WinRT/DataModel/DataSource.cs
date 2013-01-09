@@ -164,11 +164,13 @@ namespace ODataPad.UI.WinRT.DataModel
             var item = new CollectionDataItem(service, table);
             foreach (var column in table.Columns)
             {
-                item.Elements.Add(new PropertyDataItem(service, table, column));
+                item.SchemaItems.Add(new ViewableItem(new CollectionProperty(
+                    column.ActualName, column.PropertyType.Name.Split('.').Last(), false, column.IsNullable)));
             }
             foreach (var association in table.Associations)
             {
-                item.Elements.Add(new PropertyDataItem(service, table, association));
+                item.SchemaItems.Add(new ViewableItem(new CollectionAssociation(
+                    association.ActualName, association.Multiplicity)));
             }
             return item;
         }

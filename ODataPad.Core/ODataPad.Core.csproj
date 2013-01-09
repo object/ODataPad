@@ -35,6 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\CollectionAssociation.cs" />
+    <Compile Include="Models\CollectionElement.cs" />
     <Compile Include="Models\CollectionProperty.cs" />
     <Compile Include="Models\ResultRow.cs" />
     <Compile Include="Models\ServiceCollection.cs" />

@@ -107,7 +107,6 @@
     </Compile>
     <Compile Include="DataModel\ErrorDataItem.cs" />
     <Compile Include="DataModel\ObservableResultCollection.cs" />
-    <Compile Include="DataModel\PropertyDataItem.cs" />
     <Compile Include="DataModel\CollectionDataItem.cs" />
     <Compile Include="DataModel\DataItem.cs" />
     <Compile Include="DataModel\RootDataItem.cs" />

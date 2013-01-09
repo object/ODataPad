@@ -167,7 +167,7 @@
                 TabIndex="3"
                 Visibility="Visible"
                 DataContext="{Binding SelectedItem, ElementName=itemCollection}"
-                ItemsSource="{Binding Elements}" 
+                ItemsSource="{Binding SchemaItems}" 
                 ItemTemplate="{StaticResource Standard80ItemNoImageTemplate}" 
                 SelectionMode="None" />
 

@@ -27,8 +27,12 @@ namespace ODataPad.UI.WinRT
         {
             get
             {
+                if (_data is CollectionProperty)
+                    return (_data as CollectionProperty).Name;
+                if (_data is CollectionAssociation)
+                    return (_data as CollectionAssociation).Name;
                 if (_data is ResultRow)
-                    return (_data as ResultRow).GetKeySummary();
+                    return (_data as ResultRow).KeySummary;
 
                 return "Unknown";
             }
@@ -39,8 +43,12 @@ namespace ODataPad.UI.WinRT
         {
             get
             {
+                if (_data is CollectionProperty)
+                    return (_data as CollectionProperty).Summary;
+                if (_data is CollectionAssociation)
+                    return (_data as CollectionAssociation).Multiplicity;
                 if (_data is ResultRow)
-                    return (_data as ResultRow).GetResultSummary();
+                    return (_data as ResultRow).PropertySummary;
 
                 return "Unknown";
             }
