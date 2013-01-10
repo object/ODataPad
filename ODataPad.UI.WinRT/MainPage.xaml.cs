@@ -5,34 +5,24 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
+using ODataPad.Core.ViewModels;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ODataPad.Core.Models;
 
-// The Split Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234234
-
 namespace ODataPad.UI.WinRT
 {
-    /// <summary>
-    /// A page that displays a group title, a list of items within the group, and details for the
-    /// currently selected item.
-    /// </summary>
     public sealed partial class MainPage : ODataPad.UI.WinRT.Common.LayoutAwarePage
     {
-        private ViewableItem _editedItem;
+        private ServiceItem _editedItem;
         private bool _movingToFirst = false;
 
         public MainPage()
@@ -44,23 +34,14 @@ namespace ODataPad.UI.WinRT
 
         #region Page state management
 
-        /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
-        /// </summary>
-        /// <param name="navigationParameter">The parameter value passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested.
-        /// </param>
-        /// <param name="pageState">A dictionary of state preserved by this page during an earlier
-        /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            var item = DataSource.Instance.Services.Where(x => x.Title == navigationParameter.ToString());
+            var item = App.theApp.HomeViewModel.Services.Where(x => x.Name == navigationParameter.ToString());
             if (item == null)
                 return;
 
             this.DefaultViewModel["Item"] = item;
-            this.DefaultViewModel["ItemElements"] = DataSource.Instance.Services;
+            this.DefaultViewModel["ItemElements"] = App.theApp.HomeViewModel.Services;
 
             if (pageState == null)
             {
@@ -71,27 +52,20 @@ namespace ODataPad.UI.WinRT
             }
             else
             {
-                // Restore the previously saved state associated with this page
                 if (pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null)
                 {
-                    var selectedItem = DataSource.Instance.Services.Single(x => x.Title == (String)pageState["SelectedItem"]);
+                    var selectedItem = App.theApp.HomeViewModel.Services.Single(x => x.Name == (String)pageState["SelectedItem"]);
                     this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
         }
 
-        /// <summary>
-        /// Preserves state associated with this page in case the application is suspended or the
-        /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
-        /// </summary>
-        /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (ViewableItem)this.itemsViewSource.View.CurrentItem;
-                if (selectedItem != null) pageState["SelectedItem"] = selectedItem.Title;
+                var selectedItem = (ServiceItem)this.itemsViewSource.View.CurrentItem;
+                if (selectedItem != null) pageState["SelectedItem"] = selectedItem.Name;
             }
         }
 
@@ -215,12 +189,12 @@ namespace ODataPad.UI.WinRT
         {
             if (e.RemovedItems.Count == 1)
             {
-                var collection = (e.RemovedItems.First() as ViewableItem).Data as ServiceCollection;
+                var collection = e.RemovedItems.First() as ServiceCollection;
                 collection.Results = null;
             }
             if (e.AddedItems.Count == 1)
             {
-                var collection = (e.AddedItems.First() as ViewableItem).Data as ServiceCollection;
+                var collection = e.AddedItems.First() as ServiceCollection;
                 if (this.collectionMode.SelectedIndex == 0)
                     collection.Results = null;
                 else
@@ -254,9 +228,9 @@ namespace ODataPad.UI.WinRT
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
-            _editedItem = this.itemListView.SelectedItem as ViewableItem;
-            this.serviceName.Text = _editedItem.Title;
-            this.serviceUrl.Text = _editedItem.Subtitle;
+            _editedItem = this.itemListView.SelectedItem as ServiceItem;
+            this.serviceName.Text = _editedItem.Name;
+            this.serviceUrl.Text = _editedItem.Url;
             this.serviceDescription.Text = _editedItem.Description;
             this.editPopup.IsOpen = true;
             RefreshSaveButtonState();
@@ -321,7 +295,7 @@ namespace ODataPad.UI.WinRT
                 this.itemData.Visibility = Visibility.Visible;
                 if (this.itemCollection.SelectedItem != null)
                 {
-                    RequestCollectionData((this.itemCollection.SelectedItem as ViewableItem).Data as ServiceCollection);
+                    RequestCollectionData(this.itemCollection.SelectedItem as ServiceCollection);
                 }
             }
         }
@@ -332,7 +306,7 @@ namespace ODataPad.UI.WinRT
             {
                 this.itemData.Visibility = Visibility.Collapsed;
 
-                var row = (this.itemData.SelectedItem as ViewableItem).Data as ResultRow;
+                var row = this.itemData.SelectedItem as ResultRow;
                 var properties = string.Join(Environment.NewLine + Environment.NewLine,
                     row.Properties
                         .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
@@ -365,7 +339,7 @@ namespace ODataPad.UI.WinRT
 
         private async Task<bool> ServiceHasUniqueName()
         {
-            var item = DataSource.Instance.Services.Where(x => x.Title == this.serviceName.Text);
+            var item = App.theApp.HomeViewModel.Services.Where(x => x.Name == this.serviceName.Text);
             if (item != null)
             {
                 var dialog = new MessageDialog("A service with this name already exists.");
@@ -411,7 +385,7 @@ namespace ODataPad.UI.WinRT
                 Description = this.serviceDescription.Text,
                 Logo = "Custom",
             };
-            await DataSource.Instance.AddServiceItemAsync(serviceInfo);
+            await App.theApp.HomeViewModel.AddServiceItemAsync(serviceInfo);
         }
 
         private async void UpdateServiceAsync()
@@ -424,13 +398,13 @@ namespace ODataPad.UI.WinRT
                 Logo = Path.GetFileNameWithoutExtension(_editedItem.ImagePath),
             };
             serviceInfo.MetadataCache = null;
-            await DataSource.Instance.UpdateServiceItemAsync(_editedItem, serviceInfo);
+            await App.theApp.HomeViewModel.UpdateServiceItemAsync(_editedItem, serviceInfo);
         }
 
         private async void RemoveServiceAsync()
         {
-            var item = this.itemListView.SelectedItem as ViewableItem;
-            await DataSource.Instance.RemoveServiceItemAsync(item);
+            var item = this.itemListView.SelectedItem as ServiceItem;
+            await App.theApp.HomeViewModel.RemoveServiceItemAsync(item);
         }
 
         private void RequestCollectionData(ServiceCollection serviceCollection)
@@ -438,10 +412,9 @@ namespace ODataPad.UI.WinRT
             if (serviceCollection.Results == null)
             {
                 var resultCollection = new ObservableResultCollection(
-                    ((this.itemListView.SelectedItem as ViewableItem).Data as ServiceInfo).Url,
+                    (this.itemListView.SelectedItem as ServiceItem).Url,
                     serviceCollection.Name, serviceCollection.Properties, this);
-                serviceCollection.Results = new ObservableCollection<ResultRow>(
-                    resultCollection.Select(x => x.Data as ResultRow));
+                serviceCollection.Results = new ObservableCollection<ResultRow>(resultCollection);
             }
         }
 

@@ -1,0 +1,61 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  
+    <DataTemplate x:Key="ServiceItemTemplate">
+        <Grid Height="110" Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110">
+                <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                <TextBlock Text="{Binding Name}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
+                <TextBlock Text="{Binding Url}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
+                <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CollectionItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <TextBlock Text="{Binding Name}" Style="{StaticResource ItemTextStyle}" MaxHeight="40"/>
+                <TextBlock Text="{Binding Summary}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CollectionElementItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <TextBlock Text="{Binding Name}" Style="{StaticResource ItemTextStyle}" MaxHeight="40"/>
+                <TextBlock Text="{Binding Summary}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ResultItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <TextBlock Text="{Binding KeySummary}" Style="{StaticResource ItemTextStyle}" MaxHeight="40"/>
+                <TextBlock Text="{Binding ValueSummary}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

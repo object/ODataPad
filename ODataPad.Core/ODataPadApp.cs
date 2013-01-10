@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
+using ODataPad.Core.ViewModels;
 
 namespace ODataPad.Core
 {
@@ -17,6 +18,8 @@ namespace ODataPad.Core
         public int CurrentVersion { get; private set; }
         public int RequestedVersion { get; private set; }
 
+        public HomeViewModel HomeViewModel { get; private set; }
+
         public ODataPadApp(
             IServiceLocalStorage localStorage, 
             IResourceManager resourceManager,
@@ -28,11 +31,15 @@ namespace ODataPad.Core
             this.ServiceRepository = new ServiceRepository(_localStorage);
             _samplesFolder = samplesFolder;
             _samplesFilename = samplesFilename;
+
+            this.HomeViewModel = new HomeViewModel(this.ServiceRepository, _localStorage);
         }
 
         public async Task<IEnumerable<ServiceInfo>> InitializeODataServicesAsync()
         {
-            return await this.ServiceRepository.LoadServicesAsync();
+            var services = await this.ServiceRepository.LoadServicesAsync();
+            this.HomeViewModel.Populate(services);
+            return services;
         }
 
         public async Task<bool> SetVersionAsync(int currentVersion, int requestedVersion)

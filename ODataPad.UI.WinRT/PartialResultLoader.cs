@@ -38,9 +38,9 @@ namespace ODataPad.UI.WinRT
                 collection.HasMoreItems = result.Rows.Any() && !result.IsError;
                 foreach (var row in result.Rows)
                 {
-                    collection.Add(new ViewableItem(new ResultRow(
+                    collection.Add(new ResultRow(
                         row, 
-                        collection.CollectionProperties.Where(x => x.IsKey).Select(x => x.Name))));
+                        collection.CollectionProperties.Where(x => x.IsKey).Select(x => x.Name)));
                 }
                 _results.Count = (uint)result.Rows.Count();
             }

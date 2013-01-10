@@ -20,7 +20,7 @@ namespace ODataPad.Core.Models
         public ObservableCollection<CollectionProperty> Properties { get; private set; }
         public ObservableCollection<CollectionAssociation> Associations { get; private set; }
         public ObservableCollection<ResultRow> Results { get; set; }
-        public ObservableCollection<CollectionElement> SchemaItems
+        public ObservableCollection<CollectionElement> SchemaElements
         {
             get
             {

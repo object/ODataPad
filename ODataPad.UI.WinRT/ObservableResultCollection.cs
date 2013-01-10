@@ -7,7 +7,7 @@ using ODataPad.Core.Models;
 
 namespace ODataPad.UI.WinRT
 {
-    public class ObservableResultCollection : ObservableCollection<ViewableItem>, ISupportIncrementalLoading
+    public class ObservableResultCollection : ObservableCollection<ResultRow>, ISupportIncrementalLoading
     {
         public string ServiceUrl { get; private set; }
         public string CollectionName { get; private set; }
