@@ -14,8 +14,8 @@ namespace ODataPad.UI.WinRT
         public IEnumerable<CollectionProperty> CollectionProperties { get; private set; }
         public MainPage MainPage;
 
-        public ObservableResultCollection(string serviceUrl,
-            string collectionName, IEnumerable<CollectionProperty> collectionProperties, MainPage mainPage)
+        public ObservableResultCollection(string serviceUrl, string collectionName, 
+            IEnumerable<CollectionProperty> collectionProperties, MainPage mainPage)
         {
             this.ServiceUrl = serviceUrl;
             this.CollectionName = collectionName;

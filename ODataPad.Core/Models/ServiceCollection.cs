@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ODataPad.Core.Models
 {
-    public class ServiceCollection
+    public class ServiceCollection : BindableBase
     {
         public ServiceCollection(string name, 
             IEnumerable<CollectionProperty> properties, 
@@ -19,7 +19,14 @@ namespace ODataPad.Core.Models
         public string Summary { get { return GetCollectionSummary(); } }
         public ObservableCollection<CollectionProperty> Properties { get; private set; }
         public ObservableCollection<CollectionAssociation> Associations { get; private set; }
-        public ObservableCollection<ResultRow> Results { get; set; }
+        
+        private ObservableCollection<ResultRow> _queryResults;
+        public ObservableCollection<ResultRow> QueryResults
+        {
+            get { return _queryResults; }
+            set { this.SetProperty(ref _queryResults, value); }
+        }
+
         public ObservableCollection<CollectionElement> SchemaElements
         {
             get

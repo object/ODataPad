@@ -177,7 +177,7 @@
                 TabIndex="3"
                 Visibility="Collapsed"
                 DataContext="{Binding SelectedItem, ElementName=itemCollection}"
-                ItemsSource="{Binding Results}"
+                ItemsSource="{Binding QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
                 SelectionMode="Single" SelectionChanged="itemData_SelectionChanged" />
             

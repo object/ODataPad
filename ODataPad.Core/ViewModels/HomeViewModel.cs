@@ -40,8 +40,6 @@ namespace ODataPad.Core.ViewModels
             {
                 var serviceItem = new ServiceItem(serviceInfo);
                 serviceItem.Image = _imageProvider.GetImage(serviceItem.ImagePath);
-                //_imageProvider.GetImageAsync(serviceItem.ImagePath).ContinueWith(
-                //    x => serviceItem.Image = x);
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
             }

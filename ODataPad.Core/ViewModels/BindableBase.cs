@@ -2,12 +2,11 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ODataPad.UI.WinRT.Common
+namespace ODataPad.Core
 {
     /// <summary>
     /// Implementation of <see cref="INotifyPropertyChanged"/> to simplify models.
     /// </summary>
-    [Windows.Foundation.Metadata.WebHostHidden]
     public abstract class BindableBase : INotifyPropertyChanged
     {
         /// <summary>

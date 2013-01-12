@@ -42,6 +42,7 @@
     <Compile Include="Models\ServiceCollection.cs" />
     <Compile Include="Models\ServiceError.cs" />
     <Compile Include="Services\IImageService.cs" />
+    <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\ServiceItem.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />

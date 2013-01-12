@@ -191,13 +191,13 @@ namespace ODataPad.UI.WinRT
             if (e.RemovedItems.Count == 1)
             {
                 var collection = e.RemovedItems.First() as ServiceCollection;
-                collection.Results = null;
+                collection.QueryResults = null;
             }
             if (e.AddedItems.Count == 1)
             {
                 var collection = e.AddedItems.First() as ServiceCollection;
                 if (this.collectionMode.SelectedIndex == 0)
-                    collection.Results = null;
+                    collection.QueryResults = null;
                 else
                     RequestCollectionData(collection);
             }
@@ -410,12 +410,11 @@ namespace ODataPad.UI.WinRT
 
         private void RequestCollectionData(ServiceCollection serviceCollection)
         {
-            if (serviceCollection.Results == null)
+            if (serviceCollection.QueryResults == null)
             {
-                var resultCollection = new ObservableResultCollection(
+                serviceCollection.QueryResults = new ObservableResultCollection(
                     (this.itemListView.SelectedItem as ServiceItem).Url,
                     serviceCollection.Name, serviceCollection.Properties, this);
-                serviceCollection.Results = new ObservableCollection<ResultRow>(resultCollection);
             }
         }
 
