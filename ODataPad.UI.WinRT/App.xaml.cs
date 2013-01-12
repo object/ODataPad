@@ -27,6 +27,7 @@ namespace ODataPad.UI.WinRT
             theApp = new ODataPadApp(
                 new ServiceLocalStorage(),
                 new ResourceManager(),
+                new ImageService(), 
                 "Samples", 
                 "SampleServices.xml");
 

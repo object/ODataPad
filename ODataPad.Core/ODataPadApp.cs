@@ -11,6 +11,7 @@ namespace ODataPad.Core
     {
         private IServiceLocalStorage _localStorage;
         private IResourceManager _resourceManager;
+        private IImageService _imageProvider;
         public ServiceRepository ServiceRepository  { get; private set; }
         private string _samplesFolder;
         private string _samplesFilename;
@@ -23,23 +24,23 @@ namespace ODataPad.Core
         public ODataPadApp(
             IServiceLocalStorage localStorage, 
             IResourceManager resourceManager,
+            IImageService imageProvider,
             string samplesFolder,
             string samplesFilename)
         {
             _localStorage = localStorage;
             _resourceManager = resourceManager;
+            _imageProvider = imageProvider;
             this.ServiceRepository = new ServiceRepository(_localStorage);
             _samplesFolder = samplesFolder;
             _samplesFilename = samplesFilename;
 
-            this.HomeViewModel = new HomeViewModel(this.ServiceRepository, _localStorage);
+            this.HomeViewModel = new HomeViewModel(this.ServiceRepository, _localStorage, _imageProvider);
         }
 
         public async Task<IEnumerable<ServiceInfo>> InitializeODataServicesAsync()
         {
-            var services = await this.ServiceRepository.LoadServicesAsync();
-            this.HomeViewModel.Populate(services);
-            return services;
+            return await this.ServiceRepository.LoadServicesAsync();
         }
 
         public async Task<bool> SetVersionAsync(int currentVersion, int requestedVersion)

@@ -30,6 +30,7 @@ namespace ODataPad.UI.WinRT
             this.InitializeComponent();
 
             SettingsPane.GetForCurrentView().CommandsRequested += MainPage_CommandsRequested;
+            App.theApp.HomeViewModel.PopulateAsync().Wait();
         }
 
         #region Page state management

@@ -14,29 +14,38 @@ namespace ODataPad.Core.ViewModels
         private const int ResultPageSize = 100;
         private ServiceRepository _serviceRepository;
         private IServiceLocalStorage _localStorage;
+        private IImageService _imageProvider;
 
         public ObservableCollection<ServiceItem> Services { get; private set; }
         public ObservableCollection<ResultRow> QueryResults { get; private set; }
 
-        public HomeViewModel(ServiceRepository serviceRepository, IServiceLocalStorage localStorage)
+        public HomeViewModel(
+            ServiceRepository serviceRepository, 
+            IServiceLocalStorage localStorage,
+            IImageService imageProvider)
         {
             _serviceRepository = serviceRepository;
             _localStorage = localStorage;
+            _imageProvider = imageProvider;
 
             this.Services = new ObservableCollection<ServiceItem>();
             this.QueryResults = new ObservableCollection<ResultRow>();
         }
 
-        public void Populate(IEnumerable<ServiceInfo> services)
+        public async Task<bool> PopulateAsync()
         {
             this.Services.Clear();
 
-            foreach (var serviceInfo in services)
+            foreach (var serviceInfo in _serviceRepository.Services)
             {
                 var serviceItem = new ServiceItem(serviceInfo);
+                serviceItem.Image = _imageProvider.GetImage(serviceItem.ImagePath);
+                //_imageProvider.GetImageAsync(serviceItem.ImagePath).ContinueWith(
+                //    x => serviceItem.Image = x);
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
             }
+            return true;
         }
 
         public async Task<bool> AddServiceItemAsync(ServiceInfo serviceInfo)

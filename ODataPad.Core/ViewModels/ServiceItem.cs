@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
@@ -16,7 +17,8 @@ namespace ODataPad.Core.ViewModels
         public string Name { get { return _serviceInfo.Name; } }
         public string Description { get { return _serviceInfo.Description; } }
         public string Url { get { return _serviceInfo.Url; } }
-        public string ImagePath { get { return _serviceInfo.GetImagePath(); } }
+        public string ImagePath { get { return GetImagePath(); } }
+        public object Image { get; set; }
 
         public ObservableCollection<ServiceCollection> Collections { get; private set; }
 
@@ -30,6 +32,11 @@ namespace ODataPad.Core.ViewModels
         public void UpdateMetadata(string metadata)
         {
             _serviceInfo.MetadataCache = metadata;
+        }
+
+        private string GetImagePath()
+        {
+            return "Samples/" + (string.IsNullOrEmpty(_serviceInfo.Logo) ? this.Name : _serviceInfo.Logo) + ".png";
         }
     }
 }
