@@ -6,6 +6,5 @@ namespace ODataPad.Core.Services
     {
         Task<string> LoadContentAsStringAsync(string folderName, string resourceName);
         Task<string> LoadResourceAsStringAsync(string moduleName, string folderName, string resourceName);
-        string GetImageResourcePath(string folderName, string imageName);
     }
 }

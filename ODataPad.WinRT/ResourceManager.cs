@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Storage;
 using ODataPad.Core.Services;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace ODataPad.WinRT
 {
@@ -20,17 +22,46 @@ namespace ODataPad.WinRT
 
         public async Task<string> LoadResourceAsStringAsync(string moduleName, string folderName, string resourceName)
         {
-            var assembly = Assembly.Load(new AssemblyName(moduleName));
-            var resourceStream = assembly.GetManifestResourceStream(string.Join(".", moduleName, folderName, resourceName));
+            var resourceStream = GetResourceStream(moduleName, folderName, resourceName);
             using (var reader = new StreamReader(resourceStream))
             {
-                return reader.ReadToEnd();
+                return await reader.ReadToEndAsync();
             }
+        }
+
+        public async Task<BitmapImage> LoadResourceAsImageAsync(string moduleName, string folderName, string resourceName)
+        {
+            var resourceStream = GetResourceStream(moduleName, folderName, resourceName);
+            BitmapImage image = null;
+            var ras = new InMemoryRandomAccessStream();
+            await resourceStream.CopyToAsync(ras.AsStreamForWrite());
+            await Utils.ExecuteOnUIThread(() =>
+            {
+                image = new BitmapImage();
+                image.SetSource(ras);
+            });
+            return image;
+        }
+
+        public Stream GetResourceStream(string moduleName, string folderName, string resourceName)
+        {
+            var assembly = Assembly.Load(new AssemblyName(moduleName));
+            var resourcePath = resourceName;
+            if (!string.IsNullOrEmpty(folderName))
+                resourcePath = string.Join(".", folderName, resourcePath);
+            if (!string.IsNullOrEmpty(moduleName))
+                resourcePath = string.Join(".", moduleName, resourcePath);
+
+            return assembly.GetManifestResourceStream(resourcePath);
         }
 
         public string GetImageResourcePath(string folderName, string imageName)
         {
-            return new Uri("ms-appx:///") + string.Join("/", folderName, imageName);
+            var imagePath = imageName;
+            if (!string.IsNullOrEmpty(folderName))
+                imagePath = string.Join("/", folderName, imagePath);
+
+            return new Uri("ms-appx:///") + imagePath;
         }
     }
 }
