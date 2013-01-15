@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ODataPad.Core.Models;
 
-namespace ODataPad.Core.Services
+namespace ODataPad.Core.Interfaces
 {
     public interface IServiceLocalStorage
     {

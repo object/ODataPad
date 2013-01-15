@@ -41,7 +41,9 @@
     <Compile Include="Models\ResultRow.cs" />
     <Compile Include="Models\ServiceCollection.cs" />
     <Compile Include="Models\ServiceError.cs" />
-    <Compile Include="Services\IImageService.cs" />
+    <Compile Include="Interfaces\IImageProvider.cs" />
+    <Compile Include="Interfaces\IServiceRepository.cs" />
+    <Compile Include="StartNavigation.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\ServiceItem.cs" />
     <Compile Include="Services\MetadataService.cs" />
@@ -49,8 +51,8 @@
     <Compile Include="Models\ServiceInfo.cs" />
     <Compile Include="Models\QueryResult.cs" />
     <Compile Include="ODataPadApp.cs" />
-    <Compile Include="Services\IResourceManager.cs" />
-    <Compile Include="Services\IServiceLocalStorage.cs" />
+    <Compile Include="Interfaces\IResourceManager.cs" />
+    <Compile Include="Interfaces\IServiceLocalStorage.cs" />
     <Compile Include="Services\QueryService.cs" />
     <Compile Include="Services\ServiceRepository.cs" />
     <Compile Include="Services\SamplesService.cs" />
@@ -61,11 +63,16 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
+      <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
+      <Name>Cirrious.MvvmCross</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Simple.OData\Simple.OData.Client\Simple.OData.Client.Core.csproj">
       <Project>{361868b8-a63e-4c74-aa87-b70e1ab22313}</Project>
       <Name>Simple.OData.Client.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ODataPad.Core.Models;
 using ODataPad.Core.ViewModels;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Core;
@@ -14,9 +14,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using ODataPad.Core.Models;
 
 namespace ODataPad.UI.WinRT
 {
@@ -30,19 +27,26 @@ namespace ODataPad.UI.WinRT
             this.InitializeComponent();
 
             SettingsPane.GetForCurrentView().CommandsRequested += MainPage_CommandsRequested;
-            App.theApp.HomeViewModel.PopulateAsync().Wait();
+        }
+
+        public new HomeViewModel ViewModel
+        {
+            get { return (HomeViewModel)base.ViewModel; }
+            set { base.ViewModel = value; }
         }
 
         #region Page state management
 
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            var item = App.theApp.HomeViewModel.Services.Where(x => x.Name == navigationParameter.ToString());
+            if (this.ViewModel == null)
+                return;
+            var item = this.ViewModel.Services.Where(x => x.Name == navigationParameter.ToString());
             if (item == null)
                 return;
 
             this.DefaultViewModel["Item"] = item;
-            this.DefaultViewModel["ItemElements"] = App.theApp.HomeViewModel.Services;
+            this.DefaultViewModel["ItemElements"] = this.ViewModel.Services;
 
             if (pageState == null)
             {
@@ -55,7 +59,7 @@ namespace ODataPad.UI.WinRT
             {
                 if (pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null)
                 {
-                    var selectedItem = App.theApp.HomeViewModel.Services.Single(x => x.Name == (String)pageState["SelectedItem"]);
+                    var selectedItem = this.ViewModel.Services.Single(x => x.Name == (String)pageState["SelectedItem"]);
                     this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
@@ -73,24 +77,6 @@ namespace ODataPad.UI.WinRT
         #endregion
 
         #region Logical page navigation
-
-        // Visual state management typically reflects the four application view states directly
-        // (full screen landscape and portrait plus snapped and filled views.)  The split page is
-        // designed so that the snapped and portrait view states each have two distinct sub-states:
-        // either the item list or the details are displayed, but not both at the same time.
-        //
-        // This is all implemented with a single physical page that can represent two logical
-        // pages.  The code below achieves this goal without making the user aware of the
-        // distinction.
-
-        /// <summary>
-        /// Invoked to determine whether the page should act as one logical page or two.
-        /// </summary>
-        /// <param name="viewState">The view state for which the question is being posed, or null
-        /// for the current view state.  This parameter is optional with null as the default
-        /// value.</param>
-        /// <returns>True when the view state in question is portrait or snapped, false
-        /// otherwise.</returns>
         private bool UsingLogicalPageNavigation(ApplicationViewState? viewState = null)
         {
             if (viewState == null) viewState = ApplicationView.Value;
@@ -98,11 +84,6 @@ namespace ODataPad.UI.WinRT
                 viewState == ApplicationViewState.Snapped;
         }
 
-        /// <summary>
-        /// Invoked when the page's back button is pressed.
-        /// </summary>
-        /// <param name="sender">The back button instance.</param>
-        /// <param name="e">Event data that describes how the back button was clicked.</param>
         protected override void GoBack(object sender, RoutedEventArgs e)
         {
             if (this.UsingLogicalPageNavigation() && itemListView.SelectedItem != null)
@@ -121,14 +102,6 @@ namespace ODataPad.UI.WinRT
             }
         }
 
-        /// <summary>
-        /// Invoked to determine the name of the visual state that corresponds to an application
-        /// view state.
-        /// </summary>
-        /// <param name="viewState">The view state for which the question is being posed.</param>
-        /// <returns>The name of the desired visual state.  This is the same as the name of the
-        /// view state except when there is a selected item in portrait and snapped views where
-        /// this additional logical page is represented by adding a suffix of _Detail.</returns>
         protected override string DetermineVisualState(ApplicationViewState viewState)
         {
             // Update the back button's enabled state when the view state changes
@@ -340,7 +313,7 @@ namespace ODataPad.UI.WinRT
 
         private async Task<bool> ServiceHasUniqueName()
         {
-            var item = App.theApp.HomeViewModel.Services.Where(x => x.Name == this.serviceName.Text);
+            var item = this.ViewModel.Services.Where(x => x.Name == this.serviceName.Text);
             if (item != null)
             {
                 var dialog = new MessageDialog("A service with this name already exists.");
@@ -386,7 +359,7 @@ namespace ODataPad.UI.WinRT
                 Description = this.serviceDescription.Text,
                 Logo = "Custom",
             };
-            await App.theApp.HomeViewModel.AddServiceItemAsync(serviceInfo);
+            await this.ViewModel.AddServiceItemAsync(serviceInfo);
         }
 
         private async void UpdateServiceAsync()
@@ -399,13 +372,13 @@ namespace ODataPad.UI.WinRT
                 Logo = Path.GetFileNameWithoutExtension(_editedItem.ImagePath),
             };
             serviceInfo.MetadataCache = null;
-            await App.theApp.HomeViewModel.UpdateServiceItemAsync(_editedItem, serviceInfo);
+            await this.ViewModel.UpdateServiceItemAsync(_editedItem, serviceInfo);
         }
 
         private async void RemoveServiceAsync()
         {
             var item = this.itemListView.SelectedItem as ServiceItem;
-            await App.theApp.HomeViewModel.RemoveServiceItemAsync(item);
+            await this.ViewModel.RemoveServiceItemAsync(item);
         }
 
         private void RequestCollectionData(ServiceCollection serviceCollection)

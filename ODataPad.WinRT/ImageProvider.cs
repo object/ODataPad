@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ODataPad.Core.Interfaces;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
-using ODataPad.Core.Services;
 
 namespace ODataPad.WinRT
 {
-    public class ImageService : IImageService
+    public class ImageProvider : IImageProvider
     {
         private static readonly Uri _baseUri = new Uri("ms-appx:///");
 

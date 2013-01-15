@@ -6,14 +6,14 @@ using ODataPad.WinRT;
 namespace ODataPad.Tests.WinRT
 {
     [TestClass]
-    public class ImageServiceTests
+    public class ImageProviderTests
     {
         [TestMethod]
         public async Task GetImage()
         {
-            var imageService = new ImageService();
+            var imageProvider = new ImageProvider();
             object image = null;
-            await Utils.ExecuteOnUIThread(() => { image = imageService.GetImage("Samples/OData.org.png"); });
+            await Utils.ExecuteOnUIThread(() => { image = imageProvider.GetImage("Samples/OData.org.png"); });
             Assert.IsNotNull(image);
         }
     }

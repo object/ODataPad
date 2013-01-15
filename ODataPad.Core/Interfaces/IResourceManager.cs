@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ODataPad.Core.Services
+namespace ODataPad.Core.Interfaces
 {
     public interface IResourceManager
     {

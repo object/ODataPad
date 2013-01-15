@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
+using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
-using ODataPad.Core.Services;
+using Windows.Storage;
 
 namespace ODataPad.WinRT
 {

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace ODataPad.Core.Services
+namespace ODataPad.Core.Interfaces
 {
-    public interface IImageService
+    public interface IImageProvider
     {
         object GetImage(string imagePath);
     }

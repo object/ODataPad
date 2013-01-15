@@ -14,7 +14,7 @@
         <!-- Collection of items displayed by this page -->
         <CollectionViewSource
             x:Name="itemsViewSource"
-            Source="{Binding ItemElements}"/>
+            Source="{Binding Services}"/>
     </Page.Resources>
 
     <common:LayoutAwarePage.BottomAppBar>

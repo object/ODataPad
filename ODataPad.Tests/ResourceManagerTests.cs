@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ODataPad.WinRT;
 using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using ODataPad.WinRT;
 
 namespace ODataPad.Tests.WinRT
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.Services

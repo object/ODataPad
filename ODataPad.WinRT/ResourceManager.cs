@@ -2,8 +2,8 @@
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using ODataPad.Core.Interfaces;
 using Windows.Storage;
-using ODataPad.Core.Services;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
