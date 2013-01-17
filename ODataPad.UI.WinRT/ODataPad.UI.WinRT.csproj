@@ -119,7 +119,7 @@
     <Compile Include="Setup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AppxManifest Include="Package.appxmanifest">
+    <AppxManifest Include="Manifest\Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
     <Page Include="Common\CustomStyles.xaml">
@@ -140,9 +140,9 @@
     </Content>
     <Content Include="Samples\Stack Overflow.png" />
     <Content Include="Samples\twitpic.png" />
-    <None Include="ODataPad_StoreKey.pfx" />
-    <None Include="Package.StoreAssociation.xml" />
-    <None Include="ODataPad_TemporaryKey.pfx" />
+    <None Include="Manifest\ODataPad_StoreKey.pfx" />
+    <None Include="Manifest\Package.StoreAssociation.xml" />
+    <None Include="Manifest\ODataPad_TemporaryKey.pfx" />
     <Content Include="Samples\DBpedia.edmx" />
     <Content Include="Samples\Devexpress Channel.edmx" />
     <Content Include="Samples\ebay.edmx" />
