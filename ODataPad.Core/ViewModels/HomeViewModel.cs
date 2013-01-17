@@ -95,7 +95,6 @@ namespace ODataPad.Core.ViewModels
             this.Services.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };
             return await this.ServiceRepository.DeleteServiceAsync(serviceInfo);
-            return true;
         }
 
         private void RefreshServiceCollectionsFromMetadataCache(ServiceItem item, ServiceInfo service)

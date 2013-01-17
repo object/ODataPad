@@ -20,7 +20,7 @@ namespace ODataPad.UI.WinRT
         {
             base.InitializePlatformServices();
 
-            this.RegisterServiceInstance<IServiceRepository>(new ServiceRepository());
+            this.RegisterServiceInstance<IResourceManager>(new ResourceManager());
             this.RegisterServiceInstance<IServiceLocalStorage>(new ServiceLocalStorage());
             this.RegisterServiceInstance<IImageProvider>(new ImageProvider());
         }

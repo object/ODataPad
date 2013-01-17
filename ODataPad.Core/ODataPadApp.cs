@@ -36,6 +36,8 @@ namespace ODataPad.Core
         public IServiceRepository ServiceRepository { get; private set; }
         public IResourceManager ResourceManager { get; private set; }
         public IServiceLocalStorage ServiceLocalStorage { get; private set; }
+        public ISamplesService SamplesService { get; private set; }
+        public IDataVersioningService DataVersioningService { get; private set; }
 
         public HomeViewModel HomeViewModel { get; private set; }
 
@@ -47,37 +49,16 @@ namespace ODataPad.Core
         private void InitializeStartNavigation()
         {
             var startApplicationObject = new StartNavigation();
-            this.RegisterServiceInstance<IMvxStartNavigation>(startApplicationObject);
+            this.RegisterServiceInstance<IMvxStartNavigation>(
+                startApplicationObject);
+            this.RegisterServiceInstance<ISamplesService>(
+                new SamplesService(_samplesFolder, _samplesFilename, this.CurrentVersion, this.RequestedVersion));
+            this.RegisterServiceInstance<IDataVersioningService>(
+                new DataVersioningService());
         }
 
         private void InitializePlugIns()
         {
-        }
-
-        public async Task<bool> SetVersionAsync(int currentVersion, int requestedVersion)
-        {
-            this.CurrentVersion = currentVersion;
-            this.RequestedVersion = requestedVersion;
-
-            if (this.CurrentVersion != this.RequestedVersion)
-            {
-                var samplesService = new SamplesService(
-                    this.ResourceManager, _samplesFolder, _samplesFilename,
-                    this.CurrentVersion, this.RequestedVersion);
-
-                if (this.RequestedVersion <= 1)
-                {
-                    await this.ServiceRepository.ClearServicesAsync();
-                }
-                else
-                {
-                    await samplesService.UpdateSamplesAsync(this.ServiceLocalStorage);
-                }
-
-                this.CurrentVersion = this.RequestedVersion;
-            }
-
-            return true;
         }
     }
 }

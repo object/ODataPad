@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.Services
 {
     public class SamplesService
+        : ISamplesService
+        , IMvxServiceConsumer<IResourceManager>
+        , IMvxServiceConsumer<IServiceLocalStorage>
     {
-        private readonly IResourceManager _resourceManager;
         private readonly string _folderName;
         private readonly string _samplesFilename;
         private int _currentAppVersion;
@@ -53,11 +57,9 @@ namespace ODataPad.Core.Services
 
         private static readonly DateTime SampleCreationTime = new DateTime(2012, 11, 10);
 
-        public SamplesService(IResourceManager resourceManager, 
-            string folderName, string samplesFilename,
-            int currentAppVersion, int requestedAppVersion)
+        public SamplesService(string folderName, string samplesFilename,
+                            int currentAppVersion, int requestedAppVersion)
         {
-            _resourceManager = resourceManager;
             _folderName = folderName;
             _samplesFilename = samplesFilename;
             _currentAppVersion = currentAppVersion;
@@ -66,7 +68,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetAllSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await this.GetService<IResourceManager>().LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = NewSamples.Where(sample => sample.Key > _requestedAppVersion)
@@ -79,7 +81,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await this.GetService<IResourceManager>().LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = NewSamples
@@ -91,7 +93,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await this.GetService<IResourceManager>().LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = UpdatedSamples
@@ -103,7 +105,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await this.GetService<IResourceManager>().LoadContentAsStringAsync(_folderName, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = ExpiredSample
@@ -113,7 +115,7 @@ namespace ODataPad.Core.Services
             return samples.ToList();
         }
 
-        public async Task<bool> CreateSamplesAsync(IServiceLocalStorage localStorage)
+        public async Task<bool> CreateSamplesAsync()
         {
             var allSamples = await GetAllSamplesAsync();
             var index = 0;
@@ -122,22 +124,24 @@ namespace ODataPad.Core.Services
                 serviceInfo.Index = index;
                 ++index;
             }
-            var result = await localStorage.SaveServiceInfosAsync(allSamples);
+            var result = await this.GetService<IServiceLocalStorage>()
+                .SaveServiceInfosAsync(allSamples);
             var samplesWithMetadata = await GetSamplesMetadataAsync(allSamples);
             foreach (var serviceInfo in samplesWithMetadata)
             {
-                await localStorage.SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                await this.GetService<IServiceLocalStorage>()
+                    .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
 
             return result;
         }
 
-        public async Task<bool> UpdateSamplesAsync(IServiceLocalStorage localStorage)
+        public async Task<bool> UpdateSamplesAsync()
         {
             var newServices = await GetNewSamplesAsync();
             var updatedServices = await GetUpdatedSamplesAsync();
             var expiredServices = await GetExpiredSamplesAsync();
-            var oldServices = await localStorage.LoadServiceInfosAsync();
+            var oldServices = await this.GetService<IServiceLocalStorage>().LoadServiceInfosAsync();
 
             var index = oldServices.Count();
             foreach (var serviceInfo in newServices)
@@ -159,11 +163,12 @@ namespace ODataPad.Core.Services
             allServices = allServices.Where(x => updatedServices.All(y => x.Name != y.Name)).ToList();
             allServices = allServices.Union(updatedServices).ToList();
             allServices = allServices.Union(newServices).ToList();
-            var result = await localStorage.SaveServiceInfosAsync(allServices);
+            var result = await this.GetService<IServiceLocalStorage>().SaveServiceInfosAsync(allServices);
             var servicesWithMetadata = await GetSamplesMetadataAsync(allServices);
             foreach (var serviceInfo in servicesWithMetadata)
             {
-                await localStorage.SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                await this.GetService<IServiceLocalStorage>()
+                    .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
 
             return result;
@@ -182,7 +187,7 @@ namespace ODataPad.Core.Services
             foreach (var serviceInfo in serviceInfos)
             {
                 var serviceInfoWithMetadata = serviceInfo;
-                serviceInfoWithMetadata.MetadataCache = await _resourceManager.LoadContentAsStringAsync(
+                serviceInfoWithMetadata.MetadataCache = await this.GetService<IResourceManager>().LoadContentAsStringAsync(
                     _folderName, serviceInfo.MetadataCacheFilename);
                 serviceInfoWithMetadata.CacheUpdated = new DateTimeOffset(SampleCreationTime);
                 samplesWithMetadata.Add(serviceInfoWithMetadata);

@@ -109,6 +109,9 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ODataPad.UI.WinRT\Setup.cs">
+      <Link>Setup.cs</Link>
+    </Compile>
     <Compile Include="ImageProviderTests.cs" />
     <Compile Include="ResourceManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,6 +171,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross.WinRT\Cirrious.MvvmCross.WinRT.csproj">
+      <Project>{ebe1bd6c-6a53-4e9f-9840-d6a1bd074dfd}</Project>
+      <Name>Cirrious.MvvmCross.WinRT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
+      <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
+      <Name>Cirrious.MvvmCross</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
       <Name>ODataPad.Core</Name>

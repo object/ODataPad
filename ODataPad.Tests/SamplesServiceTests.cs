@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
+using ODataPad.UI.WinRT;
 using ODataPad.WinRT;
 using Windows.Storage;
 
@@ -13,6 +14,15 @@ namespace ODataPad.Tests.WinRT
     [TestClass]
     public class SampesServiceTests
     {
+        private static Setup _setup;
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            _setup = new Setup(null);
+            _setup.Initialize();
+        }
+
         [TestMethod]
         public async Task UpdateSamplesAsync_from_1_to_1()
         {
@@ -51,23 +61,22 @@ namespace ODataPad.Tests.WinRT
         private async Task<IEnumerable<ServiceInfo>> UpdateSamplesAsync(int currentVersion, int requestedVersion)
         {
             var localStorage = new ServiceLocalStorage();
-            var resourceManager = new ResourceManager();
 
             await localStorage.ClearServicesAsync();
 
             SamplesService samplesService;
             for (int oldVersion = 1; oldVersion < currentVersion; oldVersion++)
             {
-                samplesService = new SamplesService(resourceManager,
+                samplesService = new SamplesService(
                     "Samples", "SampleServices.xml",
                     oldVersion, oldVersion+1);
-                await samplesService.UpdateSamplesAsync(localStorage);
+                await samplesService.UpdateSamplesAsync();
             }
 
-            samplesService = new SamplesService(resourceManager, 
+            samplesService = new SamplesService(
                 "Samples", "SampleServices.xml", 
                 currentVersion, requestedVersion);
-            await samplesService.UpdateSamplesAsync(localStorage);
+            await samplesService.UpdateSamplesAsync();
 
             return await localStorage.LoadServiceInfosAsync();
         }

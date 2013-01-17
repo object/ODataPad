@@ -35,6 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IDataVersioningService.cs" />
+    <Compile Include="Interfaces\ISamplesService.cs" />
     <Compile Include="Models\CollectionAssociation.cs" />
     <Compile Include="Models\CollectionElement.cs" />
     <Compile Include="Models\CollectionProperty.cs" />
@@ -43,6 +45,7 @@
     <Compile Include="Models\ServiceError.cs" />
     <Compile Include="Interfaces\IImageProvider.cs" />
     <Compile Include="Interfaces\IServiceRepository.cs" />
+    <Compile Include="Services\DataVersioningService.cs" />
     <Compile Include="StartNavigation.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\ServiceItem.cs" />
