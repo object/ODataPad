@@ -22,6 +22,7 @@ namespace ODataPad.UI.WinRT
 
             this.RegisterServiceInstance<IResourceManager>(new ResourceManager());
             this.RegisterServiceInstance<IServiceLocalStorage>(new ServiceLocalStorage());
+            this.RegisterServiceInstance<IApplicationLocalData>(new ApplicationLocalData());
             this.RegisterServiceInstance<IImageProvider>(new ImageProvider());
         }
 

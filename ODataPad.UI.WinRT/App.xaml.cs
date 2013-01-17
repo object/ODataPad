@@ -6,9 +6,6 @@ using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using Cirrious.MvvmCross.Interfaces.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -16,14 +13,10 @@ namespace ODataPad.UI.WinRT
 {
     sealed partial class App : Application, IMvxServiceConsumer<IMvxStartNavigation>
     {
-        //public const uint RequestedVersion = 3;
-
         public App()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-
-            //LoadAppDataAsync().Wait();
         }
 
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
@@ -71,19 +64,5 @@ namespace ODataPad.UI.WinRT
             //await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
-
-        //private async Task<bool> LoadAppDataAsync()
-        //{
-        //    await ApplicationData.Current.SetVersionAsync(RequestedVersion, SetVersionHandlerAsync);
-        //    await theApp.InitializeODataServicesAsync();
-        //    return true;
-        //}
-
-        //private async void SetVersionHandlerAsync(SetVersionRequest request)
-        //{
-        //    SetVersionDeferral deferral = request.GetDeferral();
-        //    await theApp.SetVersionAsync((int)request.CurrentVersion, (int)RequestedVersion);
-        //    deferral.Complete();
-        //}
     }
 }

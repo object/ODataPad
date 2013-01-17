@@ -9,9 +9,16 @@ using ODataPad.Core.Models;
 namespace ODataPad.Core.Services
 {
     public class ServiceRepository
-        : IServiceRepository
-        , IMvxServiceConsumer<IServiceLocalStorage>
+        : IServiceRepository,
+        IMvxServiceConsumer<IServiceLocalStorage>
     {
+        private IServiceLocalStorage _localStorage;
+
+        public ServiceRepository(IServiceLocalStorage localStorage = null)
+        {
+            _localStorage = localStorage ?? this.GetService<IServiceLocalStorage>();
+        }
+
         public IList<ServiceInfo> Services { get; private set; }
 
         public async Task<bool> AddServiceAsync(ServiceInfo serviceInfo)
@@ -50,11 +57,11 @@ namespace ODataPad.Core.Services
         public async Task<IEnumerable<ServiceInfo>> LoadServicesAsync()
         {
             var servicesWithMetadata = new List<ServiceInfo>();
-            var serviceInfos = await this.GetService<IServiceLocalStorage>().LoadServiceInfosAsync();
+            var serviceInfos = await _localStorage.LoadServiceInfosAsync();
             foreach (var serviceInfo in serviceInfos)
             {
                 var serviceInfoWithMetadata = serviceInfo;
-                serviceInfoWithMetadata.MetadataCache = await this.GetService<IServiceLocalStorage>()
+                serviceInfoWithMetadata.MetadataCache = await _localStorage
                     .LoadServiceMetadataAsync(serviceInfo.MetadataCacheFilename);
                 servicesWithMetadata.Add(serviceInfoWithMetadata);
             }
@@ -65,10 +72,10 @@ namespace ODataPad.Core.Services
 
         public async Task<bool> SaveServicesAsync()
         {
-            await this.GetService<IServiceLocalStorage>().SaveServiceInfosAsync(this.Services);
+            await _localStorage.SaveServiceInfosAsync(this.Services);
             foreach (var serviceInfo in this.Services)
             {
-                await this.GetService<IServiceLocalStorage>()
+                await _localStorage
                     .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
             return true;
@@ -76,7 +83,7 @@ namespace ODataPad.Core.Services
 
         public async Task<bool> ClearServicesAsync()
         {
-            await this.GetService<IServiceLocalStorage>().ClearServicesAsync();
+            await _localStorage.ClearServicesAsync();
             this.Services = new ServiceInfo[] { };
             return true;
         }

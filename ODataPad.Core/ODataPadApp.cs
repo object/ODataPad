@@ -15,18 +15,16 @@ namespace ODataPad.Core
         : MvxApplication
         , IMvxServiceProducer
     {
-        private string _samplesFolder;
-        private string _samplesFilename;
-
-        public int CurrentVersion { get; private set; }
-        public int RequestedVersion { get; private set; }
+        public const int ApplicationDataVersion = 3;
+        public static string SamplesFolder;
+        public static string SamplesFilename;
 
         public ODataPadApp(
             string samplesFolder,
             string samplesFilename)
         {
-            _samplesFolder = samplesFolder;
-            _samplesFilename = samplesFilename;
+            SamplesFolder = samplesFolder;
+            SamplesFilename = samplesFilename;
 
             InitalizeServices();
             InitializeStartNavigation();
@@ -43,7 +41,10 @@ namespace ODataPad.Core
 
         private void InitalizeServices()
         {
-            this.RegisterServiceInstance<IServiceRepository>(new ServiceRepository());
+            this.RegisterServiceInstance<IServiceRepository>(
+                new ServiceRepository());
+            this.RegisterServiceInstance<IDataVersioningService>(
+                new DataVersioningService());
         }
 
         private void InitializeStartNavigation()
@@ -51,10 +52,6 @@ namespace ODataPad.Core
             var startApplicationObject = new StartNavigation();
             this.RegisterServiceInstance<IMvxStartNavigation>(
                 startApplicationObject);
-            this.RegisterServiceInstance<ISamplesService>(
-                new SamplesService(_samplesFolder, _samplesFilename, this.CurrentVersion, this.RequestedVersion));
-            this.RegisterServiceInstance<IDataVersioningService>(
-                new DataVersioningService());
         }
 
         private void InitializePlugIns()

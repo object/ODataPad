@@ -15,13 +15,22 @@ namespace ODataPad.Core.ViewModels
     public class HomeViewModel : MvxViewModel
     {
         private const int ResultPageSize = 100;
+        private readonly IServiceRepository _serviceRepository;
+        private readonly IServiceLocalStorage _localStorage;
+        private readonly IApplicationLocalData _localData;
+        private readonly IImageProvider _imageProvider;
 
         public HomeViewModel()
         {
+            _serviceRepository = this.GetService<IServiceRepository>();
+            _localStorage = this.GetService<IServiceLocalStorage>();
+            _localData = this.GetService<IApplicationLocalData>();
+            _imageProvider = this.GetService<IImageProvider>();
+
             _services = new ObservableCollection<ServiceItem>();
             this.QueryResults = new ObservableCollection<ResultRow>();
 
-            PopulateAsync();
+            PrepareApplicationDataAsync();
         }
 
         private ObservableCollection<ServiceItem> _services;
@@ -33,30 +42,27 @@ namespace ODataPad.Core.ViewModels
 
         public ObservableCollection<ResultRow> QueryResults { get; private set; }
 
-        private IServiceRepository ServiceRepository
+        private async Task<bool> PrepareApplicationDataAsync()
         {
-            get { return this.GetService<IServiceRepository>(); }
+            await EnsureDataVersionAsync();
+            await PopulateServicesAsync();
+            return true;
         }
 
-        private IServiceLocalStorage ServiceLocalStorage
+        private async Task<bool> EnsureDataVersionAsync()
         {
-            get { return this.GetService<IServiceLocalStorage>(); }
+            return await _localData.SetDataVersionAsync(ODataPadApp.ApplicationDataVersion);
         }
 
-        private IImageProvider ImageProvider
-        {
-            get { return this.GetService<IImageProvider>(); }
-        }
-
-        private async Task<bool> PopulateAsync()
+        private async Task<bool> PopulateServicesAsync()
         {
             this.Services.Clear();
-            await this.ServiceRepository.LoadServicesAsync();
+            await _serviceRepository.LoadServicesAsync();
 
-            foreach (var serviceInfo in this.ServiceRepository.Services)
+            foreach (var serviceInfo in _serviceRepository.Services)
             {
                 var serviceItem = new ServiceItem(serviceInfo);
-                serviceItem.Image = this.ImageProvider.GetImage(serviceItem.ImagePath);
+                serviceItem.Image = _imageProvider.GetImage(serviceItem.ImagePath);
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
             }
@@ -72,7 +78,7 @@ namespace ODataPad.Core.ViewModels
             if (ok)
             {
                 RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
-                ok = await this.ServiceRepository.AddServiceAsync(serviceInfo);
+                ok = await _serviceRepository.AddServiceAsync(serviceInfo);
             }
             return ok;
         }
@@ -85,7 +91,7 @@ namespace ODataPad.Core.ViewModels
             if (ok)
             {
                 RefreshServiceCollectionsFromMetadataCache(item, serviceInfo);
-                ok = await this.ServiceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
+                ok = await _serviceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
             }
             return ok;
         }
@@ -94,7 +100,7 @@ namespace ODataPad.Core.ViewModels
         {
             this.Services.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };
-            return await this.ServiceRepository.DeleteServiceAsync(serviceInfo);
+            return await _serviceRepository.DeleteServiceAsync(serviceInfo);
         }
 
         private void RefreshServiceCollectionsFromMetadataCache(ServiceItem item, ServiceInfo service)
@@ -131,7 +137,7 @@ namespace ODataPad.Core.ViewModels
             {
                 serviceItem.UpdateMetadata(service.MetadataCache);
             }
-            await this.ServiceLocalStorage.SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
+            await _localStorage.SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
             return true;
         }
     }

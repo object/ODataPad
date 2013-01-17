@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using ODataPad.Core.Interfaces;
-using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace ODataPad.WinRT

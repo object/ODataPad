@@ -8,34 +8,31 @@ namespace ODataPad.Core.Services
 {
     public class DataVersioningService
         : IDataVersioningService
-        , IMvxServiceConsumer<IResourceManager>
         , IMvxServiceConsumer<IServiceRepository>
-        , IMvxServiceConsumer<IServiceLocalStorage>
         , IMvxServiceConsumer<ISamplesService>
     {
-        public int CurrentVersion { get; set; }
-        public int RequestedVersion { get; set; }
+        private readonly IServiceRepository _serviceRepository;
 
-        public DataVersioningService()
+        public DataVersioningService(IServiceRepository serviceRepository = null)
         {
-            this.CurrentVersion = -1;
-            this.RequestedVersion = -1;
+            _serviceRepository = serviceRepository ?? this.GetService<IServiceRepository>();
         }
 
-        public async Task<bool> SetVersionAsync()
+        public async Task<bool> SetDataVersionAsync(int currentVersion, int requestedVersion)
         {
-            if (this.CurrentVersion < 0 || this.RequestedVersion < 0)
+            if (currentVersion < 0 || requestedVersion < 0)
                 throw new InvalidOperationException("Current and requested data versions must be set prior to calling data versioning operations");
 
-            if (this.CurrentVersion != this.RequestedVersion)
+            var ssamplesService = new SamplesService(ODataPadApp.SamplesFolder, ODataPadApp.SamplesFilename, currentVersion, requestedVersion);
+            if (currentVersion != requestedVersion)
             {
-                if (this.RequestedVersion <= 1)
+                if (requestedVersion <= 1)
                 {
-                    await this.GetService<IServiceRepository>().ClearServicesAsync();
+                    await _serviceRepository.ClearServicesAsync();
                 }
                 else
                 {
-                    await this.GetService<ISamplesService>().UpdateSamplesAsync();
+                    await ssamplesService.UpdateSamplesAsync();
                 }
             }
 

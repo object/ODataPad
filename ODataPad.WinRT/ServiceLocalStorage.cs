@@ -12,6 +12,11 @@ namespace ODataPad.WinRT
     {
         private const string ServicesKey = "Services";
 
+        public ServiceLocalStorage()
+        {
+
+        }
+
         public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {
             var localSettings = ApplicationData.Current.LocalSettings;
