@@ -48,6 +48,7 @@
     <Compile Include="Interfaces\IServiceRepository.cs" />
     <Compile Include="Services\DataVersioningService.cs" />
     <Compile Include="StartNavigation.cs" />
+    <Compile Include="ViewModels\BaseHomeViewModel.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\ServiceItem.cs" />
     <Compile Include="Services\MetadataService.cs" />

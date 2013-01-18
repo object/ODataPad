@@ -105,6 +105,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FakeHomeViewModel.cs" />
     <Compile Include="ObservableResultCollection.cs" />
     <Compile Include="PartialResultLoader.cs" />
     <Compile Include="MainPage.xaml.cs">

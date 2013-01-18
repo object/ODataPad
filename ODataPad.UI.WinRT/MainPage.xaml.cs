@@ -45,9 +45,6 @@ namespace ODataPad.UI.WinRT
             if (item == null)
                 return;
 
-            this.DefaultViewModel["Item"] = item;
-            this.DefaultViewModel["ItemElements"] = this.ViewModel.Services;
-
             if (pageState == null)
             {
                 this.itemListView.SelectedItem = null;
@@ -88,31 +85,20 @@ namespace ODataPad.UI.WinRT
         {
             if (this.UsingLogicalPageNavigation() && itemListView.SelectedItem != null)
             {
-                // When logical page navigation is in effect and there's a selected item that
-                // item's details are currently displayed.  Clearing the selection will return
-                // to the item list.  From the user's point of view this is a logical backward
-                // navigation.
                 this.itemListView.SelectedItem = null;
             }
             else
             {
-                // When logical page navigation is not in effect, or when there is no selected
-                // item, use the default back button behavior.
                 base.GoBack(sender, e);
             }
         }
 
         protected override string DetermineVisualState(ApplicationViewState viewState)
         {
-            // Update the back button's enabled state when the view state changes
             var logicalPageBack = this.UsingLogicalPageNavigation(viewState) && this.itemListView.SelectedItem != null;
             var physicalPageBack = this.Frame != null && this.Frame.CanGoBack;
             this.DefaultViewModel["CanGoBack"] = logicalPageBack || physicalPageBack;
 
-            // Determine visual states for landscape layouts based not on the view state, but
-            // on the width of the window.  This page has one layout that is appropriate for
-            // 1366 virtual pixels or wider, and another for narrower displays or when a snapped
-            // application reduces the horizontal space available to less than 1366.
             if (viewState == ApplicationViewState.Filled ||
                 viewState == ApplicationViewState.FullScreenLandscape)
             {
@@ -121,8 +107,6 @@ namespace ODataPad.UI.WinRT
                 return "FilledOrNarrow";
             }
 
-            // When in portrait or snapped start with the default visual state name, then add a
-            // suffix when viewing details instead of the list
             var defaultStateName = base.DetermineVisualState(viewState);
             return logicalPageBack ? defaultStateName + "_Detail" : defaultStateName;
         }
@@ -152,6 +136,7 @@ namespace ODataPad.UI.WinRT
             args.Request.ApplicationCommands.Add(cmdWebSite);
             args.Request.ApplicationCommands.Add(cmdPrivacyPolicy);
         }
+
         void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();

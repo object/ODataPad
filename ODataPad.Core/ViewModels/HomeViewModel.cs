@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Xml.Linq;
+using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ExtensionMethods;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Interfaces;
@@ -12,7 +14,7 @@ using ODataPad.Core.Services;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class HomeViewModel : MvxViewModel
+    public class HomeViewModel : BaseHomeViewModel
     {
         private const int ResultPageSize = 100;
         private readonly IServiceRepository _serviceRepository;
@@ -27,17 +29,9 @@ namespace ODataPad.Core.ViewModels
             _localData = this.GetService<IApplicationLocalData>();
             _imageProvider = this.GetService<IImageProvider>();
 
-            _services = new ObservableCollection<ServiceItem>();
             this.QueryResults = new ObservableCollection<ResultRow>();
 
             PrepareApplicationDataAsync();
-        }
-
-        private ObservableCollection<ServiceItem> _services;
-        public ObservableCollection<ServiceItem> Services
-        {
-            get { return _services; }
-            set { _services = value; RaisePropertyChanged("Services"); }
         }
 
         public ObservableCollection<ResultRow> QueryResults { get; private set; }
@@ -101,6 +95,19 @@ namespace ODataPad.Core.ViewModels
             this.Services.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };
             return await _serviceRepository.DeleteServiceAsync(serviceInfo);
+        }
+
+        public ICommand CollectionModeCommand
+        {
+            get
+            {
+                return new MvxRelayCommand(DoSelectCollectionMode);
+            }
+        }
+
+        public void DoSelectCollectionMode()
+        {
+            // TODO
         }
 
         private void RefreshServiceCollectionsFromMetadataCache(ServiceItem item, ServiceInfo service)
