@@ -18,7 +18,7 @@ namespace ODataPad.Core.Services
                 {
                     var odataClient = new ODataClient(serviceUrl);
                     result.Rows = odataClient
-                        .From(collectionName)
+                        .For(collectionName)
                         .Skip(skipCount)
                         .Top(maxCount)
                         .FindEntries();
