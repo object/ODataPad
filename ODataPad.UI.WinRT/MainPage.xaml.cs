@@ -19,12 +19,15 @@ namespace ODataPad.UI.WinRT
 {
     public sealed partial class MainPage : ODataPad.UI.WinRT.Common.LayoutAwarePage
     {
-        private ServiceItem _editedItem;
+        private ServiceViewItem _editedItem;
         private bool _movingToFirst = false;
 
         public MainPage()
         {
             this.InitializeComponent();
+
+            this.resultProgress.Visibility = Visibility.Collapsed;
+            this.collectionMode.Visibility = Visibility.Collapsed;
 
             SettingsPane.GetForCurrentView().CommandsRequested += MainPage_CommandsRequested;
         }
@@ -66,7 +69,7 @@ namespace ODataPad.UI.WinRT
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (ServiceItem)this.itemsViewSource.View.CurrentItem;
+                var selectedItem = (ServiceViewItem)this.itemsViewSource.View.CurrentItem;
                 if (selectedItem != null) pageState["SelectedItem"] = selectedItem.Name;
             }
         }
@@ -137,29 +140,29 @@ namespace ODataPad.UI.WinRT
             args.Request.ApplicationCommands.Add(cmdPrivacyPolicy);
         }
 
-        void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
+        //void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (this.UsingLogicalPageNavigation()) this.InvalidateVisualState();
 
-            this.bottomAppBar.IsOpen = e.AddedItems.Count > 0 && !_movingToFirst;
-        }
+        //    this.bottomAppBar.IsOpen = e.AddedItems.Count > 0 && !_movingToFirst;
+        //}
 
-        private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.RemovedItems.Count == 1)
-            {
-                var collection = e.RemovedItems.First() as ServiceCollection;
-                collection.QueryResults = null;
-            }
-            if (e.AddedItems.Count == 1)
-            {
-                var collection = e.AddedItems.First() as ServiceCollection;
-                if (this.collectionMode.SelectedIndex == 0)
-                    collection.QueryResults = null;
-                else
-                    RequestCollectionData(collection);
-            }
-        }
+        //private void ItemCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+            //if (e.RemovedItems.Count == 1)
+            //{
+            //    var collection = e.RemovedItems.First() as ServiceCollection;
+            //    collection.QueryResults = null;
+            //}
+            //if (e.AddedItems.Count == 1)
+            //{
+            //    var collection = e.AddedItems.First() as ServiceCollection;
+            //    if (this.collectionMode.SelectedIndex == 0)
+            //        collection.QueryResults = null;
+            //    else
+            //        RequestCollectionData(collection);
+            //}
+        //}
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
@@ -187,7 +190,7 @@ namespace ODataPad.UI.WinRT
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
-            _editedItem = this.itemListView.SelectedItem as ServiceItem;
+            _editedItem = this.itemListView.SelectedItem as ServiceViewItem;
             this.serviceName.Text = _editedItem.Name;
             this.serviceUrl.Text = _editedItem.Url;
             this.serviceDescription.Text = _editedItem.Description;
@@ -238,26 +241,26 @@ namespace ODataPad.UI.WinRT
             RefreshSaveButtonState();
         }
 
-        private void collectionMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.collectionMode == null)
-                return;
+        //private void collectionMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (this.collectionMode == null)
+        //        return;
 
-            if (this.collectionMode.SelectedIndex == 0)
-            {
-                this.itemProperties.Visibility = Visibility.Visible;
-                this.itemData.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                this.itemProperties.Visibility = Visibility.Collapsed;
-                this.itemData.Visibility = Visibility.Visible;
-                if (this.itemCollection.SelectedItem != null)
-                {
-                    RequestCollectionData(this.itemCollection.SelectedItem as ServiceCollection);
-                }
-            }
-        }
+        //    if (this.collectionMode.SelectedIndex == 0)
+        //    {
+        //        this.itemProperties.Visibility = Visibility.Visible;
+        //        this.itemData.Visibility = Visibility.Collapsed;
+        //    }
+        //    else
+        //    {
+        //        this.itemProperties.Visibility = Visibility.Collapsed;
+        //        this.itemData.Visibility = Visibility.Visible;
+        //        if (this.itemCollection.SelectedItem != null)
+        //        {
+        //            RequestCollectionData(this.itemCollection.SelectedItem as ServiceCollection);
+        //        }
+        //    }
+        //}
 
         private void itemData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -362,23 +365,8 @@ namespace ODataPad.UI.WinRT
 
         private async void RemoveServiceAsync()
         {
-            var item = this.itemListView.SelectedItem as ServiceItem;
+            var item = this.itemListView.SelectedItem as ServiceViewItem;
             await this.ViewModel.RemoveServiceItemAsync(item);
-        }
-
-        private void RequestCollectionData(ServiceCollection serviceCollection)
-        {
-            if (serviceCollection.QueryResults == null)
-            {
-                serviceCollection.QueryResults = new ObservableResultCollection(
-                    (this.itemListView.SelectedItem as ServiceItem).Url,
-                    serviceCollection.Name, serviceCollection.Properties, this);
-            }
-        }
-
-        public void EnableResultProgressBar(bool enabled)
-        {
-            this.resultProgress.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

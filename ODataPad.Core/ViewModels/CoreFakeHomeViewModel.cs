@@ -2,14 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using ODataPad.Core.Models;
-using ODataPad.Core.ViewModels;
-using Windows.UI.Xaml.Media.Imaging;
 
-namespace ODataPad.UI.WinRT
+namespace ODataPad.Core.ViewModels
 {
-    public class FakeHomeViewModel : BaseHomeViewModel
+    public class CoreFakeHomeViewModel : HomeViewModelBase
     {
-        public FakeHomeViewModel()
+        public CoreFakeHomeViewModel()
         {
             var services = new ServiceInfo[]
                                {
@@ -39,13 +37,23 @@ namespace ODataPad.UI.WinRT
                                        },
                                };
 
-            this.Services = new ObservableCollection<ServiceItem>(
-                services.Select(x =>
-                                    {
-                                        var item = new ServiceItem(x);
-                                        item.Image = new BitmapImage(new Uri("ms-appx:///Samples/" + item.Name + ".png"));
-                                        return item;
-                                    }));
+            this.Services = new ObservableCollection<ServiceViewItem>(
+                services.Select(x => new ServiceViewItem(this, x)));
+
+            this.SelectedService = this.Services.First();
+
+            var collections = new ServiceCollection[]
+                                  {
+                                      new ServiceCollection("ODataConsumers", new Collection<CollectionProperty>(),
+                                                            new Collection<CollectionAssociation>()),
+                                      new ServiceCollection("ODataProducerApplications", new Collection<CollectionProperty>(),
+                                                            new Collection<CollectionAssociation>()),
+                                      new ServiceCollection("ODataProducerLiveServices", new Collection<CollectionProperty>(),
+                                                            new Collection<CollectionAssociation>()),
+                                  };
+
+            this.Collections = new ObservableCollection<CollectionViewItem>(
+                collections.Select(x => new CollectionViewItem(this, x)));
         }
     }
 }

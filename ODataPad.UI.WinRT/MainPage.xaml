@@ -7,9 +7,11 @@
     xmlns:common="using:ODataPad.UI.WinRT.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:viewModels="using:ODataPad.Core.ViewModels"
+    xmlns:i="using:Windows.UI.Interactivity"
+    xmlns:viewModels="using:ODataPad.Core.ViewModels" 
+    xmlns:winrt="using:ODataPad.WinRT"
     DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
-    d:DataContext="{d:DesignInstance Type=local:FakeHomeViewModel, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance Type=winrt:FakeHomeViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -17,6 +19,8 @@
         <CollectionViewSource
             x:Name="itemsViewSource"
             Source="{Binding Services}"/>
+
+        <common:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Page.Resources>
 
     <common:LayoutAwarePage.BottomAppBar>
@@ -77,8 +81,14 @@
                 Padding="120,0,0,60"
                 ItemsSource="{Binding Services}"
                 IsSwipeEnabled="False"
-                SelectionChanged="ItemListView_SelectionChanged"
-                ItemTemplate="{StaticResource ServiceItemTemplate}" SelectionMode="Single" />
+                SelectedItem="{Binding SelectedService, Mode=TwoWay}"
+                ItemTemplate="{StaticResource ServiceItemTemplate}" SelectionMode="Single" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectedServiceCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
 
         <!-- Details for selected item -->
         <Grid 
@@ -86,7 +96,7 @@
             Grid.Column="1"
             Grid.RowSpan="2"
             Margin="20,40,0,0"
-            DataContext="{Binding SelectedItem, ElementName=itemListView}">
+            DataContext="{Binding SelectedService}">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -120,17 +130,26 @@
                 </StackPanel>
             </Grid>
 
-            <StackPanel x:Name="modeAndProgress" Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="1" >
-                <ProgressBar x:Name="resultProgress" IsIndeterminate="True"  Visibility="Collapsed" />
+            <StackPanel x:Name="modeAndProgress" Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="1" 
+                        >
+                <ProgressBar x:Name="resultProgress" IsIndeterminate="True"  
+                        Visibility="{Binding Path=ViewModel.IsQueryInProgress, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
+                        />
                 <ComboBox 
                     x:Name="collectionMode" 
                         Margin="10" 
-                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="Auto" SelectedIndex="0" 
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="Auto" 
                         Background="{StaticResource ApplicationPageBackgroundThemeBrush}" 
                         Foreground="{StaticResource ApplicationForegroundThemeBrush}" 
-                        BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" SelectionChanged="collectionMode_SelectionChanged">
-                    <ComboBoxItem Content="Show collection properties"/>
-                    <ComboBoxItem Content="Show collection data"/>
+                        BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
+                        ItemsSource="{Binding ViewModel.CollectionModes}"
+                        SelectedItem="{Binding ViewModel.CollectionMode, Mode=TwoWay}"
+                        Visibility="{Binding Path=ViewModel.IsServiceSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding ViewModel.CollectionModeCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ComboBox>
             </StackPanel>
 
@@ -150,9 +169,16 @@
                         Grid.Row="0"
                         Grid.Column="0"
                     TabIndex="2"
-                    SelectionChanged="ItemCollection_SelectionChanged"
-                    ItemsSource="{Binding Collections}"
-                    ItemTemplate="{StaticResource CollectionItemTemplate}" SelectionMode="Single" />
+                    ItemsSource="{Binding ViewModel.Collections, Mode=TwoWay}"
+                    ItemTemplate="{StaticResource CollectionItemTemplate}" 
+                    SelectedItem="{Binding ViewModel.SelectedCollection, Mode=TwoWay}"
+                    SelectionMode="Single" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding ViewModel.SelectedCollectionCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListView>
 
                 <Rectangle x:Name="itemGridLine"
                     Grid.Row="1"
@@ -165,10 +191,10 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                Visibility="Visible"
-                DataContext="{Binding SelectedItem, ElementName=itemCollection}"
+                DataContext="{Binding ViewModel.SelectedCollection}"
                 ItemsSource="{Binding SchemaElements}" 
                 ItemTemplate="{StaticResource CollectionElementItemTemplate}" 
+                Visibility="{Binding Path=ViewModel.IsPropertyViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
                 SelectionMode="None" />
 
             <ListView 
@@ -176,11 +202,12 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                Visibility="Collapsed"
-                DataContext="{Binding SelectedItem, ElementName=itemCollection}"
+                DataContext="{Binding ViewModel.SelectedCollection}"
                 ItemsSource="{Binding QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
-                SelectionMode="Single" SelectionChanged="itemData_SelectionChanged" />
+                Visibility="{Binding Path=ViewModel.IsResultViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
+                SelectionMode="Single" 
+                SelectionChanged="itemData_SelectionChanged" />
             
             <RichTextBlock
                 x:Name="itemText"

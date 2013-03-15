@@ -24,6 +24,7 @@ namespace ODataPad.UI.WinRT
             this.RegisterServiceInstance<IServiceLocalStorage>(new ServiceLocalStorage());
             this.RegisterServiceInstance<IApplicationLocalData>(new ApplicationLocalData());
             this.RegisterServiceInstance<IImageProvider>(new ImageProvider());
+            this.RegisterServiceInstance<IResultProvider>(new ResultProvider());
         }
 
         protected override MvxApplication CreateApp()

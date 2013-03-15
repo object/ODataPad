@@ -4,23 +4,23 @@ using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ServiceItem
+    public class ServiceViewItem
     {
-        private ServiceInfo _serviceInfo;
+        private readonly ServiceInfo _serviceInfo;
 
-        public ServiceItem(ServiceInfo serviceInfo)
+        public ServiceViewItem(HomeViewModelBase viewModel, ServiceInfo serviceInfo)
         {
+            this.ViewModel = viewModel;
             _serviceInfo = serviceInfo;
-            this.Collections = new ObservableCollection<ServiceCollection>();
         }
 
+        public HomeViewModelBase ViewModel { get; set; }
         public string Name { get { return _serviceInfo.Name; } }
         public string Description { get { return _serviceInfo.Description; } }
         public string Url { get { return _serviceInfo.Url; } }
         public string ImagePath { get { return GetImagePath(); } }
         public object Image { get; set; }
-
-        public ObservableCollection<ServiceCollection> Collections { get; private set; }
+        public string MetadataCache { get { return _serviceInfo.MetadataCache; } }
 
         public void UpdateDefinition(ServiceInfo serviceInfo)
         {

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Simple.OData.Client;
+using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
+using Simple.OData.Client;
 
 namespace ODataPad.Core.Services
 {
-    public class QueryService
+    public class ODataService
     {
         public async Task<QueryResult> LoadResultsAsync(
-            string serviceUrl, string collectionName, int skipCount, int maxCount)
+            string serviceUrl, string collectionName, int skipCount, int maxCount, INotifyInProgress notify)
         {
             var task = Task<QueryResult>.Factory.StartNew(() =>
             {
@@ -38,7 +39,10 @@ namespace ODataPad.Core.Services
                 return result;
             });
 
-            return await task;
+            notify.IsInProgress = true;
+            var queryResult = await task;
+            notify.IsInProgress = false;
+            return queryResult;
         }
     }
 }

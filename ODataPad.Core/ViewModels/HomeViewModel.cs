@@ -7,20 +7,20 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class HomeViewModel : BaseHomeViewModel
+    public class HomeViewModel : HomeViewModelBase
     {
         private const int ResultPageSize = 100;
         private readonly IServiceRepository _serviceRepository;
         private readonly IServiceLocalStorage _localStorage;
         private readonly IApplicationLocalData _localData;
         private readonly IImageProvider _imageProvider;
+        private readonly IResultProvider _resultProvider;
 
         public HomeViewModel()
         {
@@ -28,6 +28,7 @@ namespace ODataPad.Core.ViewModels
             _localStorage = this.GetService<IServiceLocalStorage>();
             _localData = this.GetService<IApplicationLocalData>();
             _imageProvider = this.GetService<IImageProvider>();
+            _resultProvider = this.GetService<IResultProvider>();
 
             this.QueryResults = new ObservableCollection<ResultRow>();
 
@@ -55,9 +56,9 @@ namespace ODataPad.Core.ViewModels
 
             foreach (var serviceInfo in _serviceRepository.Services)
             {
-                var serviceItem = new ServiceItem(serviceInfo);
+                var serviceItem = new ServiceViewItem(this, serviceInfo);
                 serviceItem.Image = _imageProvider.GetImage(serviceItem.ImagePath);
-                RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+                //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
             }
             return true;
@@ -65,39 +66,69 @@ namespace ODataPad.Core.ViewModels
 
         public async Task<bool> AddServiceItemAsync(ServiceInfo serviceInfo)
         {
-            var serviceItem = new ServiceItem(serviceInfo);
-            RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+            var serviceItem = new ServiceViewItem(this, serviceInfo);
+            //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
             this.Services.Add(serviceItem);
             bool ok = await RefreshMetadataCacheAsync(serviceInfo);
             if (ok)
             {
-                RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+                //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 ok = await _serviceRepository.AddServiceAsync(serviceInfo);
             }
             return ok;
         }
 
-        public async Task<bool> UpdateServiceItemAsync(ServiceItem item, ServiceInfo serviceInfo)
+        public async Task<bool> UpdateServiceItemAsync(ServiceViewItem item, ServiceInfo serviceInfo)
         {
             var originalTitle = item.Name;
             item.UpdateDefinition(serviceInfo);
             var ok = await RefreshMetadataCacheAsync(serviceInfo);
             if (ok)
             {
-                RefreshServiceCollectionsFromMetadataCache(item, serviceInfo);
+                //RefreshServiceCollectionsFromMetadataCache(item, serviceInfo);
                 ok = await _serviceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
             }
             return ok;
         }
 
-        public async Task<bool> RemoveServiceItemAsync(ServiceItem item)
+        public async Task<bool> RemoveServiceItemAsync(ServiceViewItem item)
         {
             this.Services.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };
             return await _serviceRepository.DeleteServiceAsync(serviceInfo);
         }
 
-        public ICommand CollectionModeCommand
+        public override ICommand SelectedServiceCommand
+        {
+            get
+            {
+                return new MvxRelayCommand(DoSelectService);
+            }
+        }
+
+        public void DoSelectService()
+        {
+            this.IsServiceSelected = true;
+            RefreshServiceCollectionsFromMetadataCache(this.SelectedService);
+        }
+
+        public override ICommand SelectedCollectionCommand
+        {
+            get
+            {
+                return new MvxRelayCommand(DoSelectCollection);
+            }
+        }
+
+        public void DoSelectCollection()
+        {
+            if (this.IsResultViewSelected)
+            {
+                RequestCollectionData();
+            }
+        }
+
+        public override ICommand CollectionModeCommand
         {
             get
             {
@@ -107,12 +138,28 @@ namespace ODataPad.Core.ViewModels
 
         public void DoSelectCollectionMode()
         {
-            // TODO
+            if (this.IsResultViewSelected)
+            {
+                RequestCollectionData();
+            }
         }
 
-        private void RefreshServiceCollectionsFromMetadataCache(ServiceItem item, ServiceInfo service)
+        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewItem item)
         {
-            item.Collections.Clear();
+            this.Collections.Clear();
+            if (!string.IsNullOrEmpty(item.MetadataCache))
+            {
+                var collections = MetadataService.ParseServiceMetadata(item.MetadataCache);
+                foreach (var collection in collections)
+                {
+                    this.Collections.Add(new CollectionViewItem(this, collection));
+                }
+            }
+        }
+
+        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewItem item, ServiceInfo service)
+        {
+            //item.Collections.Clear();
             if (!string.IsNullOrEmpty(service.MetadataCache))
             {
                 var element = XElement.Parse(service.MetadataCache);
@@ -128,7 +175,7 @@ namespace ODataPad.Core.ViewModels
                     var collections = MetadataService.ParseServiceMetadata(service.MetadataCache);
                     foreach (var collection in collections)
                     {
-                        item.Collections.Add(collection);
+                        //item.Collections.Add(collection);
                     }
                 }
             }
@@ -146,6 +193,15 @@ namespace ODataPad.Core.ViewModels
             }
             await _localStorage.SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
             return true;
+        }
+
+        private void RequestCollectionData()
+        {
+            this.SelectedCollection.QueryResults = _resultProvider.CollectResults(
+                this.SelectedService.Url,
+                this.SelectedCollection.Name,
+                this.SelectedCollection.Properties,
+                new QueryInProgress(this));
         }
     }
 }

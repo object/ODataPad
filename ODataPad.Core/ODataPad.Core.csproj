@@ -37,9 +37,14 @@
   <ItemGroup>
     <Compile Include="Interfaces\IApplicationLocalData.cs" />
     <Compile Include="Interfaces\IDataVersioningService.cs" />
+    <Compile Include="Interfaces\IResultProvider.cs" />
     <Compile Include="Interfaces\ISamplesService.cs" />
+    <Compile Include="Interfaces\INotifyInProgress.cs" />
     <Compile Include="Models\CollectionAssociation.cs" />
-    <Compile Include="Models\CollectionElement.cs" />
+    <Compile Include="ViewModels\CoreFakeHomeViewModel.cs" />
+    <Compile Include="ViewModels\QueryInProgress.cs" />
+    <Compile Include="ViewModels\ResultViewItem.cs" />
+    <Compile Include="ViewModels\SchemaElementViewItem.cs" />
     <Compile Include="Models\CollectionProperty.cs" />
     <Compile Include="Models\ResultRow.cs" />
     <Compile Include="Models\ServiceCollection.cs" />
@@ -48,9 +53,10 @@
     <Compile Include="Interfaces\IServiceRepository.cs" />
     <Compile Include="Services\DataVersioningService.cs" />
     <Compile Include="StartNavigation.cs" />
-    <Compile Include="ViewModels\BaseHomeViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModelBase.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
-    <Compile Include="ViewModels\ServiceItem.cs" />
+    <Compile Include="ViewModels\CollectionViewItem.cs" />
+    <Compile Include="ViewModels\ServiceViewItem.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="Models\ServiceInfo.cs" />
@@ -58,7 +64,7 @@
     <Compile Include="ODataPadApp.cs" />
     <Compile Include="Interfaces\IResourceManager.cs" />
     <Compile Include="Interfaces\IServiceLocalStorage.cs" />
-    <Compile Include="Services\QueryService.cs" />
+    <Compile Include="Services\ODataService.cs" />
     <Compile Include="Services\ServiceRepository.cs" />
     <Compile Include="Services\SamplesService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

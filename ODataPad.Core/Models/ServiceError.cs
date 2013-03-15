@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace ODataPad.Core.Models
+﻿namespace ODataPad.Core.Models
 {
     public class ServiceError
     {

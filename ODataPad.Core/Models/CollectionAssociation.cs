@@ -1,6 +1,6 @@
 ﻿namespace ODataPad.Core.Models
 {
-    public class CollectionAssociation : CollectionElement
+    public class CollectionAssociation
     {
         public CollectionAssociation(string name, string multiplicity)
         {
@@ -10,8 +10,5 @@
 
         public string Name { get; private set; }
         public string Multiplicity { get; private set; }
-
-        // Aliases for XAML templates
-        public string Summary { get { return Multiplicity; } }
     }
 }

@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
+using ODataPad.Core.ViewModels;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace ODataPad.UI.WinRT
+namespace ODataPad.WinRT
 {
     public class PartialResultLoader : IAsyncOperation<LoadMoreItemsResult>
     {
@@ -16,31 +18,29 @@ namespace ODataPad.UI.WinRT
         private AsyncStatus _asyncStatus = AsyncStatus.Started;
         private LoadMoreItemsResult _results;
 
-        public PartialResultLoader(ObservableResultCollection collection, uint count)
+        public PartialResultLoader(ObservableResultCollection collection, uint count, INotifyInProgress notify)
         {
-            LoadResults(collection, count);
+            LoadResults(collection, count, notify);
         }
 
-        public async Task LoadResults(ObservableResultCollection collection, uint count)
+        public async Task LoadResults(ObservableResultCollection collection, uint count, INotifyInProgress notify)
         {
-            var queryService = new QueryService();
+            var odataService = new ODataService();
 
-            collection.MainPage.EnableResultProgressBar(true);
-            var result = await queryService.LoadResultsAsync(
+            var result = await odataService.LoadResultsAsync(
                 collection.ServiceUrl,
                 collection.CollectionName,
                 collection.Count,
-                Math.Max((int)count, PageSize));
-            collection.MainPage.EnableResultProgressBar(false);
+                Math.Max((int)count, PageSize),
+                notify);
 
             if (result != null)
             {
                 collection.HasMoreItems = result.Rows.Any() && !result.IsError;
                 foreach (var row in result.Rows)
                 {
-                    collection.Add(new ResultRow(
-                        row, 
-                        collection.CollectionProperties.Where(x => x.IsKey).Select(x => x.Name)));
+                    var resultRow = new ResultRow(row, collection.CollectionProperties.Where(x => x.IsKey).Select(x => x.Name));
+                    collection.Add(new ResultViewItem(resultRow));
                 }
                 _results.Count = (uint)result.Rows.Count();
             }

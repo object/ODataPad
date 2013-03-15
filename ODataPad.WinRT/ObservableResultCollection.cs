@@ -1,33 +1,35 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
+using ODataPad.Core.ViewModels;
 using Windows.Foundation;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
-namespace ODataPad.UI.WinRT
+namespace ODataPad.WinRT
 {
-    public class ObservableResultCollection : ObservableCollection<ResultRow>, ISupportIncrementalLoading
+    public class ObservableResultCollection : ObservableCollection<ResultViewItem>, ISupportIncrementalLoading
     {
         public string ServiceUrl { get; private set; }
         public string CollectionName { get; private set; }
         public IEnumerable<CollectionProperty> CollectionProperties { get; private set; }
-        public MainPage MainPage;
 
-        public ObservableResultCollection(string serviceUrl, string collectionName, 
-            IEnumerable<CollectionProperty> collectionProperties, MainPage mainPage)
+        private INotifyInProgress _notify;
+
+        public ObservableResultCollection(string serviceUrl, string collectionName,
+            IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notify)
         {
             this.ServiceUrl = serviceUrl;
             this.CollectionName = collectionName;
             this.CollectionProperties = collectionProperties;
-            this.MainPage = mainPage;
+            _notify = notify;
 
             this.HasMoreItems = true;
         }
 
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
         {
-            return new PartialResultLoader(this, count);
+            return new PartialResultLoader(this, count, _notify);
         }
 
         public bool HasMoreItems { get; set; }
