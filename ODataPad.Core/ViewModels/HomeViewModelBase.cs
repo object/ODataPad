@@ -40,7 +40,7 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceSelected = value; RaisePropertyChanged("IsServiceSelected"); }
         }
 
-        public virtual ICommand SelectedServiceCommand
+        public virtual ICommand SelectServiceCommand
         {
             get { return null; }
         }
@@ -59,7 +59,7 @@ namespace ODataPad.Core.ViewModels
             set { _selectedCollection = value; RaisePropertyChanged("SelectedCollection"); }
         }
 
-        public virtual ICommand SelectedCollectionCommand
+        public virtual ICommand SelectCollectionCommand
         {
             get { return null; }
         }
@@ -80,10 +80,11 @@ namespace ODataPad.Core.ViewModels
                 RaisePropertyChanged("CollectionMode");
                 RaisePropertyChanged("IsPropertyViewSelected");
                 RaisePropertyChanged("IsResultViewSelected");
+                RaisePropertyChanged("IsSingleResultSelected");
             }
         }
 
-        public virtual ICommand CollectionModeCommand 
+        public virtual ICommand SelectCollectionModeCommand 
         {
             get { return null; }
         }
@@ -95,7 +96,38 @@ namespace ODataPad.Core.ViewModels
             set { _isQueryInProgress = value; RaisePropertyChanged("IsQueryInProgress"); }
         }
 
+        private ResultViewItem _selectedResult;
+        public ResultViewItem SelectedResult
+        {
+            get { return _selectedResult; }
+            set
+            {
+                _selectedResult = value;
+                RaisePropertyChanged("SelectedResult");
+                RaisePropertyChanged("IsResultViewSelected");
+                RaisePropertyChanged("IsSingleResultSelected");
+            }
+        }
+
+        public virtual ICommand SelectResultCommand
+        {
+            get { return null; }
+        }
+
+        public virtual ICommand UnselectResultCommand
+        {
+            get { return null; }
+        }
+
+        private string _selectedResultDetails;
+        public string SelectedResultDetails
+        {
+            get { return _selectedResultDetails; }
+            set { _selectedResultDetails = value; RaisePropertyChanged("SelectedResultDetails"); }
+        }
+
         public bool IsPropertyViewSelected { get { return this.CollectionMode == this.CollectionModes.First(); } }
-        public bool IsResultViewSelected { get { return this.CollectionMode != this.CollectionModes.First(); } }
+        public bool IsResultViewSelected { get { return this.CollectionMode != this.CollectionModes.First() && this.SelectedResult == null; } }
+        public bool IsSingleResultSelected { get { return this.CollectionMode != this.CollectionModes.First() && this.SelectedResult != null; } }
     }
 }

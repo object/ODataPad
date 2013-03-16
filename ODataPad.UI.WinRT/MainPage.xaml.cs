@@ -241,56 +241,6 @@ namespace ODataPad.UI.WinRT
             RefreshSaveButtonState();
         }
 
-        //private void collectionMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (this.collectionMode == null)
-        //        return;
-
-        //    if (this.collectionMode.SelectedIndex == 0)
-        //    {
-        //        this.itemProperties.Visibility = Visibility.Visible;
-        //        this.itemData.Visibility = Visibility.Collapsed;
-        //    }
-        //    else
-        //    {
-        //        this.itemProperties.Visibility = Visibility.Collapsed;
-        //        this.itemData.Visibility = Visibility.Visible;
-        //        if (this.itemCollection.SelectedItem != null)
-        //        {
-        //            RequestCollectionData(this.itemCollection.SelectedItem as ServiceCollection);
-        //        }
-        //    }
-        //}
-
-        private void itemData_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.itemData.SelectedItem != null)
-            {
-                this.itemData.Visibility = Visibility.Collapsed;
-
-                var row = this.itemData.SelectedItem as ResultRow;
-                var properties = string.Join(Environment.NewLine + Environment.NewLine,
-                    row.Properties
-                        .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
-
-                var block = new Paragraph();
-                block.Inlines.Add(new Run() { Text = properties });
-                this.itemText.Blocks.Add(block);
-
-                this.itemText.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void itemText_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            this.itemText.Blocks.Clear();
-            this.itemText.Visibility = Visibility.Collapsed;
-
-            this.itemData.SelectedItem = null;
-            this.itemData.Visibility = Visibility.Visible;
-            this.itemData.Focus(FocusState.Pointer);
-        }
-
         private void RefreshSaveButtonState()
         {
             this.editSaveButton.IsEnabled =

@@ -21,7 +21,9 @@ namespace ODataPad.UI.WinRT.Common
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (value is bool && (bool)value) ? Visibility.Visible : Visibility.Collapsed;
+            return (value is bool && (parameter == null ? (bool)value : bool.Parse(parameter.ToString()) == (bool)value)) 
+                ? Visibility.Visible 
+                : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -85,7 +85,7 @@
                 ItemTemplate="{StaticResource ServiceItemTemplate}" SelectionMode="Single" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding SelectedServiceCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding SelectServiceCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ListView>
@@ -147,7 +147,7 @@
                         Visibility="{Binding Path=ViewModel.IsServiceSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding ViewModel.CollectionModeCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionModeCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
@@ -175,7 +175,7 @@
                     SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding ViewModel.SelectedCollectionCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListView>
@@ -197,7 +197,7 @@
                 Visibility="{Binding Path=ViewModel.IsPropertyViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
                 SelectionMode="None" />
 
-            <ListView 
+                <ListView 
                 x:Name="itemData"
                     Grid.Row="0"
                     Grid.Column="1"
@@ -206,20 +206,36 @@
                 ItemsSource="{Binding QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
                 Visibility="{Binding Path=ViewModel.IsResultViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
-                SelectionMode="Single" 
-                SelectionChanged="itemData_SelectionChanged" />
-            
-            <RichTextBlock
+                SelectedItem="{Binding ViewModel.SelectedResult, Mode=TwoWay}"
+                SelectionMode="Single" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding ViewModel.SelectResultCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListView>
+
+                <RichTextBlock
                 x:Name="itemText"
                     Grid.Row="0"
                     Grid.Column="1"  
                 Margin="10,10" 
                 Padding="10,0"
                 Style="{StaticResource ItemRichTextStyle}" 
-                Visibility="Collapsed" Tapped="itemText_Tapped" IsTextSelectionEnabled="False"/>
+                IsTextSelectionEnabled="False"
+                Visibility="{Binding Path=ViewModel.IsSingleResultSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}">
+                    <Paragraph>
+                        <Run Text="{Binding Path=ViewModel.SelectedResultDetails, Mode=TwoWay}" />
+                    </Paragraph>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Tapped">
+                            <i:InvokeCommandAction Command="{Binding ViewModel.UnselectResultCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </RichTextBlock>
 
             </Grid>
-            
+
         </Grid>
 
         <Popup x:Name="editPopup" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="620" HorizontalAlignment="Center"

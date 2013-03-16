@@ -98,7 +98,7 @@ namespace ODataPad.Core.ViewModels
             return await _serviceRepository.DeleteServiceAsync(serviceInfo);
         }
 
-        public override ICommand SelectedServiceCommand
+        public override ICommand SelectServiceCommand
         {
             get
             {
@@ -112,7 +112,7 @@ namespace ODataPad.Core.ViewModels
             RefreshServiceCollectionsFromMetadataCache(this.SelectedService);
         }
 
-        public override ICommand SelectedCollectionCommand
+        public override ICommand SelectCollectionCommand
         {
             get
             {
@@ -122,13 +122,13 @@ namespace ODataPad.Core.ViewModels
 
         public void DoSelectCollection()
         {
-            if (this.IsResultViewSelected)
+            if (!this.IsPropertyViewSelected && this.SelectedCollection != null)
             {
                 RequestCollectionData();
             }
         }
 
-        public override ICommand CollectionModeCommand
+        public override ICommand SelectCollectionModeCommand
         {
             get
             {
@@ -138,10 +138,36 @@ namespace ODataPad.Core.ViewModels
 
         public void DoSelectCollectionMode()
         {
-            if (this.IsResultViewSelected)
+            if (!this.IsPropertyViewSelected && this.SelectedCollection != null)
             {
                 RequestCollectionData();
             }
+        }
+
+        public override ICommand SelectResultCommand
+        {
+            get
+            {
+                return new MvxRelayCommand(DoSelectResult);
+            }
+        }
+
+        public void DoSelectResult()
+        {
+            ShowResultDetails();
+        }
+
+        public override ICommand UnselectResultCommand
+        {
+            get
+            {
+                return new MvxRelayCommand(DoCollapseResult);
+            }
+        }
+
+        public void DoCollapseResult()
+        {
+            this.SelectedResult = null;
         }
 
         private void RefreshServiceCollectionsFromMetadataCache(ServiceViewItem item)
@@ -202,6 +228,13 @@ namespace ODataPad.Core.ViewModels
                 this.SelectedCollection.Name,
                 this.SelectedCollection.Properties,
                 new QueryInProgress(this));
+        }
+
+        private void ShowResultDetails()
+        {
+            this.SelectedResultDetails = string.Join(Environment.NewLine + Environment.NewLine,
+                this.SelectedResult.Properties
+                    .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
         }
     }
 }
