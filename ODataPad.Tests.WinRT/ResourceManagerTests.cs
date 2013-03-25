@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ODataPad.WinRT;
-using Windows.UI.Xaml.Media.Imaging;
+using ODataPad.Platform.WinRT;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace ODataPad.Tests.WinRT

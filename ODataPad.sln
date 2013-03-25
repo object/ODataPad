@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.Core", "ODataPad.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.UI.WinRT", "ODataPad.UI.WinRT\ODataPad.UI.WinRT.csproj", "{91C81852-FA13-4FCA-86CA-2EDDD9929CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.WinRT", "ODataPad.WinRT\ODataPad.WinRT.csproj", "{ECE0CAE6-B931-4036-9FB1-63170A811069}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.Platform.WinRT", "ODataPad.Platform.WinRT\ODataPad.Platform.WinRT.csproj", "{ECE0CAE6-B931-4036-9FB1-63170A811069}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cirrious.MvvmCross", "..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj", "{B6E27475-E7D0-448C-A5CC-5097DCA1E2DD}"
 EndProject
@@ -21,13 +21,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.Tests.WinRT", "ODa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Net45", "Net45", "{16651E4C-7457-4836-8CA5-A65322174709}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.Net45", "ODataPad.Net45\ODataPad.Net45.csproj", "{B36DE56B-7578-4B2E-99B6-E69A04DB85F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.Platform.Net45", "ODataPad.Platform.Net45\ODataPad.Platform.Net45.csproj", "{B36DE56B-7578-4B2E-99B6-E69A04DB85F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.UI.Net45", "ODataPad.UI.Net45\ODataPad.UI.Net45.csproj", "{DB814C2E-C0BE-40F8-A1BD-EE17768CF96B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cirrious.MvvmCross.Wpf", "..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross.Wpf\Cirrious.MvvmCross.Wpf.csproj", "{3786EA13-A491-4917-9B49-FBE76BA87FAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.WP8", "ODataPad.WP8\ODataPad.WP8.csproj", "{ABE6FC37-2FAE-4FE1-9C21-6873D264F911}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataPad.Platform.WP8", "ODataPad.Platform.WP8\ODataPad.Platform.WP8.csproj", "{ABE6FC37-2FAE-4FE1-9C21-6873D264F911}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP8", "WP8", "{3496B1D7-926A-46B2-AE46-B23FDF56A2A2}"
 EndProject

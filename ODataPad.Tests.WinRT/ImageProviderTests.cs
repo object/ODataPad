@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using ODataPad.WinRT;
+using ODataPad.Platform.WinRT;
 
 namespace ODataPad.Tests.WinRT
 {

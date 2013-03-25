@@ -3,8 +3,7 @@ using Cirrious.MvvmCross.ExtensionMethods;
 using Cirrious.MvvmCross.WinRT.Platform;
 using ODataPad.Core;
 using ODataPad.Core.Interfaces;
-using ODataPad.Core.Services;
-using ODataPad.WinRT;
+using ODataPad.Platform.WinRT;
 using Windows.UI.Xaml.Controls;
 
 namespace ODataPad.UI.WinRT

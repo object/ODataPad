@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
-using ODataPad.WinRT;
+using ODataPad.Platform.WinRT;
 using Windows.Storage;
 
 namespace ODataPad.Tests.WinRT

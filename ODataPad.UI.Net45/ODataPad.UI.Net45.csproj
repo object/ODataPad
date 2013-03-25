@@ -53,6 +53,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Common\CustomStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -61,6 +65,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PlatformFakeHomeViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -89,6 +94,17 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Samples\DBpedia.edmx" />
+    <None Include="Samples\Devexpress Channel.edmx" />
+    <None Include="Samples\ebay.edmx" />
+    <None Include="Samples\nerddinner.edmx" />
+    <None Include="Samples\Netflix.edmx" />
+    <None Include="Samples\Northwind Service.edmx" />
+    <None Include="Samples\NuGet.edmx" />
+    <None Include="Samples\OData.org.edmx" />
+    <None Include="Samples\Pluralsight.edmx" />
+    <None Include="Samples\Stack Overflow.edmx" />
+    <None Include="Samples\twitpic.edmx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -106,13 +122,27 @@
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
       <Name>ODataPad.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ODataPad.Net45\ODataPad.Net45.csproj">
+    <ProjectReference Include="..\ODataPad.Platform.Net45\ODataPad.Platform.Net45.csproj">
       <Project>{b36de56b-7578-4b2e-99b6-e69a04db85f1}</Project>
-      <Name>ODataPad.Net45</Name>
+      <Name>ODataPad.Platform.Net45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\" />
+    <EmbeddedResource Include="Samples\Custom.png" />
+    <EmbeddedResource Include="Samples\DBpedia.png" />
+    <EmbeddedResource Include="Samples\Devexpress Channel.png" />
+    <EmbeddedResource Include="Samples\ebay.png" />
+    <EmbeddedResource Include="Samples\nerddinner.png" />
+    <EmbeddedResource Include="Samples\Netflix.png" />
+    <EmbeddedResource Include="Samples\Northwind Service.png" />
+    <EmbeddedResource Include="Samples\Nuget.png" />
+    <Content Include="Samples\OData.org.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Samples\Pluralsight.png" />
+    <Resource Include="Samples\SampleServices.xml" />
+    <EmbeddedResource Include="Samples\Stack Overflow.png" />
+    <EmbeddedResource Include="Samples\twitpic.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

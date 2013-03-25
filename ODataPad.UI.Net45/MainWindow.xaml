@@ -2,20 +2,37 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:viewModels="clr-namespace:ODataPad.Core.ViewModels;assembly=ODataPad.Core"
+        xmlns:net45="clr-namespace:ODataPad.Platform.Net45"
         DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
+        d:DataContext="{d:DesignInstance Type=net45:PlatformFakeHomeViewModel, IsDesignTimeCreatable=True}"
+        mc:Ignorable="d"
         Title="ODataPad" Height="600" Width="900">
-    <Grid>
+    <Grid Background="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}">
         <ListView 
-            HorizontalAlignment="Left" Height="413" Margin="31,27,0,0" VerticalAlignment="Top" Width="248"
+            HorizontalAlignment="Left" Height="500" Margin="31,27,0,0" VerticalAlignment="Top" Width="350"
             ItemsSource="{Binding Services}"
             SelectedItem="{Binding SelectedService, Mode=TwoWay}"
-            SelectionMode="Single" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+            SelectionMode="Single" Background="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="110" Margin="6" Width="300">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="Transparent"  Width="110" Height="110">
+                            <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                            <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
+                            <TextBlock Text="{Binding Url}" TextWrapping="NoWrap"/>
+                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
     </Grid>

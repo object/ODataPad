@@ -31,7 +31,7 @@ namespace ODataPad.UI.WinRT
 
             SettingsPane.GetForCurrentView().CommandsRequested += MainPage_CommandsRequested;
         }
-
+        
         public new HomeViewModel ViewModel
         {
             get { return (HomeViewModel)base.ViewModel; }

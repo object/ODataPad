@@ -193,9 +193,9 @@
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
       <Name>ODataPad.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ODataPad.WinRT\ODataPad.WinRT.csproj">
+    <ProjectReference Include="..\ODataPad.Platform.WinRT\ODataPad.Platform.WinRT.csproj">
       <Project>{ece0cae6-b931-4036-9fb1-63170a811069}</Project>
-      <Name>ODataPad.WinRT</Name>
+      <Name>ODataPad.Platform.WinRT</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

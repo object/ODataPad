@@ -41,7 +41,7 @@
     <Compile Include="Interfaces\ISamplesService.cs" />
     <Compile Include="Interfaces\INotifyInProgress.cs" />
     <Compile Include="Models\CollectionAssociation.cs" />
-    <Compile Include="ViewModels\CoreFakeHomeViewModel.cs" />
+    <Compile Include="ViewModels\FakeHomeViewModel.cs" />
     <Compile Include="ViewModels\QueryInProgress.cs" />
     <Compile Include="ViewModels\ResultViewItem.cs" />
     <Compile Include="ViewModels\SchemaElementViewItem.cs" />
