@@ -2,6 +2,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <Color x:Key="MainBackground" A="255" B="25" G="25" R="25"></Color>
+    <Color x:Key="TextForeground" A="255" B="225" G="225" R="225"></Color>
+
+    <SolidColorBrush x:Key="MainBackgroundBrush" Color="{StaticResource MainBackground}"></SolidColorBrush>
+    <SolidColorBrush x:Key="TextForeroundBrush" Color="{StaticResource TextForeground}"></SolidColorBrush>
+
     <DataTemplate x:Key="ServiceItemTemplate">
         <Grid Height="110" Margin="6">
             <Grid.ColumnDefinitions>

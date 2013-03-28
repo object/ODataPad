@@ -15,10 +15,9 @@ namespace ODataPad.Platform.WinRT
         {
         }
 
-        public async Task<bool> SetDataVersionAsync(int requestedDataVersion)
+        public async Task SetDataVersionAsync(int requestedDataVersion)
         {
             await ApplicationData.Current.SetVersionAsync((uint)requestedDataVersion, SetVersionHandlerAsync);
-            return true;
         }
 
         private async void SetVersionHandlerAsync(SetVersionRequest request)

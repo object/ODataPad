@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ODataPad.Core.ViewModels;
 
-namespace ODataPad.UI.Net40
+namespace ODataPad.UI.Net45
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,6 +24,16 @@ namespace ODataPad.UI.Net40
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public void Present(FrameworkElement frameworkElement)
+        {
+            // TODO
+        }
+
+        public void Connect(int connectionId, object target)
+        {
+            throw new NotImplementedException();
         }
     }
 }

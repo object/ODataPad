@@ -4,7 +4,7 @@ namespace ODataPad.Core.Interfaces
 {
     public interface ISamplesService
     {
-        Task<bool> CreateSamplesAsync();
-        Task<bool> UpdateSamplesAsync();
+        Task CreateSamplesAsync();
+        Task UpdateSamplesAsync();
     }
 }

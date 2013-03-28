@@ -21,7 +21,7 @@ namespace ODataPad.UI.WinRT
 
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            var rootFrame = Window.Current.Content as Frame;
             
             if (rootFrame == null)
             {

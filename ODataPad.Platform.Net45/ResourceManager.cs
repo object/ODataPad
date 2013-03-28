@@ -3,21 +3,18 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using ODataPad.Core.Interfaces;
-using Windows.Storage;
-using Windows.Storage.Streams;
-using Windows.UI.Xaml.Media.Imaging;
 
-namespace ODataPad.Platform.WinRT
+namespace ODataPad.Platform.Net45
 {
     public class ResourceManager : IResourceManager
     {
         public async Task<string> LoadContentAsStringAsync(string folderName, string resourceName)
         {
-            var resourceMap = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap;
-            var resourceFile = await resourceMap.GetSubtree("Files/" + folderName)
-                .GetValue(resourceName)
-                .GetValueAsFileAsync();
-            return await FileIO.ReadTextAsync(resourceFile);
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            using (var reader = new StreamReader(Path.Combine(baseDirectory, folderName, resourceName)))
+            {
+                return await reader.ReadToEndAsync();
+            }
         }
 
         public async Task<string> LoadResourceAsStringAsync(string moduleName, string folderName, string resourceName)
@@ -35,26 +32,12 @@ namespace ODataPad.Platform.WinRT
             if (!string.IsNullOrEmpty(folderName))
                 resourcePath = string.Join("/", folderName, resourcePath);
 
-            return new Uri("ms-appx:///" + resourcePath);
+            return new Uri("pack://siteoforigin:,,,/" + resourcePath);
         }
 
         public Uri GetResourceUri(string moduleName, string folderName, string resourceName)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<BitmapImage> LoadResourceAsImageAsync(string moduleName, string folderName, string resourceName)
-        {
-            var resourceStream = GetResourceStream(moduleName, folderName, resourceName);
-            BitmapImage image = null;
-            var ras = new InMemoryRandomAccessStream();
-            await resourceStream.CopyToAsync(ras.AsStreamForWrite());
-            await Utils.ExecuteOnUIThread(() =>
-            {
-                image = new BitmapImage();
-                image.SetSource(ras);
-            });
-            return image;
         }
 
         public Stream GetResourceStream(string moduleName, string folderName, string resourceName)

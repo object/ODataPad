@@ -37,19 +37,18 @@ namespace ODataPad.Core.ViewModels
 
         public ObservableCollection<ResultRow> QueryResults { get; private set; }
 
-        private async Task<bool> PrepareApplicationDataAsync()
+        private async Task PrepareApplicationDataAsync()
         {
             await EnsureDataVersionAsync();
             await PopulateServicesAsync();
-            return true;
         }
 
-        private async Task<bool> EnsureDataVersionAsync()
+        private async Task EnsureDataVersionAsync()
         {
-            return await _localData.SetDataVersionAsync(ODataPadApp.ApplicationDataVersion);
+            await _localData.SetDataVersionAsync(ODataPadApp.ApplicationDataVersion);
         }
 
-        private async Task<bool> PopulateServicesAsync()
+        private async Task PopulateServicesAsync()
         {
             this.Services.Clear();
             await _serviceRepository.LoadServicesAsync();
@@ -61,41 +60,32 @@ namespace ODataPad.Core.ViewModels
                 //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
             }
-            return true;
         }
 
-        public async Task<bool> AddServiceItemAsync(ServiceInfo serviceInfo)
+        public async Task AddServiceItemAsync(ServiceInfo serviceInfo)
         {
             var serviceItem = new ServiceViewItem(this, serviceInfo);
             //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
             this.Services.Add(serviceItem);
-            bool ok = await RefreshMetadataCacheAsync(serviceInfo);
-            if (ok)
-            {
-                //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
-                ok = await _serviceRepository.AddServiceAsync(serviceInfo);
-            }
-            return ok;
+            await RefreshMetadataCacheAsync(serviceInfo);
+            //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+            await _serviceRepository.AddServiceAsync(serviceInfo);
         }
 
-        public async Task<bool> UpdateServiceItemAsync(ServiceViewItem item, ServiceInfo serviceInfo)
+        public async Task UpdateServiceItemAsync(ServiceViewItem item, ServiceInfo serviceInfo)
         {
             var originalTitle = item.Name;
             item.UpdateDefinition(serviceInfo);
-            var ok = await RefreshMetadataCacheAsync(serviceInfo);
-            if (ok)
-            {
-                //RefreshServiceCollectionsFromMetadataCache(item, serviceInfo);
-                ok = await _serviceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
-            }
-            return ok;
+            await RefreshMetadataCacheAsync(serviceInfo);
+            //RefreshServiceCollectionsFromMetadataCache(item, serviceInfo);
+            await _serviceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
         }
 
-        public async Task<bool> RemoveServiceItemAsync(ServiceViewItem item)
+        public async Task RemoveServiceItemAsync(ServiceViewItem item)
         {
             this.Services.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };
-            return await _serviceRepository.DeleteServiceAsync(serviceInfo);
+            await _serviceRepository.DeleteServiceAsync(serviceInfo);
         }
 
         public override ICommand SelectServiceCommand
@@ -207,7 +197,7 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private async Task<bool> RefreshMetadataCacheAsync(ServiceInfo service)
+        private async Task RefreshMetadataCacheAsync(ServiceInfo service)
         {
             var metadata = await MetadataService.LoadServiceMetadataAsync(service);
             service.MetadataCache = metadata;
@@ -218,7 +208,6 @@ namespace ODataPad.Core.ViewModels
                 serviceItem.UpdateMetadata(service.MetadataCache);
             }
             await _localStorage.SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
-            return true;
         }
 
         private void RequestCollectionData()

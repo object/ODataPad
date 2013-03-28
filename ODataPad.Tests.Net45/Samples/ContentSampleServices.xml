@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Services>
+  <Service>
+    <Name>OData.org</Name>
+    <Description>A service that exposes information from OData.org - like Producers and Consumers - as OData</Description>
+    <Url>http://services.odata.org/Website/odata.svc/</Url>
+  </Service>
+
+  <Service>
+    <Name>Netflix</Name>
+    <Description>The complete netflix on-demand media catalog</Description>
+    <Url>http://odata.netflix.com/v2/Catalog/</Url>
+  </Service>
+
+  <Service>
+    <Name>ebay</Name>
+    <Description>ebay online auction and shopping catalog</Description>
+    <Url>http://ebayodata.cloudapp.net/</Url>
+  </Service>
+
+  <Service>
+    <Name>twitpic</Name>
+    <Description>twitpic now exposes its Images, Users, Comments etc via OData</Description>
+    <Url>http://odata.twitpic.com/</Url>
+  </Service>
+
+  <Service>
+    <Name>Stack Overflow</Name>
+    <Description>Q&amp;A for programmers</Description>
+    <Url>http://data.stackexchange.com/stackoverflow/atom</Url>
+  </Service>
+
+  <Service>
+    <Name>Devexpress Channel</Name>
+    <Description>Devexpress has lots of training videos, now available via an OData feed</Description>
+    <Url>http://media.devexpress.com/channel.svc</Url>
+  </Service>
+
+  <Service>
+    <Name>DBpedia</Name>
+    <Description>A community effort to extract structured information from Wikipedia and to make this information available on the Web, with full support for OData interactions on the live query services</Description>
+    <Url>http://dbpedia.org/fct</Url>
+  </Service>
+
+  <Service>
+    <Name>Pluralsight</Name>
+    <Description>Pluralsight course catalog</Description>
+    <Url>http://pluralsight.com/odata/</Url>
+  </Service>
+
+  <Service>
+    <Name>NuGet</Name>
+    <Description>Visual Studio extension that makes it easy to install and update open source libraries and tools in Visual Studio</Description>
+    <Url>http://packages.nuget.org/v1/FeedService.svc/</Url>
+  </Service>
+
+  <Service>
+    <Name>nerddinner</Name>
+    <Description>A website that helps nerds to meet and talk, not surprisingly it has adopted OData</Description>
+    <Url>http://www.nerddinner.com/Services/OData.svc/</Url>
+  </Service>
+
+  <Service>
+    <Name>Northwind Service</Name>
+    <Description>This service exposes the famous Northwind sample database in read-only mode via OData</Description>
+    <Url>http://services.odata.org/Northwind/Northwind.svc/</Url>
+  </Service>
+
+</Services>

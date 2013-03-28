@@ -18,7 +18,7 @@ namespace ODataPad.Core.Services
             _serviceRepository = serviceRepository ?? this.GetService<IServiceRepository>();
         }
 
-        public async Task<bool> SetDataVersionAsync(int currentVersion, int requestedVersion)
+        public async Task SetDataVersionAsync(int currentVersion, int requestedVersion)
         {
             if (currentVersion < 0 || requestedVersion < 0)
                 throw new InvalidOperationException("Current and requested data versions must be set prior to calling data versioning operations");
@@ -35,8 +35,6 @@ namespace ODataPad.Core.Services
                     await ssamplesService.UpdateSamplesAsync();
                 }
             }
-
-            return true;
         }
     }
 }

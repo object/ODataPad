@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Media.Imaging;
 using ODataPad.Core.ViewModels;
 
@@ -10,8 +11,7 @@ namespace ODataPad.Platform.Net45
         {
             foreach (var service in this.Services)
             {
-                service.Image = new BitmapImage(new Uri(@"D:\Projects\GitHub\ODataPad\ODataPad.UI.Net45\Samples\" + service.Name + ".png"));
-                //service.Image = new BitmapImage(new Uri(@"pack://application:,,,component/Samples/" + service.Name + ".png", UriKind.RelativeOrAbsolute));
+                service.Image = new BitmapImage(new Uri(@"pack://application:,,,/ODataPad.UI.Net45;component/Samples/" + service.Name + ".png"));
             }
         }
     }

@@ -111,11 +111,15 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Tests\ResourceManagerTests.cs">
+      <Link>ResourceManagerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tests\SamplesServiceTests.cs">
+      <Link>SamplesServiceTests.cs</Link>
+    </Compile>
     <Compile Include="ImageProviderTests.cs" />
     <Compile Include="MetadataServiceTests.cs" />
-    <Compile Include="ResourceManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SamplesServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

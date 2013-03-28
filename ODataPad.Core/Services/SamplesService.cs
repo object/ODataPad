@@ -15,8 +15,8 @@ namespace ODataPad.Core.Services
         , IMvxServiceConsumer<IResourceManager>
         , IMvxServiceConsumer<IServiceLocalStorage>
     {
-        private IResourceManager _resourceManager;
-        private IServiceLocalStorage _localStorage;
+        private readonly IResourceManager _resourceManager;
+        private readonly IServiceLocalStorage _localStorage;
         private readonly string _folderName;
         private readonly string _samplesFilename;
         private readonly int _previousDataVersion;
@@ -122,7 +122,7 @@ namespace ODataPad.Core.Services
             return samples.ToList();
         }
 
-        public async Task<bool> CreateSamplesAsync()
+        public async Task CreateSamplesAsync()
         {
             var allSamples = await GetAllSamplesAsync();
             var index = 0;
@@ -131,19 +131,16 @@ namespace ODataPad.Core.Services
                 serviceInfo.Index = index;
                 ++index;
             }
-            var result = await _localStorage
-                .SaveServiceInfosAsync(allSamples);
+            await _localStorage.SaveServiceInfosAsync(allSamples);
             var samplesWithMetadata = await GetSamplesMetadataAsync(allSamples);
             foreach (var serviceInfo in samplesWithMetadata)
             {
                 await _localStorage
                     .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
-
-            return result;
         }
 
-        public async Task<bool> UpdateSamplesAsync()
+        public async Task UpdateSamplesAsync()
         {
             var newServices = await GetNewSamplesAsync();
             var updatedServices = await GetUpdatedSamplesAsync();
@@ -170,15 +167,13 @@ namespace ODataPad.Core.Services
             allServices = allServices.Where(x => updatedServices.All(y => x.Name != y.Name)).ToList();
             allServices = allServices.Union(updatedServices).ToList();
             allServices = allServices.Union(newServices).ToList();
-            var result = await _localStorage.SaveServiceInfosAsync(allServices);
+            await _localStorage.SaveServiceInfosAsync(allServices);
             var servicesWithMetadata = await GetSamplesMetadataAsync(allServices);
             foreach (var serviceInfo in servicesWithMetadata)
             {
                 await _localStorage
                     .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
             }
-
-            return result;
         }
 
         private IEnumerable<ServiceInfo> ParseSamplesXml(string xml)

@@ -32,7 +32,12 @@ namespace ODataPad.Core.Models
             };
         }
 
-        public string Format()
+        public string AsString()
+        {
+            return AsXElement().ToString();
+        }
+
+        public XElement AsXElement()
         {
             var element = new XElement("Service");
             element.Add(new XElement("Name", this.Name));
@@ -41,7 +46,7 @@ namespace ODataPad.Core.Models
             element.Add(new XElement("Logo", this.Logo));
             element.Add(new XElement("CacheUpdated", this.CacheUpdated));
             element.Add(new XElement("Index", this.Index));
-            return element.ToString();
+            return element;
         }
     }
 }

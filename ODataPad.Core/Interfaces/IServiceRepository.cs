@@ -8,12 +8,12 @@ namespace ODataPad.Core.Interfaces
     {
         IList<ServiceInfo> Services { get; }
 
-        Task<bool> AddServiceAsync(ServiceInfo serviceInfo);
-        Task<bool> UpdateServiceAsync(string serviceName, ServiceInfo serviceInfo);
-        Task<bool> DeleteServiceAsync(ServiceInfo serviceInfo);
+        Task AddServiceAsync(ServiceInfo serviceInfo);
+        Task UpdateServiceAsync(string serviceName, ServiceInfo serviceInfo);
+        Task DeleteServiceAsync(ServiceInfo serviceInfo);
 
         Task<IEnumerable<ServiceInfo>> LoadServicesAsync();
-        Task<bool> SaveServicesAsync();
-        Task<bool> ClearServicesAsync();
+        Task SaveServicesAsync();
+        Task ClearServicesAsync();
     }
 }

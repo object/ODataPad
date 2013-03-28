@@ -4,6 +4,6 @@ namespace ODataPad.Core.Interfaces
 {
     public interface IDataVersioningService
     {
-        Task<bool> SetDataVersionAsync(int currentVersion, int requestedVersion);
+        Task SetDataVersionAsync(int currentVersion, int requestedVersion);
     }
 }

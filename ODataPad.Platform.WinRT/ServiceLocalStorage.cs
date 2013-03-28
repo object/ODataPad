@@ -14,7 +14,6 @@ namespace ODataPad.Platform.WinRT
 
         public ServiceLocalStorage()
         {
-
         }
 
         public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
@@ -25,19 +24,18 @@ namespace ODataPad.Platform.WinRT
                 .Select(x => ServiceInfo.Parse(x.Value as string));
         }
 
-        public async Task<bool> SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
+        public async Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
 
             foreach (var serviceInfo in serviceInfos)
             {
-                var xml = serviceInfo.Format();
+                var xml = serviceInfo.AsString();
                 localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = xml;
             }
 
             await PurgeServiceInfosAsync(serviceInfos);
-            return true;
         }
 
         public async Task<string> LoadServiceMetadataAsync(string filename)
@@ -45,12 +43,12 @@ namespace ODataPad.Platform.WinRT
             return await LoadFromLocalStorageAsync(filename);
         }
 
-        public async Task<bool> SaveServiceMetadataAsync(string filename, string metadata)
+        public async Task SaveServiceMetadataAsync(string filename, string metadata)
         {
-            return await SaveToLocalStorageAsync(filename, metadata);
+            await SaveToLocalStorageAsync(filename, metadata);
         }
 
-        public async Task<bool> ClearServicesAsync()
+        public async Task ClearServicesAsync()
         {
             await PurgeServiceInfosAsync(new List<ServiceInfo>());
             var localSettings = ApplicationData.Current.LocalSettings;
@@ -59,7 +57,6 @@ namespace ODataPad.Platform.WinRT
             {
                 localSettings.DeleteContainer(ServicesKey);
             }
-            return true;
         }
 
         private void GetOrCreateContainer(string containerName)
@@ -71,7 +68,7 @@ namespace ODataPad.Platform.WinRT
             }
         }
 
-        private async Task<bool> PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
+        private async Task PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
@@ -83,8 +80,6 @@ namespace ODataPad.Platform.WinRT
                 var serviceInfo = ServiceInfo.Parse(kv.Value as string);
                 await SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, null);
             }
-
-            return true;
         }
 
         private async Task<string> LoadFromLocalStorageAsync(string filename)
@@ -94,7 +89,7 @@ namespace ODataPad.Platform.WinRT
             return await FileIO.ReadTextAsync(file);
         }
 
-        private async Task<bool> SaveToLocalStorageAsync(string filename, string text)
+        private async Task SaveToLocalStorageAsync(string filename, string text)
         {
             var file = await ApplicationData.Current.LocalFolder
                 .CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
@@ -106,7 +101,6 @@ namespace ODataPad.Platform.WinRT
             {
                 await file.DeleteAsync();
             }
-            return true;
         }
     }
 }
