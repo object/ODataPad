@@ -36,9 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ODataPad.UI.Net45.Program</StartupObject>
+    <StartupObject>ODataPad.UI.Net45.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cirrious.CrossCore">
+      <HintPath>..\..\MvvmCross-vnext\Library\Cirrious.CrossCore.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.14-rc\lib\net45\Microsoft.Threading.Tasks.dll</HintPath>
@@ -65,7 +68,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Program.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="SimplePresenter.cs" />
     <Page Include="Common\CustomStyles.xaml">
@@ -178,7 +180,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="OData.org.png" />
     <Resource Include="Samples\Custom.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
