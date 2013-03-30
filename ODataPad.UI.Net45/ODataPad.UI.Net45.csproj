@@ -210,7 +210,9 @@
     <Resource Include="Samples\Pluralsight.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Samples\SampleServices.xml" />
+    <Content Include="Samples\SampleServices.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Samples\Stack Overflow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

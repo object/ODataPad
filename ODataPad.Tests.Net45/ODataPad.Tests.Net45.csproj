@@ -67,22 +67,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\ODataPad.UI.Net45\Samples\DBpedia.png">
+    <Resource Include="..\ODataPad.UI.Net45\Samples\DBpedia.png">
       <Link>Samples\DBpedia.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\ODataPad.UI.Net45\Samples\OData.org.png">
+    </Resource>
+    <Resource Include="..\ODataPad.UI.Net45\Samples\OData.org.png">
       <Link>Samples\OData.org.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\ODataPad.UI.Net45\Samples\Pluralsight.png">
+    </Resource>
+    <Resource Include="..\ODataPad.UI.Net45\Samples\Pluralsight.png">
       <Link>Samples\Pluralsight.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\ODataPad.UI.Net45\Samples\Stack Overflow.png">
+    </Resource>
+    <Resource Include="..\ODataPad.UI.Net45\Samples\Stack Overflow.png">
       <Link>Samples\Stack Overflow.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Resource>
     <Content Include="Samples\ContentSampleServices.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

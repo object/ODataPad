@@ -15,7 +15,7 @@ namespace ODataPad.Platform.Net45
 
         public async Task SetDataVersionAsync(int requestedDataVersion)
         {
-            // TODO
+            await this.GetService<IDataVersioningService>().SetDataVersionAsync(3, 3);
         }
     }
 }

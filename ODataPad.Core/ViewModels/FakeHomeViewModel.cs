@@ -42,10 +42,23 @@ namespace ODataPad.Core.ViewModels
 
             this.SelectedService = this.Services.First();
 
+            var selectedProperties = new Collection<CollectionProperty>
+                                 {
+                                     new CollectionProperty("Id", "Int32", true, false),
+                                     new CollectionProperty("Name", "String", false, false),
+                                     new CollectionProperty("Description", "String", false, false),
+                                     new CollectionProperty("ApplicationUrl", "String", false, true),
+                                 };
+
+            var selectedAssociations = new Collection<CollectionAssociation>
+                                 {
+
+                                 };
+
             var collections = new ServiceCollection[]
                                   {
-                                      new ServiceCollection("ODataConsumers", new Collection<CollectionProperty>(),
-                                                            new Collection<CollectionAssociation>()),
+                                      new ServiceCollection("ODataConsumers", selectedProperties,
+                                                            selectedAssociations),
                                       new ServiceCollection("ODataProducerApplications", new Collection<CollectionProperty>(),
                                                             new Collection<CollectionAssociation>()),
                                       new ServiceCollection("ODataProducerLiveServices", new Collection<CollectionProperty>(),
@@ -54,6 +67,8 @@ namespace ODataPad.Core.ViewModels
 
             this.Collections = new ObservableCollection<CollectionViewItem>(
                 collections.Select(x => new CollectionViewItem(this, x)));
+
+            this.SelectedCollection = this.Collections.First();
         }
     }
 }

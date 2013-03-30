@@ -6,7 +6,8 @@
              xmlns:mvx="clr-namespace:Cirrious.MvvmCross.Wpf.Views;assembly=Cirrious.MvvmCross.Wpf"
              xmlns:viewModels="clr-namespace:ODataPad.Core.ViewModels;assembly=ODataPad.Core"
              xmlns:net45="clr-namespace:ODataPad.Platform.Net45"
-             DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
+                xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
              d:DataContext="{d:DesignInstance Type=net45:PlatformFakeHomeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
@@ -39,6 +40,11 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectServiceCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ListView>
 
         <Grid 
