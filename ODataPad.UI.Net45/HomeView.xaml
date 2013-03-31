@@ -10,12 +10,12 @@
                 DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
              d:DataContext="{d:DesignInstance Type=net45:PlatformFakeHomeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1000">
 
     <mvx:MvxWpfView.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
     </mvx:MvxWpfView.Resources>
-    
+
     <Grid Background="{StaticResource MainBackgroundBrush}">
 
         <ListView 
@@ -62,91 +62,20 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Vertical">
-                <ComboBox 
-                x:Name="collectionMode" 
-                    Margin="10" 
-                    HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" 
-                    Background="{StaticResource MainBackgroundBrush}" 
-                    Foreground="{StaticResource TextForegroundBrush}" 
-                    BorderBrush="{StaticResource MainBackgroundBrush}"
-                    ItemsSource="{Binding ViewModel.CollectionModes}"
-                    SelectedItem="{Binding ViewModel.CollectionMode, Mode=TwoWay}" >
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionModeCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
-
-                <ListView 
-                    HorizontalAlignment="Left" Height="500" Margin="0,0,0,0" VerticalAlignment="Top" Width="350"
+            <ListView 
+                    HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
                     ItemsSource="{Binding ViewModel.Collections, Mode=TwoWay}"
                     SelectedItem="{Binding ViewModel.SelectedCollection, Mode=TwoWay}"
                     SelectionMode="Single" 
                     Background="{StaticResource MainBackgroundBrush}" 
                     BorderBrush="{StaticResource MainBackgroundBrush}"
                 >
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                    <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
-                                    <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
-
-            <ListView 
-            x:Name="itemProperties"
-                Grid.Row="0"
-                Grid.Column="1"
-            TabIndex="3"
-            DataContext="{Binding ViewModel.SelectedCollection}"
-            ItemsSource="{Binding SchemaElements}" 
-            Visibility="{Binding Path=ViewModel.IsPropertyViewSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
-            Background="{StaticResource MainBackgroundBrush}" 
-            BorderBrush="{StaticResource MainBackgroundBrush}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="6">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
-                                <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-            <ListView 
-            x:Name="itemData"
-                Grid.Row="0"
-                Grid.Column="1"
-            TabIndex="3"
-            DataContext="{Binding ViewModel.SelectedCollection}"
-            ItemsSource="{Binding QueryResults}"
-            Visibility="{Binding Path=ViewModel.IsResultViewSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
-            SelectedItem="{Binding ViewModel.SelectedResult, Mode=TwoWay}"
-            SelectionMode="Single" 
-            Background="{StaticResource MainBackgroundBrush}" 
-            BorderBrush="{StaticResource MainBackgroundBrush}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding ViewModel.SelectResultCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListView.ItemTemplate>
@@ -156,14 +85,134 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <TextBlock Text="{Binding KeySummary}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
-                                <TextBlock Text="{Binding ValueSummary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+                            <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                                <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                                <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <Grid Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,25,0">
+
+                <StackPanel Orientation="Vertical">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ComboBox 
+                x:Name="collectionMode" 
+                    Margin="10" 
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" 
+                    Background="Black"
+                    ItemsSource="{Binding ViewModel.CollectionModes}"
+                    SelectedItem="{Binding ViewModel.CollectionMode, Mode=TwoWay}"
+                    Visibility="{Binding Path=ViewModel.IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
+                    >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionModeCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+
+                        <ProgressBar Grid.Row="1" x:Name="resultProgress" IsIndeterminate="True" Margin="10,0,0,0"
+                        Visibility="{Binding Path=ViewModel.IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
+                        />
+
+                    </Grid>
+
+                    <ListView 
+            x:Name="itemProperties"
+                Grid.Row="0"
+                Grid.Column="1"
+            TabIndex="3"
+            DataContext="{Binding ViewModel.SelectedCollection}"
+            ItemsSource="{Binding SchemaElements}" 
+            Visibility="{Binding Path=ViewModel.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
+            Background="{StaticResource MainBackgroundBrush}" 
+            BorderBrush="{StaticResource MainBackgroundBrush}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                                        <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                                        <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <ListView 
+            x:Name="itemData"
+                Grid.Row="0"
+                Grid.Column="1"
+            TabIndex="3"
+            DataContext="{Binding ViewModel.SelectedCollection}"
+            ItemsSource="{Binding QueryResults}"
+            Visibility="{Binding Path=ViewModel.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+            SelectedItem="{Binding ViewModel.SelectedResult, Mode=TwoWay}"
+            SelectionMode="Single" 
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            Background="{StaticResource MainBackgroundBrush}" 
+            BorderBrush="{StaticResource MainBackgroundBrush}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ViewModel.SelectResultCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                                        <TextBlock Text="{Binding KeySummary}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                                        <TextBlock Text="{Binding ValueSummary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <RichTextBox
+                x:Name="itemText"
+                    Grid.Row="0"
+                    Grid.Column="1"  
+                Margin="10,10" 
+                Padding="0,0"
+                IsDocumentEnabled="True"
+                Background="{StaticResource MainBackgroundBrush}"
+                Foreground="{StaticResource TextForegroundBrush}"
+                BorderThickness="0"
+                Visibility="{Binding Path=ViewModel.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run Text="{Binding Path=ViewModel.SelectedResultDetails}" />
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDown">
+                                        <i:InvokeCommandAction Command="{Binding ViewModel.UnselectResultCommand}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="TouchDown">
+                                        <i:InvokeCommandAction Command="{Binding ViewModel.UnselectResultCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </StackPanel>
+
+            </Grid>
 
         </Grid>
 

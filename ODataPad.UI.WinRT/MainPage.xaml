@@ -144,7 +144,8 @@
                         BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
                         ItemsSource="{Binding ViewModel.CollectionModes}"
                         SelectedItem="{Binding ViewModel.CollectionMode, Mode=TwoWay}"
-                        Visibility="{Binding Path=ViewModel.IsServiceSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}" >
+                        Visibility="{Binding Path=ViewModel.IsServiceSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}" 
+                    >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionModeCommand}"/>

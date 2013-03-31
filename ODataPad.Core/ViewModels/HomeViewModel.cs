@@ -98,7 +98,6 @@ namespace ODataPad.Core.ViewModels
 
         public void DoSelectService()
         {
-            this.IsServiceSelected = true;
             RefreshServiceCollectionsFromMetadataCache(this.SelectedService);
         }
 
@@ -144,7 +143,10 @@ namespace ODataPad.Core.ViewModels
 
         public void DoSelectResult()
         {
-            ShowResultDetails();
+            if (this.SelectedResult != null)
+            {
+                ShowResultDetails();
+            }
         }
 
         public override ICommand UnselectResultCommand
