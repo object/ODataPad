@@ -11,7 +11,13 @@
              d:DataContext="{d:DesignInstance Type=net45:PlatformFakeHomeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+
+    <mvx:MvxWpfView.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </mvx:MvxWpfView.Resources>
+    
     <Grid Background="{StaticResource MainBackgroundBrush}">
+
         <ListView 
             HorizontalAlignment="Left" Height="500" Margin="31,27,0,0" VerticalAlignment="Top" Width="350"
             ItemsSource="{Binding Services}"
@@ -31,11 +37,11 @@
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
                             <TextBlock Text="{Binding Name}" 
-                                       TextWrapping="NoWrap" Foreground="{StaticResource TextForeroundBrush}"/>
+                                       TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
                             <TextBlock Text="{Binding Url}" 
-                                       TextWrapping="NoWrap" Foreground="{StaticResource TextForeroundBrush}"/>
+                                       TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
                             <TextBlock Text="{Binding Description}" 
-                                       TextWrapping="Wrap" Foreground="{StaticResource TextForeroundBrush}"/>
+                                       TextWrapping="Wrap" Foreground="{StaticResource TextForegroundBrush}"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
@@ -48,16 +54,68 @@
         </ListView>
 
         <Grid 
-            Margin="400,20,0,0"
+            Margin="400,20,0,0" 
             DataContext="{Binding SelectedService}">
-            <ListView 
-                HorizontalAlignment="Left" Height="500" Margin="0,0,0,0" VerticalAlignment="Top" Width="350"
-                ItemsSource="{Binding ViewModel.Collections, Mode=TwoWay}"
-                SelectedItem="{Binding ViewModel.SelectedCollection, Mode=TwoWay}"
-                SelectionMode="Single" 
-                Background="{StaticResource MainBackgroundBrush}" 
-                BorderBrush="{StaticResource MainBackgroundBrush}"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <ComboBox 
+                x:Name="collectionMode" 
+                    Margin="10" 
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" 
+                    Background="{StaticResource MainBackgroundBrush}" 
+                    Foreground="{StaticResource TextForegroundBrush}" 
+                    BorderBrush="{StaticResource MainBackgroundBrush}"
+                    ItemsSource="{Binding ViewModel.CollectionModes}"
+                    SelectedItem="{Binding ViewModel.CollectionMode, Mode=TwoWay}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionModeCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+
+                <ListView 
+                    HorizontalAlignment="Left" Height="500" Margin="0,0,0,0" VerticalAlignment="Top" Width="350"
+                    ItemsSource="{Binding ViewModel.Collections, Mode=TwoWay}"
+                    SelectedItem="{Binding ViewModel.SelectedCollection, Mode=TwoWay}"
+                    SelectionMode="Single" 
+                    Background="{StaticResource MainBackgroundBrush}" 
+                    BorderBrush="{StaticResource MainBackgroundBrush}"
                 >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                                    <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+
+            <ListView 
+            x:Name="itemProperties"
+                Grid.Row="0"
+                Grid.Column="1"
+            TabIndex="3"
+            DataContext="{Binding ViewModel.SelectedCollection}"
+            ItemsSource="{Binding SchemaElements}" 
+            Visibility="{Binding Path=ViewModel.IsPropertyViewSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Background="{StaticResource MainBackgroundBrush}" 
+            BorderBrush="{StaticResource MainBackgroundBrush}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="6">
@@ -66,13 +124,47 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForeroundBrush}"/>
-                                <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForeroundBrush}"/>
+                                <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                                <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <ListView 
+            x:Name="itemData"
+                Grid.Row="0"
+                Grid.Column="1"
+            TabIndex="3"
+            DataContext="{Binding ViewModel.SelectedCollection}"
+            ItemsSource="{Binding QueryResults}"
+            Visibility="{Binding Path=ViewModel.IsResultViewSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+            SelectedItem="{Binding ViewModel.SelectedResult, Mode=TwoWay}"
+            SelectionMode="Single" 
+            Background="{StaticResource MainBackgroundBrush}" 
+            BorderBrush="{StaticResource MainBackgroundBrush}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding ViewModel.SelectResultCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                <TextBlock Text="{Binding KeySummary}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                                <TextBlock Text="{Binding ValueSummary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
         </Grid>
 
     </Grid>

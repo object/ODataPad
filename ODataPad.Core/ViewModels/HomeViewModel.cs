@@ -210,9 +210,9 @@ namespace ODataPad.Core.ViewModels
             await _localStorage.SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
         }
 
-        private void RequestCollectionData()
+        private async Task RequestCollectionData()
         {
-            this.SelectedCollection.QueryResults = _resultProvider.CollectResults(
+            this.SelectedCollection.QueryResults = await _resultProvider.CollectResultsAsync(
                 this.SelectedService.Url,
                 this.SelectedCollection.Name,
                 this.SelectedCollection.Properties,

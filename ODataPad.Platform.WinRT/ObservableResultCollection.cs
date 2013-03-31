@@ -14,7 +14,7 @@ namespace ODataPad.Platform.WinRT
         public string CollectionName { get; private set; }
         public IEnumerable<CollectionProperty> CollectionProperties { get; private set; }
 
-        private INotifyInProgress _notify;
+        private readonly INotifyInProgress _notify;
 
         public ObservableResultCollection(string serviceUrl, string collectionName,
             IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notify)

@@ -13,7 +13,11 @@ namespace ODataPad.Core.ViewModels
         {
             _services = new ObservableCollection<ServiceViewItem>();
             _collections = new ObservableCollection<CollectionViewItem>();
-            _collectionModes = new ObservableCollection<string>(new[] { "Show collection properties", "Show collection data" });
+            _collectionModes = new ObservableCollection<string>(new[]
+                                                                    {
+                                                                        "Show collection properties", 
+                                                                        "Show collection data"
+                                                                    });
             _collectionMode = _collectionModes[0];
         }
 
