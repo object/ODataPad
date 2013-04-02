@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
-using Cirrious.MvvmCross.Commands;
-using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.CrossCore.IoC;
+using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
@@ -24,11 +24,11 @@ namespace ODataPad.Core.ViewModels
 
         public HomeViewModel()
         {
-            _serviceRepository = this.GetService<IServiceRepository>();
-            _localStorage = this.GetService<IServiceLocalStorage>();
-            _localData = this.GetService<IApplicationLocalData>();
-            _imageProvider = this.GetService<IImageProvider>();
-            _resultProvider = this.GetService<IResultProvider>();
+            _serviceRepository = Mvx.Resolve<IServiceRepository>();
+            _localStorage = Mvx.Resolve<IServiceLocalStorage>();
+            _localData = Mvx.Resolve<IApplicationLocalData>();
+            _imageProvider = Mvx.Resolve<IImageProvider>();
+            _resultProvider = Mvx.Resolve<IResultProvider>();
 
             this.QueryResults = new ObservableCollection<ResultRow>();
 
@@ -41,6 +41,10 @@ namespace ODataPad.Core.ViewModels
         {
             await EnsureDataVersionAsync();
             await PopulateServicesAsync();
+
+            this.SelectedService = null;
+            this.IsServiceSelected = false;
+            this.IsQueryInProgress = false;
         }
 
         private async Task EnsureDataVersionAsync()
@@ -92,20 +96,21 @@ namespace ODataPad.Core.ViewModels
         {
             get
             {
-                return new MvxRelayCommand(DoSelectService);
+                return new MvxCommand(DoSelectService);
             }
         }
 
         public void DoSelectService()
         {
             RefreshServiceCollectionsFromMetadataCache(this.SelectedService);
+            this.IsServiceSelected = this.SelectedService != null;
         }
 
         public override ICommand SelectCollectionCommand
         {
             get
             {
-                return new MvxRelayCommand(DoSelectCollection);
+                return new MvxCommand(DoSelectCollection);
             }
         }
 
@@ -121,7 +126,7 @@ namespace ODataPad.Core.ViewModels
         {
             get
             {
-                return new MvxRelayCommand(DoSelectCollectionMode);
+                return new MvxCommand(DoSelectCollectionMode);
             }
         }
 
@@ -137,7 +142,7 @@ namespace ODataPad.Core.ViewModels
         {
             get
             {
-                return new MvxRelayCommand(DoSelectResult);
+                return new MvxCommand(DoSelectResult);
             }
         }
 
@@ -153,7 +158,7 @@ namespace ODataPad.Core.ViewModels
         {
             get
             {
-                return new MvxRelayCommand(DoCollapseResult);
+                return new MvxCommand(DoCollapseResult);
             }
         }
 

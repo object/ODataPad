@@ -1,22 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.CrossCore.IoC;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.Services
 {
     public class ServiceRepository
-        : IServiceRepository,
-        IMvxServiceConsumer<IServiceLocalStorage>
+        : IServiceRepository
     {
         private readonly IServiceLocalStorage _localStorage;
 
         public ServiceRepository(IServiceLocalStorage localStorage = null)
         {
-            _localStorage = localStorage ?? this.GetService<IServiceLocalStorage>();
+            _localStorage = localStorage ?? Mvx.Resolve<IServiceLocalStorage>();
         }
 
         public IList<ServiceInfo> Services { get; private set; }

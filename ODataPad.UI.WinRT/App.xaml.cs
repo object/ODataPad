@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
-using Cirrious.MvvmCross.Interfaces.ViewModels;
+using Cirrious.CrossCore.IoC;
+using Cirrious.MvvmCross.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -11,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ODataPad.UI.WinRT
 {
-    sealed partial class App : Application, IMvxServiceConsumer<IMvxStartNavigation>
+    sealed partial class App : Application
     {
         public App()
         {
@@ -51,7 +50,7 @@ namespace ODataPad.UI.WinRT
                 var setup = new Setup(rootFrame);
                 setup.Initialize();
 
-                var start = this.GetService<IMvxStartNavigation>();
+                var start = Mvx.Resolve<IMvxAppStart>();
                 start.Start();
             }
             Window.Current.Activate();

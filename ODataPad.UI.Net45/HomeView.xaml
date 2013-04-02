@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mvx="clr-namespace:Cirrious.MvvmCross.Wpf.Views;assembly=Cirrious.MvvmCross.Wpf"
              xmlns:viewModels="clr-namespace:ODataPad.Core.ViewModels;assembly=ODataPad.Core"
-             xmlns:net45="clr-namespace:ODataPad.Platform.Net45"
-                xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
+             xmlns:net45="clr-namespace:ODataPad.UI.Net45"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
              d:DataContext="{d:DesignInstance Type=net45:PlatformFakeHomeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="1000">
+             d:DesignHeight="600" d:DesignWidth="1000"
+             >
 
     <mvx:MvxWpfView.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
@@ -120,7 +121,7 @@
                         </ComboBox>
 
                         <ProgressBar Grid.Row="1" x:Name="resultProgress" IsIndeterminate="True" Margin="10,0,0,0"
-                        Visibility="{Binding Path=ViewModel.IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=ViewModel.AlwaysFalse, Converter={StaticResource BoolToVisibility}}"
                         />
 
                     </Grid>

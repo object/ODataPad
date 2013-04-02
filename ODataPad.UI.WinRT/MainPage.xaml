@@ -12,7 +12,8 @@
     xmlns:winrt="using:ODataPad.Platform.WinRT"
     DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
     d:DataContext="{d:DesignInstance Type=winrt:PlatformFakeHomeViewModel, IsDesignTimeCreatable=True}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    >
 
     <Page.Resources>
         <!-- Collection of items displayed by this page -->
@@ -144,7 +145,7 @@
                         BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
                         ItemsSource="{Binding ViewModel.CollectionModes}"
                         SelectedItem="{Binding ViewModel.CollectionMode, Mode=TwoWay}"
-                        Visibility="{Binding Path=ViewModel.IsServiceSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}" 
+                        Visibility="{Binding Path=ViewModel.IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">

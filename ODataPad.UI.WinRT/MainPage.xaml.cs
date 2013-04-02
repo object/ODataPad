@@ -26,8 +26,8 @@ namespace ODataPad.UI.WinRT
         {
             this.InitializeComponent();
 
-            this.resultProgress.Visibility = Visibility.Collapsed;
-            this.collectionMode.Visibility = Visibility.Collapsed;
+            //this.resultProgress.Visibility = Visibility.Collapsed;
+            //this.collectionMode.Visibility = Visibility.Collapsed;
 
             SettingsPane.GetForCurrentView().CommandsRequested += MainPage_CommandsRequested;
         }

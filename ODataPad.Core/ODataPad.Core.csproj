@@ -52,7 +52,7 @@
     <Compile Include="Interfaces\IImageProvider.cs" />
     <Compile Include="Interfaces\IServiceRepository.cs" />
     <Compile Include="Services\DataVersioningService.cs" />
-    <Compile Include="StartNavigation.cs" />
+    <Compile Include="AppStart.cs" />
     <Compile Include="ViewModels\HomeViewModelBase.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\CollectionViewItem.cs" />
@@ -75,12 +75,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
-      <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
-      <Name>Cirrious.MvvmCross</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.14-rc\lib\portable-net45+win8\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -96,6 +90,16 @@
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.0.16-rc\lib\portable-net40+sl5+win8+wp8\System.Threading.Tasks.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
+      <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
+      <Name>Cirrious.MvvmCross</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\CrossCore\Cirrious.CrossCore\Cirrious.CrossCore.csproj">
+      <Project>{cff6f25a-3c3b-44ee-a54c-2ed4aaff3adb}</Project>
+      <Name>Cirrious.CrossCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

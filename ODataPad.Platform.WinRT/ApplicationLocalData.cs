@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.CrossCore.IoC;
 using ODataPad.Core.Interfaces;
 using Windows.Storage;
 
 namespace ODataPad.Platform.WinRT
 {
     public class ApplicationLocalData 
-        : IApplicationLocalData,
-        IMvxServiceConsumer<IDataVersioningService>
+        : IApplicationLocalData
     {
         public ApplicationLocalData()
         {
@@ -23,7 +21,7 @@ namespace ODataPad.Platform.WinRT
         private async void SetVersionHandlerAsync(SetVersionRequest request)
         {
             SetVersionDeferral deferral = request.GetDeferral();
-            await this.GetService<IDataVersioningService>().SetDataVersionAsync((int)request.CurrentVersion, (int)request.DesiredVersion);
+            await Mvx.Resolve<IDataVersioningService>().SetDataVersionAsync((int)request.CurrentVersion, (int)request.DesiredVersion);
             deferral.Complete();
         }
     }

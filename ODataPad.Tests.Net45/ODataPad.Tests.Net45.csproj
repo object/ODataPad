@@ -53,10 +53,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
-      <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
-      <Name>Cirrious.MvvmCross</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
       <Name>ODataPad.Core</Name>

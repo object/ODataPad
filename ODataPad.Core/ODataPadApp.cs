@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Application;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
-using Cirrious.MvvmCross.Interfaces.ViewModels;
+using Cirrious.CrossCore.IoC;
+using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Services;
 using ODataPad.Core.ViewModels;
@@ -13,7 +11,6 @@ namespace ODataPad.Core
 {
     public class ODataPadApp 
         : MvxApplication
-        , IMvxServiceProducer
     {
         public const int ApplicationDataVersion = 3;
         public static string SamplesFolder;
@@ -41,17 +38,14 @@ namespace ODataPad.Core
 
         private void InitalizeServices()
         {
-            this.RegisterServiceInstance<IServiceRepository>(
-                new ServiceRepository());
-            this.RegisterServiceInstance<IDataVersioningService>(
-                new DataVersioningService());
+            Mvx.RegisterSingleton<IServiceRepository>(new ServiceRepository());
+            Mvx.RegisterSingleton<IDataVersioningService>(new DataVersioningService());
         }
 
         private void InitializeStartNavigation()
         {
-            var startApplicationObject = new StartNavigation();
-            this.RegisterServiceInstance<IMvxStartNavigation>(
-                startApplicationObject);
+            var startApplicationObject = new AppStart();
+            Mvx.RegisterSingleton<IMvxAppStart>(startApplicationObject);
         }
 
         private void InitializePlugIns()

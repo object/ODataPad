@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ViewModels;
 
 namespace ODataPad.Core.ViewModels
@@ -45,6 +45,13 @@ namespace ODataPad.Core.ViewModels
         public virtual ICommand SelectServiceCommand
         {
             get { return null; }
+        }
+
+        private bool _isServiceSelected;
+        public bool IsServiceSelected
+        {
+            get { return _isServiceSelected; }
+            set { _isServiceSelected = value; RaisePropertyChanged("IsServiceSelected"); }
         }
 
         private ObservableCollection<CollectionViewItem> _collections;
@@ -128,7 +135,6 @@ namespace ODataPad.Core.ViewModels
             set { _selectedResultDetails = value; RaisePropertyChanged("SelectedResultDetails"); }
         }
 
-        public bool IsServiceSelected { get { return this.SelectedService != null; } }
         public bool IsPropertyViewSelected { get { return this.CollectionMode == this.CollectionModes.First(); } }
         public bool IsResultViewSelected { get { return this.CollectionMode != this.CollectionModes.First() && this.SelectedResult == null; } }
         public bool IsSingleResultSelected { get { return this.CollectionMode != this.CollectionModes.First() && this.SelectedResult != null; } }

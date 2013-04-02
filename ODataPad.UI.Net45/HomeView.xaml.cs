@@ -12,8 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Cirrious.MvvmCross.Interfaces.ViewModels;
-using Cirrious.MvvmCross.Wpf.Interfaces;
 using Cirrious.MvvmCross.Wpf.Views;
 using ODataPad.Core.ViewModels;
 
@@ -27,6 +25,9 @@ namespace ODataPad.UI.Net45
         public HomeView()
         {
             InitializeComponent();
+
+            //this.resultProgress.Visibility = Visibility.Collapsed;
+            //this.collectionMode.Visibility = Visibility.Collapsed;
         }
 
         public new HomeViewModel ViewModel 

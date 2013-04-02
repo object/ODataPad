@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.CrossCore.IoC;
 using ODataPad.Core.Interfaces;
 
 namespace ODataPad.Core.Services
 {
     public class DataVersioningService
         : IDataVersioningService
-        , IMvxServiceConsumer<IServiceRepository>
-        , IMvxServiceConsumer<ISamplesService>
     {
         private readonly IServiceRepository _serviceRepository;
 
         public DataVersioningService(IServiceRepository serviceRepository = null)
         {
-            _serviceRepository = serviceRepository ?? this.GetService<IServiceRepository>();
+            _serviceRepository = serviceRepository ?? Mvx.Resolve<IServiceRepository>();
         }
 
         public async Task SetDataVersionAsync(int currentVersion, int requestedVersion)

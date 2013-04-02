@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Media.Imaging;
 using ODataPad.Core.ViewModels;
 
-namespace ODataPad.Platform.Net45
+namespace ODataPad.UI.Net45
 {
     public class PlatformFakeHomeViewModel : FakeHomeViewModel
     {

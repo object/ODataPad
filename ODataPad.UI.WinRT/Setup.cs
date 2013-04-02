@@ -1,6 +1,6 @@
-﻿using Cirrious.MvvmCross.Application;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.WinRT.Platform;
+﻿using Cirrious.CrossCore.IoC;
+using Cirrious.MvvmCross.ViewModels;
+using Cirrious.MvvmCross.WindowsStore.Platform;
 using ODataPad.Core;
 using ODataPad.Core.Interfaces;
 using ODataPad.Platform.WinRT;
@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ODataPad.UI.WinRT
 {
-    public class Setup : MvxBaseWinRTSetup
+    public class Setup : MvxStoreSetup
     {
         public Setup(Frame rootFrame)
             : base(rootFrame)
@@ -19,14 +19,14 @@ namespace ODataPad.UI.WinRT
         {
             base.InitializePlatformServices();
 
-            this.RegisterServiceInstance<IResourceManager>(new ResourceManager());
-            this.RegisterServiceInstance<IServiceLocalStorage>(new ServiceLocalStorage());
-            this.RegisterServiceInstance<IApplicationLocalData>(new ApplicationLocalData());
-            this.RegisterServiceInstance<IImageProvider>(new ImageProvider());
-            this.RegisterServiceInstance<IResultProvider>(new ResultProvider());
+            Mvx.RegisterSingleton<IResourceManager>(new ResourceManager());
+            Mvx.RegisterSingleton<IServiceLocalStorage>(new ServiceLocalStorage());
+            Mvx.RegisterSingleton<IApplicationLocalData>(new ApplicationLocalData());
+            Mvx.RegisterSingleton<IImageProvider>(new ImageProvider());
+            Mvx.RegisterSingleton<IResultProvider>(new ResultProvider());
         }
 
-        protected override MvxApplication CreateApp()
+        protected override IMvxApplication CreateApp()
         {
             return new ODataPadApp("Samples", "SampleServices.xml");
         }

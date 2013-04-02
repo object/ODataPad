@@ -100,13 +100,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross.WinRT\Cirrious.MvvmCross.WinRT.csproj">
-      <Project>{ebe1bd6c-6a53-4e9f-9840-d6a1bd074dfd}</Project>
-      <Name>Cirrious.MvvmCross.WinRT</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
+    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
       <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
       <Name>Cirrious.MvvmCross</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\CrossCore\Cirrious.CrossCore\Cirrious.CrossCore.csproj">
+      <Project>{cff6f25a-3c3b-44ee-a54c-2ed4aaff3adb}</Project>
+      <Name>Cirrious.CrossCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>

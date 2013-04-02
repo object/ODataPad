@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.CrossCore.IoC;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
@@ -12,8 +11,6 @@ namespace ODataPad.Core.Services
 {
     public class SamplesService
         : ISamplesService
-        , IMvxServiceConsumer<IResourceManager>
-        , IMvxServiceConsumer<IServiceLocalStorage>
     {
         private readonly IResourceManager _resourceManager;
         private readonly IServiceLocalStorage _localStorage;
@@ -64,8 +61,8 @@ namespace ODataPad.Core.Services
             int previousDataVersion, int currentDataVersion,
             IResourceManager resourceManager = null, IServiceLocalStorage localStorage = null)
         {
-            _resourceManager = resourceManager ?? this.GetService<IResourceManager>();
-            _localStorage = localStorage ?? this.GetService<IServiceLocalStorage>();
+            _resourceManager = resourceManager ?? Mvx.Resolve<IResourceManager>();
+            _localStorage = localStorage ?? Mvx.Resolve<IServiceLocalStorage>();
 
             _folderName = folderName;
             _samplesFilename = samplesFilename;

@@ -53,13 +53,13 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross.Wpf\Cirrious.MvvmCross.Wpf.csproj">
-      <Project>{3786ea13-a491-4917-9b49-fbe76ba87fab}</Project>
-      <Name>Cirrious.MvvmCross.Wpf</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmCross-vnext\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
+    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
       <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
       <Name>Cirrious.MvvmCross</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\CrossCore\Cirrious.CrossCore\Cirrious.CrossCore.csproj">
+      <Project>{cff6f25a-3c3b-44ee-a54c-2ed4aaff3adb}</Project>
+      <Name>Cirrious.CrossCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>

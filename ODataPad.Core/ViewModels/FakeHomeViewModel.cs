@@ -41,6 +41,7 @@ namespace ODataPad.Core.ViewModels
                 services.Select(x => new ServiceViewItem(this, x)));
 
             this.SelectedService = this.Services.First();
+            this.IsServiceSelected = true;
 
             var selectedProperties = new Collection<CollectionProperty>
                                  {
