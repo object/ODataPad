@@ -55,8 +55,7 @@
         </ListView>
 
         <Grid 
-            Margin="400,20,0,0" 
-            DataContext="{Binding SelectedService}">
+            Margin="400,20,0,0" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -67,7 +66,8 @@
             </Grid.ColumnDefinitions>
 
             <ListView 
-                    HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
+            DataContext="{Binding SelectedService}"
+                HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
                     ItemsSource="{Binding ViewModel.Collections, Mode=TwoWay}"
                     SelectedItem="{Binding ViewModel.SelectedCollection, Mode=TwoWay}"
                     SelectionMode="Single" 
@@ -109,19 +109,19 @@
                     Margin="10" 
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" 
                     Background="Black"
-                    ItemsSource="{Binding ViewModel.CollectionModes}"
-                    SelectedItem="{Binding ViewModel.CollectionMode, Mode=TwoWay}"
-                    Visibility="{Binding Path=ViewModel.IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
+                    ItemsSource="{Binding CollectionModes}"
+                    SelectedItem="{Binding CollectionMode, Mode=TwoWay}"
+                    Visibility="{Binding IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionModeCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding SelectCollectionModeCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
 
                         <ProgressBar Grid.Row="1" x:Name="resultProgress" IsIndeterminate="True" Margin="10,0,0,0"
-                        Visibility="{Binding Path=ViewModel.AlwaysFalse, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
                         />
 
                     </Grid>
@@ -131,7 +131,7 @@
                 Grid.Row="0"
                 Grid.Column="1"
             TabIndex="3"
-            DataContext="{Binding ViewModel.SelectedCollection}"
+            DataContext="{Binding SelectedCollection}"
             ItemsSource="{Binding SchemaElements}" 
             Visibility="{Binding Path=ViewModel.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
             Background="{StaticResource MainBackgroundBrush}" 
@@ -157,7 +157,7 @@
                 Grid.Row="0"
                 Grid.Column="1"
             TabIndex="3"
-            DataContext="{Binding ViewModel.SelectedCollection}"
+            DataContext="{Binding SelectedCollection}"
             ItemsSource="{Binding QueryResults}"
             Visibility="{Binding Path=ViewModel.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
             SelectedItem="{Binding ViewModel.SelectedResult, Mode=TwoWay}"
@@ -196,16 +196,16 @@
                 Background="{StaticResource MainBackgroundBrush}"
                 Foreground="{StaticResource TextForegroundBrush}"
                 BorderThickness="0"
-                Visibility="{Binding Path=ViewModel.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
+                Visibility="{Binding Path=IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                         <FlowDocument>
                             <Paragraph>
-                                <Run Text="{Binding Path=ViewModel.SelectedResultDetails}" />
+                                <Run Text="{Binding Path=SelectedResultDetails}" />
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
-                                        <i:InvokeCommandAction Command="{Binding ViewModel.UnselectResultCommand}"/>
+                                        <i:InvokeCommandAction Command="{Binding UnselectResultCommand}"/>
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="TouchDown">
-                                        <i:InvokeCommandAction Command="{Binding ViewModel.UnselectResultCommand}"/>
+                                        <i:InvokeCommandAction Command="{Binding UnselectResultCommand}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Paragraph>
