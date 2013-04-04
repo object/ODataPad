@@ -27,7 +27,8 @@ namespace ODataPad.Core.ViewModels
         public ObservableCollection<ServiceViewItem> Services
         {
             get { return _services; }
-            set { _services = value; RaisePropertyChanged("Services"); }
+            set { _services = value; RaisePropertyChanged(() => Services);
+            }
         }
 
         private ServiceViewItem _selectedService;
@@ -37,8 +38,8 @@ namespace ODataPad.Core.ViewModels
             set 
             { 
                 _selectedService = value; 
-                RaisePropertyChanged("SelectedService");
-                RaisePropertyChanged("IsServiceSelected");
+                RaisePropertyChanged(() => SelectedService);
+                RaisePropertyChanged(() => IsServiceSelected);
             }
         }
 
@@ -51,21 +52,21 @@ namespace ODataPad.Core.ViewModels
         public bool IsServiceSelected
         {
             get { return _isServiceSelected; }
-            set { _isServiceSelected = value; RaisePropertyChanged("IsServiceSelected"); }
+            set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
         private ObservableCollection<CollectionViewItem> _collections;
         public ObservableCollection<CollectionViewItem> Collections
         {
             get { return _collections; }
-            set { _collections = value; RaisePropertyChanged("Collections"); }
+            set { _collections = value; RaisePropertyChanged(() => Collections); }
         }
 
         private CollectionViewItem _selectedCollection;
         public CollectionViewItem SelectedCollection
         {
             get { return _selectedCollection; }
-            set { _selectedCollection = value; RaisePropertyChanged("SelectedCollection"); }
+            set { _selectedCollection = value; RaisePropertyChanged(() => SelectedCollection); }
         }
 
         public virtual ICommand SelectCollectionCommand
@@ -86,10 +87,10 @@ namespace ODataPad.Core.ViewModels
             set
             {
                 _collectionMode = value;
-                RaisePropertyChanged("CollectionMode");
-                RaisePropertyChanged("IsPropertyViewSelected");
-                RaisePropertyChanged("IsResultViewSelected");
-                RaisePropertyChanged("IsSingleResultSelected");
+                RaisePropertyChanged(() => CollectionMode);
+                RaisePropertyChanged(() => IsPropertyViewSelected);
+                RaisePropertyChanged(() => IsResultViewSelected);
+                RaisePropertyChanged(() => IsSingleResultSelected);
             }
         }
 
@@ -102,7 +103,7 @@ namespace ODataPad.Core.ViewModels
         public bool IsQueryInProgress
         {
             get { return _isQueryInProgress; }
-            set { _isQueryInProgress = value; RaisePropertyChanged("IsQueryInProgress"); }
+            set { _isQueryInProgress = value; RaisePropertyChanged(() => IsQueryInProgress); }
         }
 
         private ResultViewItem _selectedResult;
@@ -112,9 +113,9 @@ namespace ODataPad.Core.ViewModels
             set
             {
                 _selectedResult = value;
-                RaisePropertyChanged("SelectedResult");
-                RaisePropertyChanged("IsResultViewSelected");
-                RaisePropertyChanged("IsSingleResultSelected");
+                RaisePropertyChanged(() => SelectedResult);
+                RaisePropertyChanged(() => IsResultViewSelected);
+                RaisePropertyChanged(() => IsSingleResultSelected);
             }
         }
 
@@ -132,7 +133,7 @@ namespace ODataPad.Core.ViewModels
         public string SelectedResultDetails
         {
             get { return _selectedResultDetails; }
-            set { _selectedResultDetails = value; RaisePropertyChanged("SelectedResultDetails"); }
+            set { _selectedResultDetails = value; RaisePropertyChanged(() => SelectedResultDetails); }
         }
 
         public bool IsPropertyViewSelected { get { return this.CollectionMode == this.CollectionModes.First(); } }
