@@ -106,6 +106,11 @@ namespace ODataPad.Core.ViewModels
             set { _isQueryInProgress = value; RaisePropertyChanged(() => IsQueryInProgress); }
         }
 
+        public virtual ICommand LoadMoreResultsCommand
+        {
+            get { return null; }
+        }
+
         private ResultViewItem _selectedResult;
         public ResultViewItem SelectedResult
         {

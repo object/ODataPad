@@ -25,9 +25,6 @@ namespace ODataPad.UI.Net45
         public HomeView()
         {
             InitializeComponent();
-
-            //this.resultProgress.Visibility = Visibility.Collapsed;
-            //this.collectionMode.Visibility = Visibility.Collapsed;
         }
 
         public new HomeViewModel ViewModel 

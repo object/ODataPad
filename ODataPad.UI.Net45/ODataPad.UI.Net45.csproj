@@ -65,6 +65,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\RoutedEventTrigger.cs" />
+    <Compile Include="Common\ScrollChangedEventToCommand.cs" />
     <Compile Include="Setup.cs" />
     <Page Include="Common\CustomStyles.xaml">
       <SubType>Designer</SubType>

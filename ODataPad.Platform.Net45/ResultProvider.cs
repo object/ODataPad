@@ -14,25 +14,19 @@ namespace ODataPad.Platform.Net45
     {
         public Task<ObservableCollection<ResultViewItem>> CollectResultsAsync(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
         {
-            return Task.Factory.StartNew(() => LoadResultsAsync(serviceUrl, collectionName, collectionProperties, notifyInProgress));
+            return Task.Factory.StartNew(() => LoadResultsAsync(serviceUrl, collectionName, collectionProperties, notifyInProgress).Result);
         }
 
-        private ObservableCollection<ResultViewItem> LoadResultsAsync(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
+        private async Task<ObservableCollection<ResultViewItem>> LoadResultsAsync(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
         {
-            var odataService = new ODataService();
+            var resultCollection = new ObservableResultCollection();
 
-            var result = odataService.LoadResultsAsync(
-                serviceUrl,
-                collectionName,
-                10,
-                10,
-                notifyInProgress).Result;
+            var resultLoader = new PartialResultLoader(serviceUrl, collectionName, collectionProperties, notifyInProgress);
+            var resultRows = await resultLoader.LoadResults(100);
 
-            var resultCollection = new ObservableCollection<ResultViewItem>();
-            foreach (var row in result.Rows)
+            foreach (var row in resultRows)
             {
-                var resultRow = new ResultRow(row, collectionProperties.Where(x => x.IsKey).Select(x => x.Name));
-                resultCollection.Add(new ResultViewItem(resultRow));
+                resultCollection.Add(new ResultViewItem(row));
             }
 
             return resultCollection;

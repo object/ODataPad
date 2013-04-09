@@ -30,12 +30,8 @@ namespace ODataPad.Core.ViewModels
             _imageProvider = Mvx.Resolve<IImageProvider>();
             _resultProvider = Mvx.Resolve<IResultProvider>();
 
-            this.QueryResults = new ObservableCollection<ResultRow>();
-
             PrepareApplicationDataAsync();
         }
-
-        public ObservableCollection<ResultRow> QueryResults { get; private set; }
 
         private async Task PrepareApplicationDataAsync()
         {
@@ -136,6 +132,18 @@ namespace ODataPad.Core.ViewModels
             {
                 RequestCollectionData();
             }
+        }
+
+        public override ICommand LoadMoreResultsCommand
+        {
+            get
+            {
+                return new MvxCommand(DoLoadMoreResults);
+            }
+        }
+
+        public void DoLoadMoreResults()
+        {
         }
 
         public override ICommand SelectResultCommand
