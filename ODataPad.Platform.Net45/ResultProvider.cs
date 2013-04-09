@@ -12,24 +12,34 @@ namespace ODataPad.Platform.Net45
 {
     public class ResultProvider : IResultProvider
     {
-        public Task<ObservableCollection<ResultViewItem>> CollectResultsAsync(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
+        public Task<ObservableResultCollection> CollectResultsAsync(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
         {
-            return Task.Factory.StartNew(() => LoadResultsAsync(serviceUrl, collectionName, collectionProperties, notifyInProgress).Result);
+            return Task.Factory.StartNew(() => LoadResults(serviceUrl, collectionName, collectionProperties, notifyInProgress).Result);
         }
 
-        private async Task<ObservableCollection<ResultViewItem>> LoadResultsAsync(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
+        public Task CollectMoreResultsAsync(ObservableResultCollection collection)
         {
-            var resultCollection = new ObservableResultCollection();
+            return Task.Factory.StartNew(() => LoadResults(collection).Result);
+        }
 
-            var resultLoader = new PartialResultLoader(serviceUrl, collectionName, collectionProperties, notifyInProgress);
-            var resultRows = await resultLoader.LoadResults(100);
+        private async Task<ObservableResultCollection> LoadResults(
+            string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
+        {
+            var collection = new ObservableResultCollection(serviceUrl, collectionName, collectionProperties, notifyInProgress);
+            return await LoadResults(collection);
+        }
+
+        private async Task<ObservableResultCollection> LoadResults(ObservableResultCollection collection)
+        {
+            var resultLoader = new PartialResultLoader(collection.ServiceUrl, collection.CollectionName, collection.CollectionProperties, collection.NotifyInProgress);
+            var resultRows = await resultLoader.LoadResults(collection.Count, 100);
 
             foreach (var row in resultRows)
             {
-                resultCollection.Add(new ResultViewItem(row));
+                collection.Add(new ResultViewItem(row));
             }
-
-            return resultCollection;
+            collection.HasMoreItems = resultLoader.HasMoreItems;
+            return collection;
         }
     }
 }

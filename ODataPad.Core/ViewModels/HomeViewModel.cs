@@ -144,6 +144,12 @@ namespace ODataPad.Core.ViewModels
 
         public void DoLoadMoreResults()
         {
+            if (this.SelectedCollection.QueryResults != null 
+                && this.SelectedCollection.QueryResults.HasMoreItems
+                && !this.IsQueryInProgress)
+            {
+                _resultProvider.CollectMoreResultsAsync(this.SelectedCollection.QueryResults);
+            }
         }
 
         public override ICommand SelectResultCommand

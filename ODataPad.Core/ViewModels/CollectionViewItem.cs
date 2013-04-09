@@ -24,8 +24,8 @@ namespace ODataPad.Core.ViewModels
         public ObservableCollection<CollectionAssociation> Associations { get { return _serviceCollection.Associations; } }
         public List<SchemaElementViewItem> SchemaElements { get { return _schemaElements; } }
 
-        private ObservableCollection<ResultViewItem> _queryResults;
-        public ObservableCollection<ResultViewItem> QueryResults
+        private ObservableResultCollection _queryResults;
+        public ObservableResultCollection QueryResults
         {
             get { return _queryResults; }
             set { this.SetProperty(ref _queryResults, value); }

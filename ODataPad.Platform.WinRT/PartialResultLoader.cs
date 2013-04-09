@@ -18,12 +18,12 @@ namespace ODataPad.Platform.WinRT
         private AsyncStatus _asyncStatus = AsyncStatus.Started;
         private LoadMoreItemsResult _results;
 
-        public PartialResultLoader(ObservableResultCollection collection, uint count, INotifyInProgress notify)
+        public PartialResultLoader(ObservableResultCollectionWithLoader collection, uint count, INotifyInProgress notify)
         {
             LoadResults(collection, count, notify);
         }
 
-        public async Task LoadResults(ObservableResultCollection collection, uint count, INotifyInProgress notify)
+        public async Task LoadResults(ObservableResultCollectionWithLoader collection, uint count, INotifyInProgress notify)
         {
             var odataService = new ODataService();
 
