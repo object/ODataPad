@@ -14,7 +14,7 @@ namespace ODataPad.UI.Net45.Common
             if (e != null && e.VerticalOffset > 0 && e.ViewportHeight + e.VerticalOffset == e.ExtentHeight)
                 return true;
             else
-                return parameter;
+                return false;
         }
     }
 }

@@ -138,7 +138,7 @@ namespace ODataPad.Core.ViewModels
         {
             get
             {
-                return new MvxCommand(DoLoadMoreResults);
+                return new MvxCommand<bool>(x => { if (x) DoLoadMoreResults(); });
             }
         }
 
