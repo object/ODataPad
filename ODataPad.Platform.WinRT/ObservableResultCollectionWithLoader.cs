@@ -27,7 +27,9 @@ namespace ODataPad.Platform.WinRT
 
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
         {
-            return new PartialResultLoader(this, count, this.NotifyInProgress);
+            var loader = new PartialResultLoaderWithAsyncOperation(this);
+            loader.LoadResults((int)count, 100);
+            return loader;
         }
     }
 }

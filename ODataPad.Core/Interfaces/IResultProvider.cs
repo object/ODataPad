@@ -8,12 +8,12 @@ namespace ODataPad.Core.Interfaces
 {
     public interface IResultProvider
     {
-        Task<ObservableResultCollection> CollectResultsAsync(
-            string serviceUrl, 
-            string collectionName, 
+        ObservableResultCollection CreateResultCollection(
+            string serviceUrl,
+            string collectionName,
             IEnumerable<CollectionProperty> collectionProperties,
             INotifyInProgress notifyInProgress);
 
-        Task CollectMoreResultsAsync(ObservableResultCollection collection);
+        Task AddResultsAsync(ObservableResultCollection collection);
     }
 }

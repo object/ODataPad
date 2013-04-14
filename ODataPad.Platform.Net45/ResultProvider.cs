@@ -12,19 +12,16 @@ namespace ODataPad.Platform.Net45
 {
     public class ResultProvider : IResultProvider
     {
-        public async Task<ObservableResultCollection> CollectResultsAsync(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notifyInProgress)
+        public ObservableResultCollection CreateResultCollection(
+            string serviceUrl, 
+            string collectionName,
+            IEnumerable<CollectionProperty> collectionProperties, 
+            INotifyInProgress notifyInProgress)
         {
-            var collection = new ObservableResultCollection(serviceUrl, collectionName, collectionProperties, notifyInProgress);
-            await LoadResults(collection);
-            return collection;
+            return new ObservableResultCollection(serviceUrl, collectionName, collectionProperties, notifyInProgress);
         }
 
-        public async Task CollectMoreResultsAsync(ObservableResultCollection collection)
-        {
-            await LoadResults(collection);
-        }
-
-        private async Task LoadResults(ObservableResultCollection collection)
+        public async Task AddResultsAsync(ObservableResultCollection collection)
         {
             var resultLoader = new PartialResultLoader(collection.ServiceUrl, collection.CollectionName, collection.CollectionProperties, collection.NotifyInProgress);
             var resultRows = await Task.Factory.StartNew(() => resultLoader.LoadResults(collection.Count, 100).Result);

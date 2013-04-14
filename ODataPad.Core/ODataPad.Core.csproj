@@ -42,6 +42,7 @@
     <Compile Include="Interfaces\INotifyInProgress.cs" />
     <Compile Include="Models\CollectionAssociation.cs" />
     <Compile Include="Models\ObservableResultCollection.cs" />
+    <Compile Include="Services\PartialResultLoader.cs" />
     <Compile Include="ViewModels\FakeHomeViewModel.cs" />
     <Compile Include="ViewModels\QueryInProgress.cs" />
     <Compile Include="ViewModels\ResultViewItem.cs" />

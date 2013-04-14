@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 using ODataPad.Core.ViewModels;
@@ -12,45 +12,35 @@ using Windows.UI.Xaml.Data;
 
 namespace ODataPad.Platform.WinRT
 {
-    public class PartialResultLoader : IAsyncOperation<LoadMoreItemsResult>
+    public class PartialResultLoaderWithAsyncOperation : PartialResultLoader, IAsyncOperation<LoadMoreItemsResult>
     {
-        private const int PageSize = 40;
         private AsyncStatus _asyncStatus = AsyncStatus.Started;
         private LoadMoreItemsResult _results;
+        private readonly ObservableResultCollectionWithLoader _collection;
 
-        public PartialResultLoader(ObservableResultCollectionWithLoader collection, uint count, INotifyInProgress notify)
+        public PartialResultLoaderWithAsyncOperation(ObservableResultCollectionWithLoader collection)
+            : base(collection.ServiceUrl, collection.CollectionName, collection.CollectionProperties, collection.NotifyInProgress)
         {
-            LoadResults(collection, count, notify);
+            _collection = collection;
         }
 
-        public async Task LoadResults(ObservableResultCollectionWithLoader collection, uint count, INotifyInProgress notify)
+        public override async Task<ObservableCollection<ResultRow>> LoadResults(int skipCount, int maxCount)
         {
-            var odataService = new ODataService();
+            var resultRows = await base.LoadResults(skipCount, maxCount);
+            _collection.HasMoreItems = this.HasMoreItems;
 
-            var result = await odataService.LoadResultsAsync(
-                collection.ServiceUrl,
-                collection.CollectionName,
-                collection.Count,
-                Math.Max((int)count, PageSize),
-                notify);
-
-            if (result != null)
+            if (resultRows != null)
             {
-                collection.HasMoreItems = result.Rows.Any() && !result.IsError;
-                foreach (var row in result.Rows)
+                foreach (var row in resultRows)
                 {
-                    var resultRow = new ResultRow(row, collection.CollectionProperties.Where(x => x.IsKey).Select(x => x.Name));
-                    collection.Add(new ResultViewItem(resultRow));
+                    _collection.Add(new ResultViewItem(row));
                 }
-                _results.Count = (uint)result.Rows.Count();
-            }
-            else
-            {
-                collection.HasMoreItems = false;
+                _results.Count = (uint)resultRows.Count();
             }
 
             _asyncStatus = AsyncStatus.Completed;
             if (Completed != null) Completed(this, _asyncStatus);
+            return resultRows;
         }
 
         public AsyncOperationCompletedHandler<LoadMoreItemsResult> Completed { get; set; }

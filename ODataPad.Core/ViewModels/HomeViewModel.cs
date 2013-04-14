@@ -15,7 +15,6 @@ namespace ODataPad.Core.ViewModels
 {
     public class HomeViewModel : HomeViewModelBase
     {
-        private const int ResultPageSize = 100;
         private readonly IServiceRepository _serviceRepository;
         private readonly IServiceLocalStorage _localStorage;
         private readonly IApplicationLocalData _localData;
@@ -148,7 +147,7 @@ namespace ODataPad.Core.ViewModels
                 && this.SelectedCollection.QueryResults.HasMoreItems
                 && !this.IsQueryInProgress)
             {
-                _resultProvider.CollectMoreResultsAsync(this.SelectedCollection.QueryResults);
+                _resultProvider.AddResultsAsync(this.SelectedCollection.QueryResults);
             }
         }
 
@@ -233,11 +232,13 @@ namespace ODataPad.Core.ViewModels
 
         private async Task RequestCollectionData()
         {
-            this.SelectedCollection.QueryResults = await _resultProvider.CollectResultsAsync(
+            this.SelectedCollection.QueryResults = _resultProvider.CreateResultCollection(
                 this.SelectedService.Url,
                 this.SelectedCollection.Name,
                 this.SelectedCollection.Properties,
                 new QueryInProgress(this));
+
+            await _resultProvider.AddResultsAsync(this.SelectedCollection.QueryResults);
         }
 
         private void ShowResultDetails()

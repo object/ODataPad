@@ -4,13 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
-using ODataPad.Core.Services;
-using ODataPad.Core.ViewModels;
 
-namespace ODataPad.Platform.Net45
+namespace ODataPad.Core.Services
 {
     public class PartialResultLoader
     {
@@ -33,7 +30,7 @@ namespace ODataPad.Platform.Net45
             this.HasMoreItems = true;
         }
 
-        public async Task<ObservableCollection<ResultRow>> LoadResults(int skipCount, int maxCount)
+        public virtual async Task<ObservableCollection<ResultRow>> LoadResults(int skipCount, int maxCount)
         {
             var odataService = new ODataService();
 
