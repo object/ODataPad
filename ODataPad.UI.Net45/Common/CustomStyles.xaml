@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="TextForegroundBrush" Color="{StaticResource TextForeground}"></SolidColorBrush>
 
     <DataTemplate x:Key="ServiceItemTemplate">
-        <Grid Height="110" Margin="6">
+        <Grid Height="110" Margin="6" Width="300">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -18,11 +18,54 @@
                 <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
             </Border>
             <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"/>
-                <TextBlock Text="{Binding Url}" TextWrapping="NoWrap"/>
-                <TextBlock Text="{Binding Description}" MaxHeight="60" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Name}" 
+                                       TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+                <TextBlock Text="{Binding Url}" 
+                                       TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+                <TextBlock Text="{Binding Description}" 
+                                       TextWrapping="Wrap" Foreground="{StaticResource TextForegroundBrush}"/>
             </StackPanel>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate x:Key="CollectionItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CollectionElementItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                <TextBlock Text="{Binding Name}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ResultItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                <TextBlock Text="{Binding KeySummary}" MaxHeight="40" Foreground="{StaticResource TextForegroundBrush}"/>
+                <TextBlock Text="{Binding ValueSummary}" TextWrapping="NoWrap" Foreground="{StaticResource TextForegroundBrush}"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
 </ResourceDictionary>
     
