@@ -19,7 +19,7 @@ namespace ODataPad.UI.WinRT
 {
     public sealed partial class MainPage : ODataPad.UI.WinRT.Common.LayoutAwarePage
     {
-        private ServiceViewItem _editedItem;
+        private ServiceViewModel _editedItem;
         private bool _movingToFirst = false;
 
         public MainPage()
@@ -66,7 +66,7 @@ namespace ODataPad.UI.WinRT
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (ServiceViewItem)this.itemsViewSource.View.CurrentItem;
+                var selectedItem = (ServiceViewModel)this.itemsViewSource.View.CurrentItem;
                 if (selectedItem != null) pageState["SelectedItem"] = selectedItem.Name;
             }
         }
@@ -187,7 +187,7 @@ namespace ODataPad.UI.WinRT
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
             this.bottomAppBar.IsOpen = false;
-            _editedItem = this.itemListView.SelectedItem as ServiceViewItem;
+            _editedItem = this.itemListView.SelectedItem as ServiceViewModel;
             this.serviceName.Text = _editedItem.Name;
             this.serviceUrl.Text = _editedItem.Url;
             this.serviceDescription.Text = _editedItem.Description;
@@ -312,7 +312,7 @@ namespace ODataPad.UI.WinRT
 
         private async void RemoveServiceAsync()
         {
-            var item = this.itemListView.SelectedItem as ServiceViewItem;
+            var item = this.itemListView.SelectedItem as ServiceViewModel;
             await this.ViewModel.RemoveServiceItemAsync(item);
         }
     }

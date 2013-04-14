@@ -11,8 +11,8 @@ namespace ODataPad.Core.ViewModels
     {
         protected HomeViewModelBase()
         {
-            _services = new ObservableCollection<ServiceViewItem>();
-            _collections = new ObservableCollection<CollectionViewItem>();
+            _services = new ObservableCollection<ServiceViewModel>();
+            _collections = new ObservableCollection<CollectionViewModel>();
             _collectionModes = new ObservableCollection<string>(new[]
                                                                     {
                                                                         "Show collection properties", 
@@ -23,16 +23,16 @@ namespace ODataPad.Core.ViewModels
 
         public HomeViewModelBase Self { get { return this; } }
 
-        private ObservableCollection<ServiceViewItem> _services;
-        public ObservableCollection<ServiceViewItem> Services
+        private ObservableCollection<ServiceViewModel> _services;
+        public ObservableCollection<ServiceViewModel> Services
         {
             get { return _services; }
             set { _services = value; RaisePropertyChanged(() => Services);
             }
         }
 
-        private ServiceViewItem _selectedService;
-        public ServiceViewItem SelectedService
+        private ServiceViewModel _selectedService;
+        public ServiceViewModel SelectedService
         {
             get { return _selectedService; }
             set 
@@ -55,15 +55,15 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
-        private ObservableCollection<CollectionViewItem> _collections;
-        public ObservableCollection<CollectionViewItem> Collections
+        private ObservableCollection<CollectionViewModel> _collections;
+        public ObservableCollection<CollectionViewModel> Collections
         {
             get { return _collections; }
             set { _collections = value; RaisePropertyChanged(() => Collections); }
         }
 
-        private CollectionViewItem _selectedCollection;
-        public CollectionViewItem SelectedCollection
+        private CollectionViewModel _selectedCollection;
+        public CollectionViewModel SelectedCollection
         {
             get { return _selectedCollection; }
             set { _selectedCollection = value; RaisePropertyChanged(() => SelectedCollection); }
@@ -111,8 +111,8 @@ namespace ODataPad.Core.ViewModels
             get { return null; }
         }
 
-        private ResultViewItem _selectedResult;
-        public ResultViewItem SelectedResult
+        private ResultViewModel _selectedResult;
+        public ResultViewModel SelectedResult
         {
             get { return _selectedResult; }
             set

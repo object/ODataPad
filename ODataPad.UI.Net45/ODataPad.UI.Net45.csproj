@@ -65,6 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\Base64ImageConverter.cs" />
     <Compile Include="Common\RoutedEventTrigger.cs" />
     <Compile Include="Common\ScrollChangedEventToCommand.cs" />
     <Compile Include="Setup.cs" />

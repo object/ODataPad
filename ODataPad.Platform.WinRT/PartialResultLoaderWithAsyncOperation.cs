@@ -33,7 +33,7 @@ namespace ODataPad.Platform.WinRT
             {
                 foreach (var row in resultRows)
                 {
-                    _collection.Add(new ResultViewItem(row));
+                    _collection.Add(new ResultViewModel(row));
                 }
                 _results.Count = (uint)resultRows.Count();
             }

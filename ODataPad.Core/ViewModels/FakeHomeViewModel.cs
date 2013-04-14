@@ -37,8 +37,8 @@ namespace ODataPad.Core.ViewModels
                                        },
                                };
 
-            this.Services = new ObservableCollection<ServiceViewItem>(
-                services.Select(x => new ServiceViewItem(this, x)));
+            this.Services = new ObservableCollection<ServiceViewModel>(
+                services.Select(x => new ServiceViewModel(this, x)));
 
             this.SelectedService = this.Services.First();
             this.IsServiceSelected = true;
@@ -66,8 +66,8 @@ namespace ODataPad.Core.ViewModels
                                                             new Collection<CollectionAssociation>()),
                                   };
 
-            this.Collections = new ObservableCollection<CollectionViewItem>(
-                collections.Select(x => new CollectionViewItem(this, x)));
+            this.Collections = new ObservableCollection<CollectionViewModel>(
+                collections.Select(x => new CollectionViewModel(this, x)));
 
             this.SelectedCollection = this.Collections.First();
         }

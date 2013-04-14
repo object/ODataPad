@@ -6,7 +6,7 @@ using ODataPad.Core.ViewModels;
 
 namespace ODataPad.Core.Models
 {
-    public class ObservableResultCollection : ObservableCollection<ResultViewItem>
+    public class ObservableResultCollection : ObservableCollection<ResultViewModel>
     {
         public string ServiceUrl { get; private set; }
         public string CollectionName { get; private set; }

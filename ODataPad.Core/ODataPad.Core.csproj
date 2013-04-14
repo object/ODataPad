@@ -45,8 +45,8 @@
     <Compile Include="Services\PartialResultLoader.cs" />
     <Compile Include="ViewModels\FakeHomeViewModel.cs" />
     <Compile Include="ViewModels\QueryInProgress.cs" />
-    <Compile Include="ViewModels\ResultViewItem.cs" />
-    <Compile Include="ViewModels\SchemaElementViewItem.cs" />
+    <Compile Include="ViewModels\ResultViewModel.cs" />
+    <Compile Include="ViewModels\SchemaElementViewModel.cs" />
     <Compile Include="Models\CollectionProperty.cs" />
     <Compile Include="Models\ResultRow.cs" />
     <Compile Include="Models\ServiceCollection.cs" />
@@ -57,8 +57,8 @@
     <Compile Include="AppStart.cs" />
     <Compile Include="ViewModels\HomeViewModelBase.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
-    <Compile Include="ViewModels\CollectionViewItem.cs" />
-    <Compile Include="ViewModels\ServiceViewItem.cs" />
+    <Compile Include="ViewModels\CollectionViewModel.cs" />
+    <Compile Include="ViewModels\ServiceViewModel.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="Models\ServiceInfo.cs" />

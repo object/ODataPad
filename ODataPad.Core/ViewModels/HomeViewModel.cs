@@ -54,7 +54,7 @@ namespace ODataPad.Core.ViewModels
 
             foreach (var serviceInfo in _serviceRepository.Services)
             {
-                var serviceItem = new ServiceViewItem(this, serviceInfo);
+                var serviceItem = new ServiceViewModel(this, serviceInfo);
                 serviceItem.Image = _imageProvider.GetImage(serviceItem.ImagePath);
                 //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
@@ -63,7 +63,7 @@ namespace ODataPad.Core.ViewModels
 
         public async Task AddServiceItemAsync(ServiceInfo serviceInfo)
         {
-            var serviceItem = new ServiceViewItem(this, serviceInfo);
+            var serviceItem = new ServiceViewModel(this, serviceInfo);
             //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
             this.Services.Add(serviceItem);
             await RefreshMetadataCacheAsync(serviceInfo);
@@ -71,7 +71,7 @@ namespace ODataPad.Core.ViewModels
             await _serviceRepository.AddServiceAsync(serviceInfo);
         }
 
-        public async Task UpdateServiceItemAsync(ServiceViewItem item, ServiceInfo serviceInfo)
+        public async Task UpdateServiceItemAsync(ServiceViewModel item, ServiceInfo serviceInfo)
         {
             var originalTitle = item.Name;
             item.UpdateDefinition(serviceInfo);
@@ -80,7 +80,7 @@ namespace ODataPad.Core.ViewModels
             await _serviceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
         }
 
-        public async Task RemoveServiceItemAsync(ServiceViewItem item)
+        public async Task RemoveServiceItemAsync(ServiceViewModel item)
         {
             this.Services.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };
@@ -180,7 +180,7 @@ namespace ODataPad.Core.ViewModels
             this.SelectedResult = null;
         }
 
-        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewItem item)
+        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewModel item)
         {
             this.Collections.Clear();
             if (!string.IsNullOrEmpty(item.MetadataCache))
@@ -188,12 +188,12 @@ namespace ODataPad.Core.ViewModels
                 var collections = MetadataService.ParseServiceMetadata(item.MetadataCache);
                 foreach (var collection in collections)
                 {
-                    this.Collections.Add(new CollectionViewItem(this, collection));
+                    this.Collections.Add(new CollectionViewModel(this, collection));
                 }
             }
         }
 
-        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewItem item, ServiceInfo service)
+        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewModel item, ServiceInfo service)
         {
             //item.Collections.Clear();
             if (!string.IsNullOrEmpty(service.MetadataCache))

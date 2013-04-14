@@ -28,7 +28,7 @@ namespace ODataPad.Platform.Net45
 
             foreach (var row in resultRows)
             {
-                collection.Add(new ResultViewItem(row));
+                collection.Add(new ResultViewModel(row));
             }
             collection.HasMoreItems = resultLoader.HasMoreItems;
         }
