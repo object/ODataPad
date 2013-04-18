@@ -117,6 +117,9 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="ServiceEditControl.xaml.cs">
+      <DependentUpon>ServiceEditControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Setup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +159,10 @@
     <Content Include="Samples\Pluralsight.edmx" />
     <Content Include="Samples\Stack Overflow.edmx" />
     <Content Include="Samples\twitpic.edmx" />
+    <Page Include="ServiceEditControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.png" />

@@ -87,29 +87,31 @@ namespace ODataPad.Core.ViewModels
             await _serviceRepository.DeleteServiceAsync(serviceInfo);
         }
 
-        public override ICommand SelectServiceCommand
+        public override void AddService()
         {
-            get
-            {
-                return new MvxCommand(DoSelectService);
-            }
+            this.IsServiceEditInProgress = true;
+            this.EditedService = null;
         }
 
-        public void DoSelectService()
+        public override void EditService()
+        {
+            this.IsServiceEditInProgress = true;
+            this.EditedService = this.SelectedService;
+        }
+
+        public override void RemoveService()
+        {
+            this.IsServiceEditInProgress = true;
+            this.EditedService = this.SelectedService;
+        }
+
+        public override void SelectService()
         {
             RefreshServiceCollectionsFromMetadataCache(this.SelectedService);
             this.IsServiceSelected = this.SelectedService != null;
         }
 
-        public override ICommand SelectCollectionCommand
-        {
-            get
-            {
-                return new MvxCommand(DoSelectCollection);
-            }
-        }
-
-        public void DoSelectCollection()
+        public override void SelectCollection()
         {
             if (!this.IsPropertyViewSelected && this.SelectedCollection != null)
             {
@@ -117,15 +119,7 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public override ICommand SelectCollectionModeCommand
-        {
-            get
-            {
-                return new MvxCommand(DoSelectCollectionMode);
-            }
-        }
-
-        public void DoSelectCollectionMode()
+        public override void SelectCollectionMode()
         {
             if (!this.IsPropertyViewSelected && this.SelectedCollection != null)
             {
@@ -133,15 +127,7 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public override ICommand LoadMoreResultsCommand
-        {
-            get
-            {
-                return new MvxCommand<bool>(x => { if (x) DoLoadMoreResults(); });
-            }
-        }
-
-        public void DoLoadMoreResults()
+        public override void LoadMoreResults()
         {
             if (this.SelectedCollection.QueryResults != null 
                 && this.SelectedCollection.QueryResults.HasMoreItems
@@ -151,33 +137,12 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public override ICommand SelectResultCommand
-        {
-            get
-            {
-                return new MvxCommand(DoSelectResult);
-            }
-        }
-
-        public void DoSelectResult()
+        public override void SelectResult()
         {
             if (this.SelectedResult != null)
             {
                 ShowResultDetails();
             }
-        }
-
-        public override ICommand UnselectResultCommand
-        {
-            get
-            {
-                return new MvxCommand(DoCollapseResult);
-            }
-        }
-
-        public void DoCollapseResult()
-        {
-            this.SelectedResult = null;
         }
 
         private void RefreshServiceCollectionsFromMetadataCache(ServiceViewModel item)

@@ -33,6 +33,22 @@
                     <i:InvokeCommandAction Command="{Binding SelectServiceCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <ListView.ContextMenu>
+                <ContextMenu x:Name="serviceMenu" >
+                    <MenuItem Header="_Add" 
+                          Command="{Binding AddServiceCommand}"
+                          IsEnabled="True">
+                    </MenuItem>
+                    <MenuItem Header="_Edit" 
+                          Command="{Binding EditServiceCommand}"
+                          IsEnabled="{Binding IsServiceSelected}">
+                    </MenuItem>
+                    <MenuItem Header="_Remove" 
+                          Command="{Binding RemoveServiceCommand}"
+                          IsEnabled="{Binding IsServiceSelected}">
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
         </ListView>
 
         <Grid 

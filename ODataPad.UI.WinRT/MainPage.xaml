@@ -22,19 +22,26 @@
             Source="{Binding Services}"/>
 
         <common:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <common:BooleanNegationConverter x:Key="BoolInverted" />
     </Page.Resources>
 
     <common:LayoutAwarePage.BottomAppBar>
-        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Opened="bottomAppBar_Opened" Closed="bottomAppBar_Closed">
+        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" 
+                IsOpen="{Binding IsServiceEditInProgress, Converter={StaticResource BoolInverted}}">
             <Grid>
                 <StackPanel x:Name="leftStackPanel" Orientation="Horizontal" HorizontalAlignment="Left">
                     <!--Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/-->
-                    <Button Style="{StaticResource EditAppBarButtonStyle}" Click="editButton_Click"/>
-                    <Button Style="{StaticResource RemoveAppBarButtonStyle}" Click="removeButton_Click"/>
+                    <Button Style="{StaticResource EditAppBarButtonStyle}" 
+                            Visibility="{Binding Path=IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
+                            Command="{Binding EditServiceCommand, Mode=OneWay}"/>
+                    <Button Style="{StaticResource RemoveAppBarButtonStyle}" 
+                            Visibility="{Binding Path=IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
+                            Command="{Binding RemoveServiceCommand, Mode=OneWay}"/>
                     <!--Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="refreshButton_Click"/-->
                 </StackPanel>
                 <StackPanel x:Name="rightStackPanel" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource AddAppBarButtonStyle}" Click="addButton_Click"/>
+                    <Button Style="{StaticResource AddAppBarButtonStyle}" 
+                            Command="{Binding AddServiceCommand, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
         </AppBar>
@@ -240,35 +247,12 @@
         </Grid>
 
         <Popup x:Name="editPopup" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="620" HorizontalAlignment="Center"
-                IsLightDismissEnabled="True">
+               IsOpen="{Binding IsServiceEditInProgress}"
+               IsLightDismissEnabled="True">
 
             <Border x:Name="editBorder" Background="RoyalBlue">
 
-                <Grid x:Name="editPanel">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel>
-                        <Button x:Name="editBackButton" 
-                    Style="{StaticResource BackButtonStyle}" HorizontalAlignment="Center" Margin="20,15,20,0"
-                        Click="editBackButton_Click" />
-                        <Button x:Name="editSaveButton" HorizontalAlignment="Center" Margin="0,120,0,0"
-                        Style="{StaticResource SaveAppBarButtonStyle}" Click="editSaveButton_Click"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Margin="0,10,20,20">
-                        <TextBlock Grid.Column="1" Text="Service Details" Margin="0,0,0,15" Style="{StaticResource SubheaderTextStyle}"/>
-                        <TextBlock Text="Name:" Margin="0,0,0,5" Style="{StaticResource BasicTextStyle}"/>
-                        <TextBox x:Name="serviceName" Width="250" HorizontalAlignment="Left" TextChanged="serviceName_TextChanged" />
-                        <TextBlock Text="URL:" Margin="0,5,0,5" Style="{StaticResource BasicTextStyle}" />
-                        <TextBox x:Name="serviceUrl" Width="500" InputScope="Url" TextChanged="serviceUrl_TextChanged"/>
-                        <TextBlock Text="Description:" Margin="0,5,0,5" Style="{StaticResource BasicTextStyle}" />
-                        <TextBox x:Name="serviceDescription" Width="500" AcceptsReturn="True" TextChanged="serviceDescription_TextChanged" />
-                    </StackPanel>
-                </Grid>
+                <local:ServiceEditControl Visibility="{Binding IsServiceEditInProgress, Converter={StaticResource BoolToVisibility}}"/>
 
             </Border>
         </Popup>

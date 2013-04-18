@@ -23,6 +23,51 @@ namespace ODataPad.Core.ViewModels
 
         public HomeViewModelBase Self { get { return this; } }
 
+        public ICommand AddServiceCommand
+        {
+            get { return new MvxCommand(AddService); }
+        }
+
+        public virtual void AddService()
+        {
+        }
+
+        public ICommand EditServiceCommand
+        {
+            get { return new MvxCommand(AddService); }
+        }
+
+        public virtual void EditService()
+        {
+        }
+
+        public ICommand RemoveServiceCommand
+        {
+            get { return new MvxCommand(AddService); }
+        }
+
+        public virtual void RemoveService()
+        {
+        }
+
+        private bool _isServiceEditInProgress;
+        public bool IsServiceEditInProgress
+        {
+            get { return _isServiceEditInProgress; }
+            set { _isServiceEditInProgress = value; RaisePropertyChanged(() => IsServiceEditInProgress); }
+        }
+
+        private ServiceViewModel _editedService;
+        public ServiceViewModel EditedService
+        {
+            get { return _editedService; }
+            set
+            {
+                _editedService = value;
+                RaisePropertyChanged(() => EditedService);
+            }
+        }
+
         private ObservableCollection<ServiceViewModel> _services;
         public ObservableCollection<ServiceViewModel> Services
         {
@@ -43,9 +88,13 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public virtual ICommand SelectServiceCommand
+        public ICommand SelectServiceCommand
         {
-            get { return null; }
+            get { return new MvxCommand(SelectService); }
+        }
+
+        public virtual void SelectService()
+        {
         }
 
         private bool _isServiceSelected;
@@ -69,9 +118,13 @@ namespace ODataPad.Core.ViewModels
             set { _selectedCollection = value; RaisePropertyChanged(() => SelectedCollection); }
         }
 
-        public virtual ICommand SelectCollectionCommand
+        public ICommand SelectCollectionCommand
         {
-            get { return null; }
+            get { return new MvxCommand(SelectCollection); }
+        }
+
+        public virtual void SelectCollection()
+        {
         }
 
         private readonly ObservableCollection<string> _collectionModes; 
@@ -94,9 +147,13 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public virtual ICommand SelectCollectionModeCommand 
+        public ICommand SelectCollectionModeCommand
         {
-            get { return null; }
+            get { return new MvxCommand(SelectCollectionMode); }
+        }
+
+        public virtual void SelectCollectionMode()
+        {
         }
 
         private bool _isQueryInProgress;
@@ -106,9 +163,13 @@ namespace ODataPad.Core.ViewModels
             set { _isQueryInProgress = value; RaisePropertyChanged(() => IsQueryInProgress); }
         }
 
-        public virtual ICommand LoadMoreResultsCommand
+        public ICommand LoadMoreResultsCommand
         {
-            get { return null; }
+            get { return new MvxCommand<bool>(x => { if (x) LoadMoreResults(); }); }
+        }
+
+        public virtual void LoadMoreResults()
+        {
         }
 
         private ResultViewModel _selectedResult;
@@ -124,14 +185,23 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public virtual ICommand SelectResultCommand
+        public ICommand SelectResultCommand
         {
-            get { return null; }
+            get { return new MvxCommand(SelectResult); }
         }
 
-        public virtual ICommand UnselectResultCommand
+        public virtual void SelectResult()
         {
-            get { return null; }
+        }
+
+        public ICommand UnselectResultCommand
+        {
+             get { return new MvxCommand(CollapseResult); } 
+        }
+
+        public virtual void CollapseResult()
+        {
+            this.SelectedResult = null;
         }
 
         private string _selectedResultDetails;
