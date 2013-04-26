@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1A4D9DA-E7E7-4821-BD53-EA57C0CFD3FE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ODataPad.Samples</RootNamespace>
+    <AssemblyName>ODataPad.Samples</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile158</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <EmbeddedResource Include="Schemas\DBpedia.edmx" />
+    <EmbeddedResource Include="Schemas\Devexpress Channel.edmx" />
+    <EmbeddedResource Include="Schemas\ebay.edmx" />
+    <EmbeddedResource Include="Schemas\nerddinner.edmx" />
+    <EmbeddedResource Include="Schemas\Netflix.edmx" />
+    <EmbeddedResource Include="Schemas\Northwind Service.edmx" />
+    <EmbeddedResource Include="Schemas\NuGet.edmx" />
+    <EmbeddedResource Include="Schemas\OData.org.edmx" />
+    <EmbeddedResource Include="Schemas\Pluralsight.edmx" />
+    <EmbeddedResource Include="Schemas\Stack Overflow.edmx" />
+    <EmbeddedResource Include="Schemas\twitpic.edmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DesignData.cs" />
+    <Compile Include="DesignHomeViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ImagesBase64\Custom.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\DBpedia.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\Devexpress Channel.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\ebay.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\nerddinner.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\Netflix.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\Northwind Service.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\NuGet.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\OData.org.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\Pluralsight.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\Stack Overflow.png.base64" />
+    <EmbeddedResource Include="ImagesBase64\twitpic.png.base64" />
+    <None Include="app.config" />
+    <None Include="Images\Custom.png" />
+    <None Include="Images\DBpedia.png" />
+    <None Include="Images\Devexpress Channel.png" />
+    <None Include="Images\ebay.png" />
+    <None Include="Images\nerddinner.png" />
+    <None Include="Images\Netflix.png" />
+    <None Include="Images\Northwind Service.png" />
+    <None Include="Images\Nuget.png" />
+    <None Include="Images\OData.org.png" />
+    <None Include="Images\Pluralsight.png" />
+    <None Include="Images\Stack Overflow.png" />
+    <None Include="Images\twitpic.png" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SampleServices.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
+      <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
+      <Name>Cirrious.MvvmCross</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\CrossCore\Cirrious.CrossCore\Cirrious.CrossCore.csproj">
+      <Project>{cff6f25a-3c3b-44ee-a54c-2ed4aaff3adb}</Project>
+      <Name>Cirrious.CrossCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
+      <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
+      <Name>ODataPad.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\portable-net40+sl4+win8+wp71\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\portable-net40+sl4+win8+wp71\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\portable-net40+sl5+win8+wp8\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\portable-net40+sl5+win8+wp8\System.Threading.Tasks.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,4 +1,6 @@
-﻿using System.Windows.Threading;
+﻿using System;
+using System.Windows;
+using System.Windows.Threading;
 using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Wpf.Platform;

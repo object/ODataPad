@@ -5,13 +5,14 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Cirrious.MvvmCross.WindowsPhone.Views;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using ODataPad.UI.WP8.Resources;
 
 namespace ODataPad.UI.WP8
 {
-    public partial class MainPage : PhoneApplicationPage
+    public partial class MainPage : MvxPhonePage
     {
         // Constructor
         public MainPage()

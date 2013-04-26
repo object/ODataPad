@@ -20,6 +20,7 @@ namespace ODataPad.Core.ViewModels
         public string Url { get { return _serviceInfo.Url; } }
         public string ImagePath { get { return GetImagePath(); } }
         public object Image { get; set; }
+        public string ImageBase64 { get { return _serviceInfo.ImageBase64; } }
         public string MetadataCache { get { return _serviceInfo.MetadataCache; } }
 
         public void UpdateDefinition(ServiceInfo serviceInfo)
@@ -27,6 +28,11 @@ namespace ODataPad.Core.ViewModels
             _serviceInfo.Name = serviceInfo.Name;
             _serviceInfo.Url = serviceInfo.Url;
             _serviceInfo.Description = serviceInfo.Description;
+        }
+
+        public void UpdateImageBase64(string imageBase64)
+        {
+            _serviceInfo.ImageBase64 = imageBase64;
         }
 
         public void UpdateMetadata(string metadata)

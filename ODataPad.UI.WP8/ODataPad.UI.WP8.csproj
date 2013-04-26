@@ -93,6 +93,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\Base64ImageConverter.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -109,6 +110,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Common\CustomStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -146,6 +151,28 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross.WindowsPhone\Cirrious.MvvmCross.WindowsPhone.csproj">
+      <Project>{A9F1C41F-FBC3-4DE3-8572-68990C1BCFC3}</Project>
+      <Name>Cirrious.MvvmCross.WindowsPhone</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
+      <Project>{B6E27475-E7D0-448C-A5CC-5097DCA1E2DD}</Project>
+      <Name>Cirrious.MvvmCross</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\CrossCore\Cirrious.CrossCore\Cirrious.CrossCore.csproj">
+      <Project>{CFF6F25A-3C3B-44EE-A54C-2ED4AAFF3ADB}</Project>
+      <Name>Cirrious.CrossCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
+      <Project>{D30AD8D0-4452-4F6E-BE1B-D8097EC3B53D}</Project>
+      <Name>ODataPad.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ODataPad.Samples\ODataPad.Samples.csproj">
+      <Project>{A1A4D9DA-E7E7-4821-BD53-EA57C0CFD3FE}</Project>
+      <Name>ODataPad.Samples</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

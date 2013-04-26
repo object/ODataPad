@@ -9,6 +9,7 @@ namespace ODataPad.Core.Models
         public string Description { get; set; }
         public string Url { get; set; }
         public string Logo { get; set; }
+        public string ImageBase64 { get; set; }
         public string MetadataCache { get; set; }
         public DateTimeOffset? CacheUpdated { get; set; }
         public string MetadataCacheFilename { get { return this.Name + ".edmx"; } }

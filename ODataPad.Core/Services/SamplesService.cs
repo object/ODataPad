@@ -173,7 +173,7 @@ namespace ODataPad.Core.Services
             }
         }
 
-        private IEnumerable<ServiceInfo> ParseSamplesXml(string xml)
+        public static IEnumerable<ServiceInfo> ParseSamplesXml(string xml)
         {
             XElement element = XElement.Parse(xml);
             var samples = element.Elements("Service").Select(ServiceInfo.Parse);

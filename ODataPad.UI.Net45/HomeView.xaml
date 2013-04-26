@@ -8,8 +8,9 @@
              xmlns:common="clr-namespace:ODataPad.UI.Net45.Common"
              xmlns:net45="clr-namespace:ODataPad.UI.Net45"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
-             d:DataContext="{d:DesignInstance Type=net45:PlatformFakeHomeViewModel, IsDesignTimeCreatable=True}"
+                xmlns:samples="clr-namespace:ODataPad.Samples;assembly=ODataPad.Samples"
+                DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
+             d:DataContext="{d:DesignInstance Type=samples:DesignHomeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
              >
@@ -24,8 +25,8 @@
             HorizontalAlignment="Left" Height="500" Margin="31,27,0,0" VerticalAlignment="Top" Width="350"
             ItemsSource="{Binding Services}"
             SelectedItem="{Binding SelectedService, Mode=TwoWay}"
-            ItemTemplate="{StaticResource ServiceItemTemplate}" 
             SelectionMode="Single" 
+            ItemTemplate="{StaticResource ServiceItemTemplate}"
             Background="{StaticResource MainBackgroundBrush}" 
             BorderBrush="{StaticResource MainBackgroundBrush}" >
             <i:Interaction.Triggers>

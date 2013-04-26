@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
@@ -9,7 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace ODataPad.UI.WinRT.Common
 {
-    public class Base64ImageConverter : IValueConverter
+    public sealed class Base64ImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -18,24 +19,23 @@ namespace ODataPad.UI.WinRT.Common
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
-        public async Task<object> ConvertAsync(object value, Type targetType, object parameter, string language)
+        public async Task<BitmapImage> ConvertAsync(object value, Type targetType, object parameter, string language)
         {
-            byte[] bytes = System.Convert.FromBase64String((string)value);
+            var bytes = System.Convert.FromBase64String((string)value);
 
             var image = new BitmapImage();
-            if (bytes == null || bytes.Length <= 0)
-                return image;
-
-            using (var stream = new MemoryStream(bytes))
+            var ras = new InMemoryRandomAccessStream();
+            using (var writer = new DataWriter(ras.GetOutputStreamAt(0)))
             {
-                var ras = new InMemoryRandomAccessStream();
-                await stream.CopyToAsync(ras.AsStreamForWrite());
-                image.SetSource(ras);
-                return image;
+                writer.WriteBytes(bytes);
+                await writer.StoreAsync();
             }
+
+            image.SetSource(ras);
+            return image;
         }
     }
 }
