@@ -10,10 +10,12 @@ namespace ODataPad.UI.WP8.Common
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var bytes = System.Convert.FromBase64String((string)value);
-
             var image = new BitmapImage();
-            image.SetSource(new MemoryStream(bytes));
+            if (value != null)
+            {
+                var bytes = System.Convert.FromBase64String((string)value);
+                image.SetSource(new MemoryStream(bytes));
+            }
             return image;
         }
 

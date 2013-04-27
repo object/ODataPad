@@ -11,12 +11,15 @@ namespace ODataPad.UI.Net45.Common
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var bytes = System.Convert.FromBase64String((string)value);
-
             var image = new BitmapImage();
-            image.BeginInit();
-            image.StreamSource = new MemoryStream(bytes);
-            image.EndInit();
+            if (value != null)
+            {
+                var bytes = System.Convert.FromBase64String((string)value);
+
+                image.BeginInit();
+                image.StreamSource = new MemoryStream(bytes);
+                image.EndInit();
+            }
             return image;
         }
 

@@ -9,7 +9,7 @@ namespace ODataPad.Core.ViewModels
     public class ServiceEditViewModel : MvxViewModel
     {
         public ServiceEditViewModel Self { get { return this; } }
-        public HomeViewModelBase ViewModel { get; set; }
+        public HomeViewModelBase Home { get; set; }
 
         private ServiceViewModel _sourceService;
         public ServiceViewModel SourceService
@@ -75,12 +75,12 @@ namespace ODataPad.Core.ViewModels
         {
             // TODO: add or update service
 
-            this.ViewModel.IsServiceEditInProgress = false;
+            this.Home.IsServiceEditInProgress = false;
         }
 
         private void CancelServiceEdit()
         {
-            this.ViewModel.IsServiceEditInProgress = false;
+            this.Home.IsServiceEditInProgress = false;
         }
 
         private void RefreshSaveButtonState()
@@ -93,7 +93,7 @@ namespace ODataPad.Core.ViewModels
 
         public bool ServiceHasUniqueName()
         {
-            return this.ViewModel.Services.All(x => x.Name != this.Name);
+            return this.Home.Services.All(x => x.Name != this.Name);
         }
 
 

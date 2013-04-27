@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Xml.Linq;
 using Cirrious.CrossCore.IoC;
-using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
@@ -30,16 +28,16 @@ namespace ODataPad.Core.ViewModels
             _resultProvider = Mvx.Resolve<IResultProvider>();
 
             PrepareApplicationDataAsync();
+
+            this.SelectedService = null;
+            this.IsServiceSelected = false;
+            this.IsQueryInProgress = false;
         }
 
         private async Task PrepareApplicationDataAsync()
         {
             await EnsureDataVersionAsync();
             await PopulateServicesAsync();
-
-            this.SelectedService = null;
-            this.IsServiceSelected = false;
-            this.IsQueryInProgress = false;
         }
 
         private async Task EnsureDataVersionAsync()

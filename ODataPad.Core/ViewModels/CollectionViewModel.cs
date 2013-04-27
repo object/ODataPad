@@ -10,14 +10,14 @@ namespace ODataPad.Core.ViewModels
         private readonly ServiceCollection _serviceCollection;
         private readonly List<SchemaElementViewModel> _schemaElements;
 
-        public CollectionViewModel(HomeViewModelBase viewModel, ServiceCollection serviceCollection)
+        public CollectionViewModel(HomeViewModelBase home, ServiceCollection serviceCollection)
         {
-            this.ViewModel = viewModel;
+            this.Home = home;
             _serviceCollection = serviceCollection;
             _schemaElements = PopulateSchemaElements();
         }
 
-        public HomeViewModelBase ViewModel { get; set; }
+        public HomeViewModelBase Home { get; set; }
         public string Name { get { return _serviceCollection.Name; } }
         public string Summary { get { return GetCollectionSummary(); } }
         public ObservableCollection<CollectionProperty> Properties { get { return _serviceCollection.Properties; } }

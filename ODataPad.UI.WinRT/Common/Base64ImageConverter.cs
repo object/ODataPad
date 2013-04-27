@@ -24,17 +24,21 @@ namespace ODataPad.UI.WinRT.Common
 
         public async Task<BitmapImage> ConvertAsync(object value, Type targetType, object parameter, string language)
         {
-            var bytes = System.Convert.FromBase64String((string)value);
-
             var image = new BitmapImage();
-            var ras = new InMemoryRandomAccessStream();
-            using (var writer = new DataWriter(ras.GetOutputStreamAt(0)))
-            {
-                writer.WriteBytes(bytes);
-                await writer.StoreAsync();
-            }
 
-            image.SetSource(ras);
+            if (value != null)
+            {
+                var bytes = System.Convert.FromBase64String((string)value);
+
+                var ras = new InMemoryRandomAccessStream();
+                using (var writer = new DataWriter(ras.GetOutputStreamAt(0)))
+                {
+                    writer.WriteBytes(bytes);
+                    await writer.StoreAsync();
+                }
+
+                image.SetSource(ras);
+            }
             return image;
         }
     }

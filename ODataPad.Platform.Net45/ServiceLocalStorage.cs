@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
+using ODataPad.Core.Services;
 
 namespace ODataPad.Platform.Net45
 {
@@ -34,6 +35,14 @@ namespace ODataPad.Platform.Net45
                 foreach (var element in elements)
                 {
                     var serviceInfo = ServiceInfo.Parse(element.ToString());
+                    var imageFilePath = Path.Combine(ServiceDataFolder, serviceInfo.Name + ".png.base64");
+                    if (File.Exists(imageFilePath))
+                    {
+                        using (var reader = new StreamReader(imageFilePath))
+                        {
+                            serviceInfo.ImageBase64 = reader.ReadToEnd();
+                        }
+                    }
                     services.Add(serviceInfo);
                 }
             }

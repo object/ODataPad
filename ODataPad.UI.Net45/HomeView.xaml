@@ -66,8 +66,8 @@
             <ListView 
             DataContext="{Binding SelectedService}"
                 HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
-                    ItemsSource="{Binding ViewModel.Collections, Mode=TwoWay}"
-                    SelectedItem="{Binding ViewModel.SelectedCollection, Mode=TwoWay}"
+                    ItemsSource="{Binding Home.Collections, Mode=TwoWay}"
+                    SelectedItem="{Binding Home.SelectedCollection, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}"
                     SelectionMode="Single" 
                     Background="{StaticResource MainBackgroundBrush}" 
@@ -75,7 +75,7 @@
                 >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding ViewModel.SelectCollectionCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding Home.SelectCollectionCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
@@ -115,7 +115,7 @@
                         TabIndex="3"
                         DataContext="{Binding SelectedCollection}"
                         ItemsSource="{Binding SchemaElements}" 
-                        Visibility="{Binding Path=ViewModel.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=Home.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                         ItemTemplate="{StaticResource CollectionElementItemTemplate}"
                         Background="{StaticResource MainBackgroundBrush}" 
                         BorderBrush="{StaticResource MainBackgroundBrush}">
@@ -128,8 +128,8 @@
                         TabIndex="3"
                         DataContext="{Binding SelectedCollection}"
                         ItemsSource="{Binding QueryResults}"
-                        Visibility="{Binding Path=ViewModel.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
-                        SelectedItem="{Binding ViewModel.SelectedResult, Mode=TwoWay}"
+                        Visibility="{Binding Path=Home.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+                        SelectedItem="{Binding Home.SelectedResult, Mode=TwoWay}"
                         SelectionMode="Single" 
                         ItemTemplate="{StaticResource ResultItemTemplate}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -137,10 +137,10 @@
                         BorderBrush="{StaticResource MainBackgroundBrush}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding ViewModel.SelectResultCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding Home.SelectResultCommand}"/>
                             </i:EventTrigger>
                             <common:RoutedEventTrigger RoutedEvent="ScrollViewer.ScrollChanged">
-                                <common:ScrollChangedEventToCommand Command="{Binding ViewModel.LoadMoreResultsCommand}"/>
+                                <common:ScrollChangedEventToCommand Command="{Binding Home.LoadMoreResultsCommand}"/>
                             </common:RoutedEventTrigger>
                         </i:Interaction.Triggers>
                     </ListView>

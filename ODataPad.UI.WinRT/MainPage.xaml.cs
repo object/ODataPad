@@ -28,7 +28,7 @@ namespace ODataPad.UI.WinRT
             SettingsPane.GetForCurrentView().CommandsRequested += MainPage_CommandsRequested;
         }
 
-        public new HomeViewModel ViewModel
+        public new HomeViewModel Home
         {
             get { return (HomeViewModel)base.ViewModel; }
             set { base.ViewModel = value; }
@@ -38,9 +38,9 @@ namespace ODataPad.UI.WinRT
 
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            if (this.ViewModel == null)
+            if (this.Home == null)
                 return;
-            var item = this.ViewModel.Services.Where(x => x.Name == navigationParameter.ToString());
+            var item = this.Home.Services.Where(x => x.Name == navigationParameter.ToString());
             if (item == null)
                 return;
 
@@ -55,7 +55,7 @@ namespace ODataPad.UI.WinRT
             {
                 if (pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null)
                 {
-                    var selectedItem = this.ViewModel.Services.Single(x => x.Name == (String)pageState["SelectedItem"]);
+                    var selectedItem = this.Home.Services.Single(x => x.Name == (String)pageState["SelectedItem"]);
                     this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
@@ -213,7 +213,7 @@ namespace ODataPad.UI.WinRT
                 Description = service.Description,
                 Logo = "Custom",
             };
-            await this.ViewModel.AddServiceItemAsync(serviceInfo);
+            await this.Home.AddServiceItemAsync(serviceInfo);
         }
 
         private async void UpdateServiceAsync(ServiceEditViewModel service)
@@ -226,13 +226,13 @@ namespace ODataPad.UI.WinRT
                 Logo = Path.GetFileNameWithoutExtension(service.SourceService.ImagePath),
             };
             serviceInfo.MetadataCache = null;
-            await this.ViewModel.UpdateServiceItemAsync(service.SourceService, serviceInfo);
+            await this.Home.UpdateServiceItemAsync(service.SourceService, serviceInfo);
         }
 
         private async void RemoveServiceAsync()
         {
             var item = this.itemListView.SelectedItem as ServiceViewModel;
-            await this.ViewModel.RemoveServiceItemAsync(item);
+            await this.Home.RemoveServiceItemAsync(item);
         }
     }
 }

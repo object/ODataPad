@@ -8,13 +8,13 @@ namespace ODataPad.Core.ViewModels
     {
         private readonly ServiceInfo _serviceInfo;
 
-        public ServiceViewModel(HomeViewModelBase viewModel, ServiceInfo serviceInfo)
+        public ServiceViewModel(HomeViewModelBase home, ServiceInfo serviceInfo)
         {
-            this.ViewModel = viewModel;
+            this.Home = home;
             _serviceInfo = serviceInfo;
         }
 
-        public HomeViewModelBase ViewModel { get; set; }
+        public HomeViewModelBase Home { get; set; }
         public string Name { get { return _serviceInfo.Name; } }
         public string Description { get { return _serviceInfo.Description; } }
         public string Url { get { return _serviceInfo.Url; } }
