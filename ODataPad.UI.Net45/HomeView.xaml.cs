@@ -27,7 +27,7 @@ namespace ODataPad.UI.Net45
             InitializeComponent();
         }
 
-        public new HomeViewModel Home 
+        public new HomeViewModel ViewModel
         { 
             get { return base.ViewModel as HomeViewModel; }
             set { base.ViewModel = value; }
