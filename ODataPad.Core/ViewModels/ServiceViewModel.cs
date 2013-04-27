@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
@@ -19,7 +20,7 @@ namespace ODataPad.Core.ViewModels
         public string Description { get { return _serviceInfo.Description; } }
         public string Url { get { return _serviceInfo.Url; } }
         public string ImagePath { get { return GetImagePath(); } }
-        public object Image { get; set; }
+        //public object Image { get; set; }
         public string ImageBase64 { get { return _serviceInfo.ImageBase64; } }
         public string MetadataCache { get { return _serviceInfo.MetadataCache; } }
 
@@ -30,9 +31,12 @@ namespace ODataPad.Core.ViewModels
             _serviceInfo.Description = serviceInfo.Description;
         }
 
-        public void UpdateImageBase64(string imageBase64)
+        public void ReadImageBase64(Stream stream)
         {
-            _serviceInfo.ImageBase64 = imageBase64;
+            using (var reader = new StreamReader(stream))
+            {
+                _serviceInfo.ImageBase64 = reader.ReadToEnd();
+            }
         }
 
         public void UpdateMetadata(string metadata)
@@ -42,7 +46,7 @@ namespace ODataPad.Core.ViewModels
 
         private string GetImagePath()
         {
-            return "Samples/" + (string.IsNullOrEmpty(_serviceInfo.Logo) ? this.Name : _serviceInfo.Logo) + ".png";
+            return "Samples/" + (string.IsNullOrEmpty(_serviceInfo.Logo) ? this.Name : _serviceInfo.Logo) + ".png.base64";
         }
     }
 }

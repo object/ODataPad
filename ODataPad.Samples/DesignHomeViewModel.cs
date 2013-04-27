@@ -32,10 +32,7 @@ namespace ODataPad.Samples
                 {
                     stream = typeof(DesignHomeViewModel).Assembly
                         .GetManifestResourceStream(string.Join(".", namespaceName, "ImagesBase64", service.Name, "png", "base64"));
-                    using (var reader = new StreamReader(stream))
-                    {
-                        service.UpdateImageBase64(reader.ReadToEnd());
-                    }
+                    service.ReadImageBase64(stream);
                 }
 
                 this.SelectedService = this.Services.First();

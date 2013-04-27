@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -53,7 +54,6 @@ namespace ODataPad.Core.ViewModels
             foreach (var serviceInfo in _serviceRepository.Services)
             {
                 var serviceItem = new ServiceViewModel(this, serviceInfo);
-                serviceItem.Image = _imageProvider.GetImage(serviceItem.ImagePath);
                 //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
             }

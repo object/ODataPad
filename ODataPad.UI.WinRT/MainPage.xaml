@@ -9,7 +9,7 @@
     xmlns:local="using:ODataPad.UI.WinRT"
     xmlns:common="using:ODataPad.UI.WinRT.Common"
     xmlns:viewModels="using:ODataPad.Core.ViewModels" 
-    xmlns:winrt="using:ODataPad.Platform.WinRT" xmlns:samples="using:ODataPad.Samples"
+    xmlns:samples="using:ODataPad.Samples"
     DataContext="{Binding viewModels:HomeViewModel.Self, RelativeSource={RelativeSource Self}}"
     d:DataContext="{d:DesignInstance Type=samples:DesignHomeViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d"
