@@ -223,7 +223,6 @@ namespace ODataPad.UI.WinRT
                 Name = service.Name,
                 Url = service.Url,
                 Description = service.Description,
-                Logo = Path.GetFileNameWithoutExtension(service.SourceService.ImagePath),
             };
             serviceInfo.MetadataCache = null;
             await this.ViewModel.UpdateServiceItemAsync(service.SourceService, serviceInfo);

@@ -36,17 +36,17 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <EmbeddedResource Include="Schemas\DBpedia.edmx" />
-    <EmbeddedResource Include="Schemas\Devexpress Channel.edmx" />
-    <EmbeddedResource Include="Schemas\ebay.edmx" />
-    <EmbeddedResource Include="Schemas\nerddinner.edmx" />
-    <EmbeddedResource Include="Schemas\Netflix.edmx" />
-    <EmbeddedResource Include="Schemas\Northwind Service.edmx" />
-    <EmbeddedResource Include="Schemas\NuGet.edmx" />
-    <EmbeddedResource Include="Schemas\OData.org.edmx" />
-    <EmbeddedResource Include="Schemas\Pluralsight.edmx" />
-    <EmbeddedResource Include="Schemas\Stack Overflow.edmx" />
-    <EmbeddedResource Include="Schemas\twitpic.edmx" />
+    <EmbeddedResource Include="Metadata\DBpedia.edmx" />
+    <EmbeddedResource Include="Metadata\Devexpress Channel.edmx" />
+    <EmbeddedResource Include="Metadata\ebay.edmx" />
+    <EmbeddedResource Include="Metadata\nerddinner.edmx" />
+    <EmbeddedResource Include="Metadata\Netflix.edmx" />
+    <EmbeddedResource Include="Metadata\Northwind Service.edmx" />
+    <EmbeddedResource Include="Metadata\NuGet.edmx" />
+    <EmbeddedResource Include="Metadata\OData.org.edmx" />
+    <EmbeddedResource Include="Metadata\Pluralsight.edmx" />
+    <EmbeddedResource Include="Metadata\Stack Overflow.edmx" />
+    <EmbeddedResource Include="Metadata\twitpic.edmx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DesignData.cs" />

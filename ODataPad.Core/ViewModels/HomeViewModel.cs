@@ -17,7 +17,6 @@ namespace ODataPad.Core.ViewModels
         private readonly IServiceRepository _serviceRepository;
         private readonly IServiceLocalStorage _localStorage;
         private readonly IApplicationLocalData _localData;
-        private readonly IImageProvider _imageProvider;
         private readonly IResultProvider _resultProvider;
 
         public HomeViewModel()
@@ -25,7 +24,6 @@ namespace ODataPad.Core.ViewModels
             _serviceRepository = Mvx.Resolve<IServiceRepository>();
             _localStorage = Mvx.Resolve<IServiceLocalStorage>();
             _localData = Mvx.Resolve<IApplicationLocalData>();
-            _imageProvider = Mvx.Resolve<IImageProvider>();
             _resultProvider = Mvx.Resolve<IResultProvider>();
 
             PrepareApplicationDataAsync();
@@ -190,7 +188,7 @@ namespace ODataPad.Core.ViewModels
             {
                 serviceItem.UpdateMetadata(service.MetadataCache);
             }
-            await _localStorage.SaveServiceMetadataAsync(service.MetadataCacheFilename, service.MetadataCache);
+            await _localStorage.SaveServiceDetailsAsync(service);
         }
 
         private async Task RequestCollectionData()

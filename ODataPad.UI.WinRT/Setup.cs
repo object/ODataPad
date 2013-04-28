@@ -22,13 +22,12 @@ namespace ODataPad.UI.WinRT
             Mvx.RegisterSingleton<IResourceManager>(new ResourceManager());
             Mvx.RegisterSingleton<IServiceLocalStorage>(new ServiceLocalStorage());
             Mvx.RegisterSingleton<IApplicationLocalData>(new ApplicationLocalData());
-            Mvx.RegisterSingleton<IImageProvider>(new ImageProvider());
             Mvx.RegisterSingleton<IResultProvider>(new ResultProvider());
         }
 
         protected override IMvxApplication CreateApp()
         {
-            return new ODataPadApp("Samples", "SampleServices.xml");
+            return new ODataPadApp("ODataPad.Samples", "SampleServices.xml");
         }
     }
 }

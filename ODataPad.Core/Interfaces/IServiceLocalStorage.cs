@@ -8,8 +8,9 @@ namespace ODataPad.Core.Interfaces
     {
         Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync();
         Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos);
-        Task<string> LoadServiceMetadataAsync(string filename);
-        Task SaveServiceMetadataAsync(string filename, string metadata);
-        Task ClearServicesAsync();
+        Task ClearServiceInfosAsync();
+        Task LoadServiceDetailsAsync(ServiceInfo serviceInfo);
+        Task SaveServiceDetailsAsync(ServiceInfo serviceInfo);
+        Task ClearServiceDetailsAsync(ServiceInfo serviceInfo);
     }
 }

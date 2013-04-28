@@ -14,7 +14,7 @@ namespace ODataPad.Core.Services
     {
         private readonly IResourceManager _resourceManager;
         private readonly IServiceLocalStorage _localStorage;
-        private readonly string _folderName;
+        private readonly string _moduleName;
         private readonly string _samplesFilename;
         private readonly int _previousDataVersion;
         private readonly int _currentDataVersion;
@@ -57,14 +57,14 @@ namespace ODataPad.Core.Services
         private static readonly DateTime SampleCreationTime = new DateTime(2012, 11, 10);
 
         public SamplesService(
-            string folderName, string samplesFilename,
+            string moduleName, string samplesFilename,
             int previousDataVersion, int currentDataVersion,
             IResourceManager resourceManager = null, IServiceLocalStorage localStorage = null)
         {
             _resourceManager = resourceManager ?? Mvx.Resolve<IResourceManager>();
             _localStorage = localStorage ?? Mvx.Resolve<IServiceLocalStorage>();
 
-            _folderName = folderName;
+            _moduleName = moduleName;
             _samplesFilename = samplesFilename;
             _previousDataVersion = previousDataVersion;
             _currentDataVersion = currentDataVersion;
@@ -72,7 +72,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetAllSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = NewSamples.Where(sample => sample.Key > _currentDataVersion)
@@ -85,7 +85,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = NewSamples
@@ -97,7 +97,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = UpdatedSamples
@@ -109,7 +109,7 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync()
         {
-            var xml = await _resourceManager.LoadContentAsStringAsync(_folderName, _samplesFilename);
+            var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = ExpiredSample
@@ -129,11 +129,10 @@ namespace ODataPad.Core.Services
                 ++index;
             }
             await _localStorage.SaveServiceInfosAsync(allSamples);
-            var samplesWithMetadata = await GetSamplesMetadataAsync(allSamples);
-            foreach (var serviceInfo in samplesWithMetadata)
+            var samplesDetails = await GetSamplesDetailsAsync(allSamples);
+            foreach (var serviceInfo in samplesDetails)
             {
-                await _localStorage
-                    .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                await _localStorage.SaveServiceDetailsAsync(serviceInfo);
             }
         }
 
@@ -165,11 +164,10 @@ namespace ODataPad.Core.Services
             allServices = allServices.Union(updatedServices).ToList();
             allServices = allServices.Union(newServices).ToList();
             await _localStorage.SaveServiceInfosAsync(allServices);
-            var servicesWithMetadata = await GetSamplesMetadataAsync(allServices);
+            var servicesWithMetadata = await GetSamplesDetailsAsync(allServices);
             foreach (var serviceInfo in servicesWithMetadata)
             {
-                await _localStorage
-                    .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                await _localStorage.SaveServiceDetailsAsync(serviceInfo);
             }
         }
 
@@ -180,18 +178,20 @@ namespace ODataPad.Core.Services
             return samples;
         }
 
-        private async Task<IEnumerable<ServiceInfo>> GetSamplesMetadataAsync(IEnumerable<ServiceInfo> serviceInfos)
+        private async Task<IEnumerable<ServiceInfo>> GetSamplesDetailsAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
-            var samplesWithMetadata = new List<ServiceInfo>();
+            var samplesDetails = new List<ServiceInfo>();
             foreach (var serviceInfo in serviceInfos)
             {
-                var serviceInfoWithMetadata = serviceInfo;
-                serviceInfoWithMetadata.MetadataCache = await _resourceManager.LoadContentAsStringAsync(
-                    _folderName, serviceInfo.MetadataCacheFilename);
-                serviceInfoWithMetadata.CacheUpdated = new DateTimeOffset(SampleCreationTime);
-                samplesWithMetadata.Add(serviceInfoWithMetadata);
+                var serviceDetails = serviceInfo;
+                serviceDetails.MetadataCache = await _resourceManager.LoadResourceAsStringAsync(
+                    _moduleName, "Metadata", serviceInfo.MetadataCacheFilename);
+                serviceDetails.ImageBase64 = await _resourceManager.LoadResourceAsStringAsync(
+                    _moduleName, "ImagesBase64", serviceInfo.ImageBase64Filename);
+                serviceDetails.CacheUpdated = new DateTimeOffset(SampleCreationTime);
+                samplesDetails.Add(serviceDetails);
             }
-            return samplesWithMetadata;
+            return samplesDetails;
         }
     }
 }

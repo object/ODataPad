@@ -54,17 +54,16 @@ namespace ODataPad.Core.Services
 
         public async Task<IEnumerable<ServiceInfo>> LoadServicesAsync()
         {
-            var servicesWithMetadata = new List<ServiceInfo>();
+            var services = new List<ServiceInfo>();
             var serviceInfos = await _localStorage.LoadServiceInfosAsync();
             foreach (var serviceInfo in serviceInfos)
             {
-                var serviceInfoWithMetadata = serviceInfo;
-                serviceInfoWithMetadata.MetadataCache = await _localStorage
-                    .LoadServiceMetadataAsync(serviceInfo.MetadataCacheFilename);
-                servicesWithMetadata.Add(serviceInfoWithMetadata);
+                var serviceDetails = serviceInfo;
+                await _localStorage.LoadServiceDetailsAsync(serviceDetails);
+                services.Add(serviceDetails);
             }
 
-            this.Services = servicesWithMetadata.OrderBy(x => x.Index).Select(x => x).ToList();
+            this.Services = services.OrderBy(x => x.Index).Select(x => x).ToList();
             return this.Services;
         }
 
@@ -74,13 +73,13 @@ namespace ODataPad.Core.Services
             foreach (var serviceInfo in this.Services)
             {
                 await _localStorage
-                    .SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+                    .SaveServiceDetailsAsync(serviceInfo);
             }
         }
 
         public async Task ClearServicesAsync()
         {
-            await _localStorage.ClearServicesAsync();
+            await _localStorage.ClearServiceInfosAsync();
             this.Services = new ServiceInfo[] { };
         }
     }

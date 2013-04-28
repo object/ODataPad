@@ -117,7 +117,6 @@
     <Compile Include="..\Tests\SamplesServiceTests.cs">
       <Link>SamplesServiceTests.cs</Link>
     </Compile>
-    <Compile Include="ImageProviderTests.cs" />
     <Compile Include="MetadataServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -125,33 +124,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\DBpedia.edmx">
-      <Link>Samples\DBpedia.edmx</Link>
-    </Content>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\OData.org.edmx">
-      <Link>Samples\OData.org.edmx</Link>
-    </Content>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\Pluralsight.edmx">
-      <Link>Samples\Pluralsight.edmx</Link>
-    </Content>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\Stack Overflow.edmx">
-      <Link>Samples\Stack Overflow.edmx</Link>
-    </Content>
     <None Include="ODataPad.Tests.WinRT_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\DBpedia.png">
-      <Link>Samples\DBpedia.png</Link>
-    </Content>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\OData.org.png">
-      <Link>Samples\OData.org.png</Link>
-    </Content>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\Pluralsight.png">
-      <Link>Samples\Pluralsight.png</Link>
-    </Content>
-    <Content Include="..\ODataPad.UI.WinRT\Samples\Stack Overflow.png">
-      <Link>Samples\Stack Overflow.png</Link>
-    </Content>
     <Content Include="Images\UnitTestLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -165,14 +140,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Samples\ContentSampleServices.xml">
-      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Samples\EmbeddedSampleServices.xml" />
     <Content Include="Samples\SampleServices.xml">
-      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Samples\EmbeddedSampleServices.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
@@ -183,7 +156,12 @@
       <Project>{ece0cae6-b931-4036-9fb1-63170a811069}</Project>
       <Name>ODataPad.Platform.WinRT</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ODataPad.Samples\ODataPad.Samples.csproj">
+      <Project>{a1a4d9da-e7e7-4821-bd53-ea57c0cfd3fe}</Project>
+      <Name>ODataPad.Samples</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>

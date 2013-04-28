@@ -13,15 +13,13 @@ namespace ODataPad.Core
         : MvxApplication
     {
         public const int ApplicationDataVersion = 3;
-        public static string SamplesFolder;
-        public static string SamplesFilename;
+        private string _samplesModuleName;
+        private string _samplesFilename;
 
-        public ODataPadApp(
-            string samplesFolder,
-            string samplesFilename)
+        public ODataPadApp(string samplesModuleName, string samplesFilename)
         {
-            SamplesFolder = samplesFolder;
-            SamplesFilename = samplesFilename;
+            _samplesModuleName = samplesModuleName;
+            _samplesFilename = samplesFilename;
 
             InitalizeServices();
             InitializeStartNavigation();
@@ -38,8 +36,12 @@ namespace ODataPad.Core
 
         private void InitalizeServices()
         {
-            Mvx.RegisterSingleton<IServiceRepository>(new ServiceRepository());
-            Mvx.RegisterSingleton<IDataVersioningService>(new DataVersioningService());
+            Mvx.RegisterSingleton<IServiceRepository>(
+                new ServiceRepository());
+            Mvx.RegisterSingleton<ISamplesService>(
+                new SamplesService(_samplesModuleName, _samplesFilename, 3, 3));
+            Mvx.RegisterSingleton<IDataVersioningService>(
+                new DataVersioningService(this.SamplesService));
         }
 
         private void InitializeStartNavigation()

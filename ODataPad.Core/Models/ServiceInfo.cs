@@ -12,6 +12,7 @@ namespace ODataPad.Core.Models
         public string ImageBase64 { get; set; }
         public string MetadataCache { get; set; }
         public DateTimeOffset? CacheUpdated { get; set; }
+        public string ImageBase64Filename { get { return this.Name + ".png.base64"; } }
         public string MetadataCacheFilename { get { return this.Name + ".edmx"; } }
         public int Index { get; set; }
 

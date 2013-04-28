@@ -8,10 +8,12 @@ namespace ODataPad.Core.Services
     public class DataVersioningService
         : IDataVersioningService
     {
+        private readonly ISamplesService _samplesService;
         private readonly IServiceRepository _serviceRepository;
 
-        public DataVersioningService(IServiceRepository serviceRepository = null)
+        public DataVersioningService(ISamplesService samplesService, IServiceRepository serviceRepository = null)
         {
+            _samplesService = samplesService;
             _serviceRepository = serviceRepository ?? Mvx.Resolve<IServiceRepository>();
         }
 
@@ -20,7 +22,6 @@ namespace ODataPad.Core.Services
             if (currentVersion < 0 || requestedVersion < 0)
                 throw new InvalidOperationException("Current and requested data versions must be set prior to calling data versioning operations");
 
-            var samplesService = new SamplesService(ODataPadApp.SamplesFolder, ODataPadApp.SamplesFilename, currentVersion, requestedVersion);
             if (currentVersion != requestedVersion)
             {
                 if (requestedVersion <= 1)
@@ -29,7 +30,7 @@ namespace ODataPad.Core.Services
                 }
                 else
                 {
-                    await samplesService.UpdateSamplesAsync();
+                    await _samplesService.UpdateSamplesAsync();
                 }
             }
         }

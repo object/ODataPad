@@ -10,6 +10,8 @@ using ODataPad.Platform.Net45;
 #elif NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.Platform.WinRT;
+using ODataPad.Samples;
+
 #endif
 
 namespace ODataPad.Tests
@@ -23,7 +25,7 @@ namespace ODataPad.Tests
         public void TestInitialize()
         {
             _localStorage = new ServiceLocalStorage();
-            _localStorage.ClearServicesAsync().Wait();
+            _localStorage.ClearServiceInfosAsync().Wait();
         }
 
         [TestMethod]
@@ -42,9 +44,10 @@ namespace ODataPad.Tests
             Assert.IsTrue(services.All(x => x.Name != "Pluralsight"));
             Assert.AreEqual(0, services.Single(x => x.Name == "OData.org").Index);
             Assert.AreNotEqual(0, services.Single(x => x.Name == "Stack Overflow").Index);
-            var filename = services.Single(x => x.Name == "OData.org").MetadataCacheFilename;
-            var metadata = await _localStorage.LoadServiceMetadataAsync(filename);
-            Assert.IsNotNull(metadata);
+            var service = services.Single(x => x.Name == "OData.org");
+            await _localStorage.LoadServiceDetailsAsync(service);
+            Assert.IsNotNull(service.MetadataCache);
+            Assert.IsNotNull(service.ImageBase64);
         }
 
         [TestMethod]
@@ -56,9 +59,10 @@ namespace ODataPad.Tests
             Assert.IsTrue(services.Any(x => x.Name == "Pluralsight"));
             Assert.AreEqual(0, services.Single(x => x.Name == "OData.org").Index);
             Assert.AreNotEqual(0, services.Single(x => x.Name == "Stack Overflow").Index);
-            var filename = services.Single(x => x.Name == "OData.org").MetadataCacheFilename;
-            var metadata = await _localStorage.LoadServiceMetadataAsync(filename);
-            Assert.IsNotNull(metadata);
+            var service = services.Single(x => x.Name == "OData.org");
+            await _localStorage.LoadServiceDetailsAsync(service);
+            Assert.IsNotNull(service.MetadataCache);
+            Assert.IsNotNull(service.ImageBase64);
         }
 
         private async Task<IEnumerable<ServiceInfo>> UpdateSamplesAsync(int currentVersion, int requestedVersion)
@@ -67,14 +71,14 @@ namespace ODataPad.Tests
             for (int oldVersion = 1; oldVersion < currentVersion; oldVersion++)
             {
                 samplesService = new SamplesService(
-                    "Samples", "SampleServices.xml",
+                    typeof(ODataPad.Samples.DesignData).Namespace, "SampleServices.xml",
                     oldVersion, oldVersion + 1,
                     new ResourceManager(), new ServiceLocalStorage());
                 await samplesService.UpdateSamplesAsync();
             }
 
             samplesService = new SamplesService(
-                "Samples", "SampleServices.xml",
+                typeof(ODataPad.Samples.DesignData).Namespace, "SampleServices.xml",
                 currentVersion, requestedVersion,
                 new ResourceManager(), new ServiceLocalStorage());
             await samplesService.UpdateSamplesAsync();

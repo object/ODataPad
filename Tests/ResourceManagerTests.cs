@@ -46,19 +46,5 @@ namespace ODataPad.Tests
                 moduleName, "Samples", "EmbeddedSampleServices.xml");
             Assert.IsNotNull(text);
         }
-
-        [TestMethod]
-        public void GetImageResourcePath()
-        {
-            const string resourcePath =
-#if NET45
-            "pack://siteoforigin:,,,/Samples/OData.org.png";
-#elif NETFX_CORE
-            "ms-appx:///Samples/OData.org.png";
-#endif
-            var resourceManager = new ResourceManager();
-            var uri = resourceManager.GetResourceUri("Samples", "OData.org.png");
-            Assert.AreEqual(resourcePath, uri.ToString());
-        }
     }
 }

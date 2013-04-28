@@ -23,7 +23,7 @@ namespace ODataPad.Platform.Net45
             }
         }
 
-        public Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
+        public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {
             var services = new List<ServiceInfo>();
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
@@ -35,18 +35,11 @@ namespace ODataPad.Platform.Net45
                 foreach (var element in elements)
                 {
                     var serviceInfo = ServiceInfo.Parse(element.ToString());
-                    var imageFilePath = Path.Combine(ServiceDataFolder, serviceInfo.Name + ".png.base64");
-                    if (File.Exists(imageFilePath))
-                    {
-                        using (var reader = new StreamReader(imageFilePath))
-                        {
-                            serviceInfo.ImageBase64 = reader.ReadToEnd();
-                        }
-                    }
+                    await LoadServiceDetailsAsync(serviceInfo);
                     services.Add(serviceInfo);
                 }
             }
-            return Task.Factory.StartNew(() => services.Select(x => x));
+            return await Task.Factory.StartNew(() => services.Select(x => x));
         }
 
         public async Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
@@ -63,25 +56,7 @@ namespace ODataPad.Platform.Net45
             }
         }
 
-        public async Task<string> LoadServiceMetadataAsync(string filename)
-        {
-            var metadataFilePath = Path.Combine(ServiceDataFolder, filename);
-            using (var reader = new StreamReader(metadataFilePath))
-            {
-                return await reader.ReadToEndAsync();
-            }
-        }
-
-        public async Task SaveServiceMetadataAsync(string filename, string metadata)
-        {
-            var metadataFilePath = Path.Combine(ServiceDataFolder, filename);
-            using (var writer = new StreamWriter(metadataFilePath))
-            {
-                await writer.WriteAsync(metadata);
-            }
-        }
-
-        public async Task ClearServicesAsync()
+        public async Task ClearServiceInfosAsync()
         {
             await PurgeServiceInfosAsync(new List<ServiceInfo>());
 
@@ -90,6 +65,48 @@ namespace ODataPad.Platform.Net45
             {
                 File.Delete(serviceFilePath);
             }
+        }
+
+        public async Task LoadServiceDetailsAsync(ServiceInfo serviceInfo)
+        {
+            var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
+            if (File.Exists(filename))
+            {
+                using (var reader = new StreamReader(filename))
+                {
+                    serviceInfo.MetadataCache = await reader.ReadToEndAsync();
+                }
+            }
+            filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
+            if (File.Exists(filename))
+            {
+                using (var reader = new StreamReader(filename))
+                {
+                    serviceInfo.ImageBase64 = await reader.ReadToEndAsync();
+                }
+            }
+        }
+
+        public async Task SaveServiceDetailsAsync(ServiceInfo serviceInfo)
+        {
+            var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
+            using (var writer = new StreamWriter(filename))
+            {
+                await writer.WriteAsync(serviceInfo.MetadataCache);
+            }
+            filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
+            using (var writer = new StreamWriter(filename))
+            {
+                await writer.WriteAsync(serviceInfo.ImageBase64);
+            }
+        }
+
+        public async Task ClearServiceDetailsAsync(ServiceInfo serviceInfo)
+        {
+            var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
+            File.Delete(filename);
+            filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
+            File.Delete(filename);
         }
 
         private async Task PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
@@ -107,7 +124,7 @@ namespace ODataPad.Platform.Net45
                 {
                     elementsToRemove.Add(element);
                     var serviceInfo = ServiceInfo.Parse(element.ToString());
-                    await SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, null);
+                    await ClearServiceDetailsAsync(serviceInfo);
                 }
 
                 elementsToRemove.Remove();

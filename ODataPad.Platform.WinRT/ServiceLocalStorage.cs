@@ -20,8 +20,13 @@ namespace ODataPad.Platform.WinRT
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
-            return localSettings.Containers[ServicesKey].Values
+            var services = localSettings.Containers[ServicesKey].Values
                 .Select(x => ServiceInfo.Parse(x.Value as string));
+            foreach (var serviceInfo in services)
+            {
+                await LoadServiceDetailsAsync(serviceInfo);
+            }
+            return services;
         }
 
         public async Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
@@ -38,17 +43,7 @@ namespace ODataPad.Platform.WinRT
             await PurgeServiceInfosAsync(serviceInfos);
         }
 
-        public async Task<string> LoadServiceMetadataAsync(string filename)
-        {
-            return await LoadFromLocalStorageAsync(filename);
-        }
-
-        public async Task SaveServiceMetadataAsync(string filename, string metadata)
-        {
-            await SaveToLocalStorageAsync(filename, metadata);
-        }
-
-        public async Task ClearServicesAsync()
+        public async Task ClearServiceInfosAsync()
         {
             await PurgeServiceInfosAsync(new List<ServiceInfo>());
             var localSettings = ApplicationData.Current.LocalSettings;
@@ -57,6 +52,24 @@ namespace ODataPad.Platform.WinRT
             {
                 localSettings.DeleteContainer(ServicesKey);
             }
+        }
+
+        public async Task LoadServiceDetailsAsync(ServiceInfo serviceInfo)
+        {
+            serviceInfo.MetadataCache = await LoadFromLocalStorageAsync(serviceInfo.MetadataCacheFilename);
+            serviceInfo.ImageBase64 = await LoadFromLocalStorageAsync(serviceInfo.ImageBase64Filename);
+        }
+
+        public async Task SaveServiceDetailsAsync(ServiceInfo serviceInfo)
+        {
+            await SaveToLocalStorageAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
+            await SaveToLocalStorageAsync(serviceInfo.ImageBase64Filename, serviceInfo.ImageBase64);
+        }
+
+        public async Task ClearServiceDetailsAsync(ServiceInfo serviceInfo)
+        {
+            await SaveToLocalStorageAsync(serviceInfo.MetadataCacheFilename, null);
+            await SaveToLocalStorageAsync(serviceInfo.ImageBase64Filename, null);
         }
 
         private void GetOrCreateContainer(string containerName)
@@ -78,7 +91,7 @@ namespace ODataPad.Platform.WinRT
             {
                 localSettings.Containers[ServicesKey].Values.Remove(kv);
                 var serviceInfo = ServiceInfo.Parse(kv.Value as string);
-                await SaveServiceMetadataAsync(serviceInfo.MetadataCacheFilename, null);
+                await ClearServiceDetailsAsync(serviceInfo);
             }
         }
 
