@@ -25,8 +25,8 @@ namespace ODataPad.Core.Services
                          {
                              "DBpedia",
                              "Devexpress Channel",
-                             "ebay.org",
-                             "nerddinner.org",
+                             "ebay",
+                             "nerddinner",
                              "Netflix",
                              "Northwind Service",
                              "NuGet",

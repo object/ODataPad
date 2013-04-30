@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Services>
+<Services DataVersion="3">
+
   <Service>
     <Name>OData.org</Name>
     <Description>A service that exposes information from OData.org - like Producers and Consumers - as OData</Description>

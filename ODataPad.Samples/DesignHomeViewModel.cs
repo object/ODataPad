@@ -20,7 +20,8 @@ namespace ODataPad.Samples
                 .GetManifestResourceStream(string.Join(".", namespaceName, "SampleServices.xml"));
             using (var reader = new StreamReader(stream))
             {
-                services = SamplesService.ParseSamplesXml(reader.ReadToEnd());
+                services = SamplesService.ParseSamplesXml(reader.ReadToEnd())
+                    .Where(x => DesignData.ServiceNames.Contains(x.Name));
             }
 
             if (services != null)

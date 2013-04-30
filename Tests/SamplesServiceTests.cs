@@ -39,7 +39,7 @@ namespace ODataPad.Tests
         public async Task UpdateSamplesAsync_from_1_to_2()
         {
             var services = await UpdateSamplesAsync(1, 2);
-            Assert.AreEqual(3, services.Count());
+            Assert.AreEqual(10, services.Count());
             Assert.IsTrue(services.Any(x => x.Name == "DBpedia"));
             Assert.IsTrue(services.All(x => x.Name != "Pluralsight"));
             Assert.AreEqual(0, services.Single(x => x.Name == "OData.org").Index);
@@ -54,7 +54,7 @@ namespace ODataPad.Tests
         public async Task UpdateSamplesAsync_from_2_to_3()
         {
             var services = await UpdateSamplesAsync(2, 3);
-            Assert.AreEqual(3, services.Count());
+            Assert.AreEqual(10, services.Count());
             Assert.IsTrue(services.All(x => x.Name != "DBpedia"));
             Assert.IsTrue(services.Any(x => x.Name == "Pluralsight"));
             Assert.AreEqual(0, services.Single(x => x.Name == "OData.org").Index);

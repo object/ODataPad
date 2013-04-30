@@ -113,7 +113,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <EmbeddedResource Include="SampleServices.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
