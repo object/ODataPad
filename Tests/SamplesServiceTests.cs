@@ -72,16 +72,14 @@ namespace ODataPad.Tests
             {
                 samplesService = new SamplesService(
                     typeof(ODataPad.Samples.DesignData).Namespace, "SampleServices.xml",
-                    oldVersion, oldVersion + 1,
                     new ResourceManager(), new ServiceLocalStorage());
-                await samplesService.UpdateSamplesAsync();
+                await samplesService.UpdateSamplesAsync(oldVersion, oldVersion + 1);
             }
 
             samplesService = new SamplesService(
                 typeof(ODataPad.Samples.DesignData).Namespace, "SampleServices.xml",
-                currentVersion, requestedVersion,
                 new ResourceManager(), new ServiceLocalStorage());
-            await samplesService.UpdateSamplesAsync();
+            await samplesService.UpdateSamplesAsync(currentVersion, requestedVersion);
 
             return await _localStorage.LoadServiceInfosAsync();
         }

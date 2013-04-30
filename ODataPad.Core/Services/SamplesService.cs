@@ -16,8 +16,6 @@ namespace ODataPad.Core.Services
         private readonly IServiceLocalStorage _localStorage;
         private readonly string _moduleName;
         private readonly string _samplesFilename;
-        private readonly int _previousDataVersion;
-        private readonly int _currentDataVersion;
 
         private static readonly Dictionary<int, List<string>> NewSamples = new Dictionary<int, List<string>>
             {
@@ -58,7 +56,6 @@ namespace ODataPad.Core.Services
 
         public SamplesService(
             string moduleName, string samplesFilename,
-            int previousDataVersion, int currentDataVersion,
             IResourceManager resourceManager = null, IServiceLocalStorage localStorage = null)
         {
             _resourceManager = resourceManager ?? Mvx.Resolve<IResourceManager>();
@@ -66,62 +63,60 @@ namespace ODataPad.Core.Services
 
             _moduleName = moduleName;
             _samplesFilename = samplesFilename;
-            _previousDataVersion = previousDataVersion;
-            _currentDataVersion = currentDataVersion;
         }
 
-        public async Task<IEnumerable<ServiceInfo>> GetAllSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetAllSamplesAsync(int currentDataVersion)
         {
             var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
-            var samples = NewSamples.Where(sample => sample.Key > _currentDataVersion)
+            var samples = NewSamples.Where(sample => sample.Key > currentDataVersion)
                 .Aggregate(allSamples, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
-            samples = ExpiredSample.Where(sample => sample.Key <= _currentDataVersion)
+            samples = ExpiredSample.Where(sample => sample.Key <= currentDataVersion)
                 .Aggregate(samples, (current, sample) => current.Where(x => !sample.Value.Contains(x.Name)));
 
             return samples.ToList();
         }
 
-        public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetNewSamplesAsync(int fromDataVersion, int toDataVersion)
         {
             var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = NewSamples
-                .Where(sample => sample.Key > _previousDataVersion && sample.Key <= _currentDataVersion)
+                .Where(sample => sample.Key > fromDataVersion && sample.Key <= toDataVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
 
             return samples.ToList();
         }
 
-        public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetUpdatedSamplesAsync(int fromDataVersion, int toDataVersion)
         {
             var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = UpdatedSamples
-                .Where(sample => sample.Key > _previousDataVersion && sample.Key <= _currentDataVersion)
+                .Where(sample => sample.Key > fromDataVersion && sample.Key <= toDataVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
 
             return samples.ToList();
         }
 
-        public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync()
+        public async Task<IEnumerable<ServiceInfo>> GetExpiredSamplesAsync(int fromDataVersion, int toDataVersion)
         {
             var xml = await _resourceManager.LoadResourceAsStringAsync(_moduleName, string.Empty, _samplesFilename);
             var allSamples = ParseSamplesXml(xml);
 
             var samples = ExpiredSample
-                .Where(sample => sample.Key > _previousDataVersion && sample.Key <= _currentDataVersion)
+                .Where(sample => sample.Key > fromDataVersion && sample.Key <= toDataVersion)
                 .SelectMany(x => allSamples.Where(y => x.Value.Contains(y.Name)));
 
             return samples.ToList();
         }
 
-        public async Task CreateSamplesAsync()
+        public async Task CreateSamplesAsync(int dataVersion)
         {
-            var allSamples = await GetAllSamplesAsync();
+            var allSamples = await GetAllSamplesAsync(dataVersion);
             var index = 0;
             foreach (var serviceInfo in allSamples)
             {
@@ -136,11 +131,11 @@ namespace ODataPad.Core.Services
             }
         }
 
-        public async Task UpdateSamplesAsync()
+        public async Task UpdateSamplesAsync(int fromDataVersion, int toDataVersion)
         {
-            var newServices = await GetNewSamplesAsync();
-            var updatedServices = await GetUpdatedSamplesAsync();
-            var expiredServices = await GetExpiredSamplesAsync();
+            var newServices = await GetNewSamplesAsync(fromDataVersion, toDataVersion);
+            var updatedServices = await GetUpdatedSamplesAsync(fromDataVersion, toDataVersion);
+            var expiredServices = await GetExpiredSamplesAsync(fromDataVersion, toDataVersion);
             var oldServices = await _localStorage.LoadServiceInfosAsync();
 
             var index = oldServices.Count();

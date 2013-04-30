@@ -129,7 +129,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Border x:Name="itemDetailImage" Background="Transparent"  Width="110" Height="110"  Margin="0,0,10,0">
-                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                    <Image Source="{Binding ImageBase64, Converter={StaticResource Base64ToImage}}" Stretch="UniformToFill"/>
                 </Border>
                 <StackPanel x:Name="itemDetailTitlePanel" Grid.Column="1" >
                     <TextBlock x:Name="itemTitle" Margin="0,0,0,0" Text="{Binding Name}" Style="{StaticResource SubheaderTextStyle}"/>

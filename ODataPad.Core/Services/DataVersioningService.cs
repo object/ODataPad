@@ -11,9 +11,9 @@ namespace ODataPad.Core.Services
         private readonly ISamplesService _samplesService;
         private readonly IServiceRepository _serviceRepository;
 
-        public DataVersioningService(ISamplesService samplesService, IServiceRepository serviceRepository = null)
+        public DataVersioningService(IServiceRepository serviceRepository = null)
         {
-            _samplesService = samplesService;
+            _samplesService = Mvx.Resolve<ISamplesService>();
             _serviceRepository = serviceRepository ?? Mvx.Resolve<IServiceRepository>();
         }
 
@@ -30,7 +30,7 @@ namespace ODataPad.Core.Services
                 }
                 else
                 {
-                    await _samplesService.UpdateSamplesAsync();
+                    await _samplesService.UpdateSamplesAsync(currentVersion, requestedVersion);
                 }
             }
         }

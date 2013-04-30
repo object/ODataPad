@@ -12,8 +12,8 @@ namespace ODataPad.Platform.Net45
 {
     public class ServiceLocalStorage : IServiceLocalStorage
     {
-        private static readonly string ServiceDataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Services");
-        private const string ServiceFile = "Services.xml";
+        internal static readonly string ServiceDataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Services");
+        internal const string ServiceFile = "Services.xml";
 
         static ServiceLocalStorage()
         {
