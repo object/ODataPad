@@ -68,13 +68,16 @@
       <Name>ODataPad.Samples</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Samples\ContentSampleServices.xml">
+    <Content Include="..\Tests\ContentSampleServices.xml">
+      <Link>Samples\ContentSampleServices.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Samples\EmbeddedSampleServices.xml" />
-    <Content Include="Samples\SampleServices.xml">
+    <EmbeddedResource Include="..\Tests\EmbeddedSampleServices.xml">
+      <Link>Samples\EmbeddedSampleServices.xml</Link>
+    </EmbeddedResource>
+    <Content Include="..\Tests\SampleServices.xml">
+      <Link>Samples\SampleServices.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

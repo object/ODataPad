@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #endif
 
-namespace ODataPad.Tests.WinRT
+namespace ODataPad.Tests
 {
     [TestClass]
     public class MetadataServiceTests

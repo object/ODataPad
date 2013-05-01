@@ -114,6 +114,17 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Tests\ContentSampleServices.xml">
+      <Link>Samples\ContentSampleServices.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="..\Tests\EmbeddedSampleServices.xml">
+      <Link>Samples\EmbeddedSampleServices.xml</Link>
+    </EmbeddedResource>
+    <Content Include="..\Tests\SampleServices.xml">
+      <Link>Samples\SampleServices.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\AlignmentGrid.png" />
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

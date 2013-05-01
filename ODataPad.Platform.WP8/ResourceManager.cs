@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using ODataPad.Core;
 using ODataPad.Core.Interfaces;
@@ -14,7 +15,11 @@ namespace ODataPad.Platform.WP8
     {
         public async Task<string> LoadContentAsStringAsync(string folderName, string resourceName)
         {
-            throw new NotImplementedException();
+            var streamInfo = Application.GetResourceStream(new Uri(Path.Combine(folderName, resourceName), UriKind.Relative));
+            using (var reader = new StreamReader(streamInfo.Stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
         }
 
         public async Task<string> LoadResourceAsStringAsync(string moduleName, string folderName, string resourceName)

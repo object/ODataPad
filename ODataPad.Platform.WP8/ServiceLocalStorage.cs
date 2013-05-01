@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using Windows.Storage;
@@ -12,119 +14,122 @@ namespace ODataPad.Platform.WP8
 {
     public class ServiceLocalStorage : IServiceLocalStorage
     {
-        private const string ServicesKey = "Services";
+        internal static readonly string ServiceDataFolder = "Services";
+        internal const string ServiceFile = "Services.xml";
 
-        public ServiceLocalStorage()
+        static ServiceLocalStorage()
         {
+            if (!Directory.Exists(ServiceDataFolder))
+            {
+                Directory.CreateDirectory(ServiceDataFolder);
+            }
         }
 
         public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {
-            var localSettings = ApplicationData.Current.LocalSettings;
-            GetOrCreateContainer(ServicesKey);
-            var services = localSettings.Containers[ServicesKey].Values
-                .Select(x => ServiceInfo.Parse(x.Value as string));
-            foreach (var serviceInfo in services)
+            var services = new List<ServiceInfo>();
+            var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
+            if (File.Exists(serviceFilePath))
             {
-                await LoadServiceDetailsAsync(serviceInfo);
+                var document = XDocument.Load(serviceFilePath);
+                var root = document.Element("Services");
+                var elements = root.Elements("Service");
+                foreach (var element in elements)
+                {
+                    var serviceInfo = ServiceInfo.Parse(element.ToString());
+                    await LoadServiceDetailsAsync(serviceInfo);
+                    services.Add(serviceInfo);
+                }
             }
-            return services;
+            return await Task.Factory.StartNew(() => services.Select(x => x));
         }
 
         public async Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
-            var localSettings = ApplicationData.Current.LocalSettings;
-            GetOrCreateContainer(ServicesKey);
-
+            var element = new XElement("Services");
             foreach (var serviceInfo in serviceInfos)
             {
-                var xml = serviceInfo.AsString();
-                localSettings.Containers[ServicesKey].Values[serviceInfo.Name] = xml;
+                element.Add(serviceInfo.AsXElement());
             }
-
-            await PurgeServiceInfosAsync(serviceInfos);
+            var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
+            using (var writer = new StreamWriter(serviceFilePath))
+            {
+                await writer.WriteAsync(element.ToString());
+            }
         }
 
         public async Task ClearServiceInfosAsync()
         {
             await PurgeServiceInfosAsync(new List<ServiceInfo>());
-            var localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values.Clear();
-            if (localSettings.Containers.ContainsKey(ServicesKey))
+
+            var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
+            if (File.Exists(serviceFilePath))
             {
-                localSettings.DeleteContainer(ServicesKey);
+                File.Delete(serviceFilePath);
             }
         }
 
         public async Task LoadServiceDetailsAsync(ServiceInfo serviceInfo)
         {
-            serviceInfo.MetadataCache = await LoadFromLocalStorageAsync(serviceInfo.MetadataCacheFilename);
-            serviceInfo.ImageBase64 = await LoadFromLocalStorageAsync(serviceInfo.ImageBase64Filename);
+            var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
+            if (File.Exists(filename))
+            {
+                using (var reader = new StreamReader(filename))
+                {
+                    serviceInfo.MetadataCache = await reader.ReadToEndAsync();
+                }
+            }
+            filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
+            if (File.Exists(filename))
+            {
+                using (var reader = new StreamReader(filename))
+                {
+                    serviceInfo.ImageBase64 = await reader.ReadToEndAsync();
+                }
+            }
         }
 
         public async Task SaveServiceDetailsAsync(ServiceInfo serviceInfo)
         {
-            await SaveToLocalStorageAsync(serviceInfo.MetadataCacheFilename, serviceInfo.MetadataCache);
-            await SaveToLocalStorageAsync(serviceInfo.ImageBase64Filename, serviceInfo.ImageBase64);
+            var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
+            using (var writer = new StreamWriter(filename))
+            {
+                await writer.WriteAsync(serviceInfo.MetadataCache);
+            }
+            filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
+            using (var writer = new StreamWriter(filename))
+            {
+                await writer.WriteAsync(serviceInfo.ImageBase64);
+            }
         }
 
         public async Task ClearServiceDetailsAsync(ServiceInfo serviceInfo)
         {
-            await SaveToLocalStorageAsync(serviceInfo.MetadataCacheFilename, null);
-            await SaveToLocalStorageAsync(serviceInfo.ImageBase64Filename, null);
-        }
-
-        private void GetOrCreateContainer(string containerName)
-        {
-            var localSettings = ApplicationData.Current.LocalSettings;
-            if (!localSettings.Containers.ContainsKey(containerName))
-            {
-                localSettings.CreateContainer(ServicesKey, ApplicationDataCreateDisposition.Always);
-            }
+            var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
+            File.Delete(filename);
+            filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
+            File.Delete(filename);
         }
 
         private async Task PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
         {
-            var localSettings = ApplicationData.Current.LocalSettings;
-            GetOrCreateContainer(ServicesKey);
-
-            foreach (var kv in localSettings.Containers[ServicesKey].Values
-                .Where(x => serviceInfosToKeep.All(y => x.Key != y.Name)))
+            var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
+            if (File.Exists(serviceFilePath))
             {
-                localSettings.Containers[ServicesKey].Values.Remove(kv);
-                var serviceInfo = ServiceInfo.Parse(kv.Value as string);
-                await ClearServiceDetailsAsync(serviceInfo);
-            }
-        }
+                var document = XDocument.Load(serviceFilePath);
+                var root = document.Element("Services");
+                var elements = root.Elements("Service");
 
-        private async Task<string> LoadFromLocalStorageAsync(string filename)
-        {
-            var file = await ApplicationData.Current.LocalFolder
-                .CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
-
-            using (var stream = await file.OpenStreamForReadAsync())
-            {
-                var reader = new StreamReader(stream);
-                return await reader.ReadToEndAsync();
-            }
-        }
-
-        private async Task SaveToLocalStorageAsync(string filename, string text)
-        {
-            var file = await ApplicationData.Current.LocalFolder
-                .CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-            
-            if (!string.IsNullOrEmpty(text))
-            {
-                using (var stream = await file.OpenStreamForWriteAsync())
+                var elementsToRemove = new List<XElement>();
+                foreach (var element in elements
+                    .Where(x => serviceInfosToKeep.All(y => ServiceInfo.Parse(x).Name != y.Name)))
                 {
-                    var reader = new StreamWriter(stream);
-                    await reader.WriteAsync(text);
+                    elementsToRemove.Add(element);
+                    var serviceInfo = ServiceInfo.Parse(element.ToString());
+                    await ClearServiceDetailsAsync(serviceInfo);
                 }
-            }
-            else
-            {
-                await file.DeleteAsync();
+
+                elementsToRemove.Remove();
             }
         }
     }

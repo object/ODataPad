@@ -129,6 +129,17 @@
     <None Include="ODataPad.Tests.WinRT_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Tests\ContentSampleServices.xml">
+      <Link>Samples\ContentSampleServices.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="..\Tests\EmbeddedSampleServices.xml">
+      <Link>Samples\EmbeddedSampleServices.xml</Link>
+    </EmbeddedResource>
+    <Content Include="..\Tests\SampleServices.xml">
+      <Link>Samples\SampleServices.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\UnitTestLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -140,13 +151,6 @@
     </Content>
     <Content Include="Images\UnitTestStoreLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\ContentSampleServices.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="Samples\EmbeddedSampleServices.xml" />
-    <Content Include="Samples\SampleServices.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
