@@ -70,11 +70,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Tests\MetadataServiceTests.cs">
+      <Link>MetadataServiceTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tests\ResourceManagerTests.cs">
+      <Link>ResourceManagerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tests\SamplesServiceTests.cs">
+      <Link>SamplesServiceTests.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -125,6 +133,20 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
+      <Project>{D30AD8D0-4452-4F6E-BE1B-D8097EC3B53D}</Project>
+      <Name>ODataPad.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ODataPad.Platform.WP8\ODataPad.Platform.WP8.csproj">
+      <Project>{ABE6FC37-2FAE-4FE1-9C21-6873D264F911}</Project>
+      <Name>ODataPad.Platform.WP8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ODataPad.Samples\ODataPad.Samples.csproj">
+      <Project>{A1A4D9DA-E7E7-4821-BD53-EA57C0CFD3FE}</Project>
+      <Name>ODataPad.Samples</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

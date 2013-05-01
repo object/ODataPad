@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 #if NET45
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ODataPad.Platform.Net45;
 #elif NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.Platform.WinRT;
+#elif WINDOWS_PHONE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using ODataPad.Platform.WP8;
 #endif
 
 namespace ODataPad.Tests
@@ -40,6 +44,8 @@ namespace ODataPad.Tests
             "ODataPad.Tests.Net45";
 #elif NETFX_CORE
             "ODataPad.Tests.WinRT";
+#elif WINDOWS_PHONE
+            "ODataPad.Tests.WP8";
 #endif
             var resourceManager = new ResourceManager();
             var text = await resourceManager.LoadResourceAsStringAsync(

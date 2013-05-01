@@ -4,14 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
+using ODataPad.Samples;
+
 #if NET45
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ODataPad.Platform.Net45;
 #elif NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.Platform.WinRT;
-using ODataPad.Samples;
-
+#elif WINDOWS_PHONE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using ODataPad.Platform.WP8;
 #endif
 
 namespace ODataPad.Tests
