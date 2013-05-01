@@ -12,7 +12,7 @@ namespace ODataPad.Core
     public class ODataPadApp 
         : MvxApplication
     {
-        public const int ApplicationDataVersion = 3;
+        public const int ApplicationDataVersion = 4;
         private readonly string _samplesModuleName;
         private readonly string _samplesFilename;
 

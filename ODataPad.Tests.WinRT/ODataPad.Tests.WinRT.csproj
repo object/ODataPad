@@ -111,13 +111,15 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Tests\MetadataServiceTests.cs">
+      <Link>MetadataServiceTests.cs</Link>
+    </Compile>
     <Compile Include="..\Tests\ResourceManagerTests.cs">
       <Link>ResourceManagerTests.cs</Link>
     </Compile>
     <Compile Include="..\Tests\SamplesServiceTests.cs">
       <Link>SamplesServiceTests.cs</Link>
     </Compile>
-    <Compile Include="MetadataServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

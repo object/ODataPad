@@ -43,6 +43,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Tests\MetadataServiceTests.cs">
+      <Link>MetadataServiceTests.cs</Link>
+    </Compile>
     <Compile Include="..\Tests\ResourceManagerTests.cs">
       <Link>ResourceManagerTests.cs</Link>
     </Compile>

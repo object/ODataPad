@@ -44,8 +44,7 @@ namespace ODataPad.Platform.Net45
         {
             var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder, ServiceLocalStorage.ServiceFile);
             var document = XDocument.Load(serviceFilePath);
-            var root = document.Element("Services");
-            root.Attribute(DataVersionAttributeName).SetValue(dataVersion);
+            document.Element("Services").SetAttributeValue(DataVersionAttributeName, dataVersion);
             document.Save(serviceFilePath);
         }
     }
