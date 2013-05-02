@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
-using Cirrious.CrossCore.IoC;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;

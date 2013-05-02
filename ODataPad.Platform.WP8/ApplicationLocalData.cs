@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Cirrious.CrossCore.IoC;
+using Cirrious.CrossCore;
 using ODataPad.Core.Interfaces;
-using ODataPad.Core.Models;
 
 namespace ODataPad.Platform.WP8
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cirrious.CrossCore.IoC;
+using Cirrious.CrossCore;
 using ODataPad.Core.Interfaces;
 using Windows.Storage;
 

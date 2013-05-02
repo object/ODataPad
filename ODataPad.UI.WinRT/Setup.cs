@@ -1,4 +1,4 @@
-﻿using Cirrious.CrossCore.IoC;
+﻿using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.WindowsStore.Platform;
 using ODataPad.Core;
