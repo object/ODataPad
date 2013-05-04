@@ -43,11 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationLocalData.cs" />
-    <Compile Include="ResourceManager.cs" />
+    <Compile Include="ApplicationLocalData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ResourceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceLocalStorage.cs" />
+    <Compile Include="ResultProvider.cs" />
+    <Compile Include="ServiceLocalStorage.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -59,6 +66,10 @@
     <ProjectReference Include="..\..\MvvmCross\CrossCore\Cirrious.CrossCore\Cirrious.CrossCore.csproj">
       <Project>{cff6f25a-3c3b-44ee-a54c-2ed4aaff3adb}</Project>
       <Name>Cirrious.CrossCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\PortableSupport\System.Windows\System.Windows.Droid.csproj">
+      <Project>{72d13ee1-53a3-4a9f-9281-ae44cc5e92ac}</Project>
+      <Name>System.Windows.Droid</Name>
     </ProjectReference>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>

@@ -26,6 +26,11 @@ namespace ODataPad.UI.Droid
 		
 		public static void UpdateIdValues()
 		{
+			ODataPad.Platform.Droid.Resource.Drawable.monoandroidsplash = ODataPad.UI.Droid.Resource.Drawable.monoandroidsplash;
+			ODataPad.Platform.Droid.Resource.Layout.monoandroidsplash = ODataPad.UI.Droid.Resource.Layout.monoandroidsplash;
+			ODataPad.Platform.Droid.Resource.String.ApplicationName = ODataPad.UI.Droid.Resource.String.ApplicationName;
+			ODataPad.Platform.Droid.Resource.String.Hello = ODataPad.UI.Droid.Resource.String.Hello;
+			ODataPad.Platform.Droid.Resource.Style.Mono_Android_Theme_Splash = ODataPad.UI.Droid.Resource.Style.Mono_Android_Theme_Splash;
 		}
 		
 		public partial class Attribute

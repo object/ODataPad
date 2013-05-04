@@ -81,9 +81,17 @@
       <Project>{cff6f25a-3c3b-44ee-a54c-2ed4aaff3adb}</Project>
       <Name>Cirrious.CrossCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\PortableSupport\System.Net\System.Net.Droid.csproj">
+      <Project>{eb2591f7-1492-4885-ad59-d11d2311bbc7}</Project>
+      <Name>System.Net.Droid</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
       <Name>ODataPad.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ODataPad.Platform.Droid\ODataPad.Platform.Droid.csproj">
+      <Project>{4e21502e-ea62-4628-a7d8-e37f7dfdbd22}</Project>
+      <Name>ODataPad.Platform.Droid</Name>
     </ProjectReference>
     <ProjectReference Include="..\ODataPad.Samples\ODataPad.Samples.csproj">
       <Project>{a1a4d9da-e7e7-4821-bd53-ea57c0cfd3fe}</Project>
