@@ -13,8 +13,6 @@ namespace ODataPad.UI.WP8
 {
     public partial class App : Application
     {
-        private bool _hasDoneFirstNavigation = false;
-        
         public static PhoneApplicationFrame RootFrame { get; private set; }
 
         public App()
@@ -36,16 +34,14 @@ namespace ODataPad.UI.WP8
 
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            RootFrame.Navigating += (navigatingSender, navigatingArgs) =>
-            {
-                if (_hasDoneFirstNavigation)
-                    return;
+            RootFrame.Navigating += RootFrameOnNavigating;
+        }
 
-                navigatingArgs.Cancel = true;
-                _hasDoneFirstNavigation = true;
-                var appStart = Mvx.Resolve<IMvxAppStart>();
-                RootFrame.Dispatcher.BeginInvoke(() => appStart.Start());
-            };
+        private void RootFrameOnNavigating(object sender, NavigatingCancelEventArgs args)
+        {
+            args.Cancel = true;
+            RootFrame.Navigating -= RootFrameOnNavigating;
+            RootFrame.Dispatcher.BeginInvoke(() => Mvx.Resolve<IMvxAppStart>().Start());
         }
 
         private void Application_Activated(object sender, ActivatedEventArgs e)

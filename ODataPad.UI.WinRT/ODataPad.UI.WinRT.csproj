@@ -108,7 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Base64ImageConverter.cs" />
-    <Compile Include="HomeView.xaml.cs">
+    <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ServiceEditControl.xaml.cs">
+    <Compile Include="Views\ServiceEditControl.xaml.cs">
       <DependentUpon>ServiceEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Setup.cs" />
@@ -134,7 +134,7 @@
     <None Include="Manifest\ODataPad_StoreKey.pfx" />
     <None Include="Manifest\Package.StoreAssociation.xml" />
     <None Include="Manifest\ODataPad_TemporaryKey.pfx" />
-    <Page Include="ServiceEditControl.xaml">
+    <Page Include="Views\ServiceEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,7 +157,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="HomeView.xaml">
+    <Page Include="Views\HomeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

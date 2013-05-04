@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using Cirrious.MvvmCross.Wpf.Views;
 using ODataPad.Core.ViewModels;
 
-namespace ODataPad.UI.Net45
+namespace ODataPad.UI.Net45.Views
 {
     /// <summary>
     /// Interaction logic for HomeView.xaml

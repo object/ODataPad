@@ -31,11 +31,5 @@ namespace ODataPad.UI.WP8
         {
             return new ODataPadApp("ODataPad.Samples", "SampleServices.xml");
         }
-
-        protected override IMvxNavigationSerializer CreateNavigationSerializer()
-        {
-            Cirrious.MvvmCross.Plugins.Json.PluginLoader.Instance.EnsureLoaded();
-            return new MvxJsonNavigationSerializer();
-        }
     }
 }

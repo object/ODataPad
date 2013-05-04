@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 
-namespace ODataPad.UI.WinRT
+namespace ODataPad.UI.WinRT.Views
 {
     public sealed partial class MainPage : ODataPad.UI.WinRT.Common.LayoutAwarePage
     {

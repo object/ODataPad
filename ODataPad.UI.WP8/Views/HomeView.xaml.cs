@@ -11,11 +11,11 @@ using Microsoft.Phone.Shell;
 using ODataPad.Core.ViewModels;
 using ODataPad.UI.WP8.Resources;
 
-namespace ODataPad.UI.WP8
+namespace ODataPad.UI.WP8.Views
 {
-    public partial class MainPage : MvxPhonePage
+    public partial class HomeView : MvxPhonePage
     {
-        public MainPage()
+        public HomeView()
         {
             InitializeComponent();
         }

@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.ViewModels;
-using ODataPad.Core.Interfaces;
 
 namespace ODataPad.Core.ViewModels
 {
@@ -22,8 +19,6 @@ namespace ODataPad.Core.ViewModels
                                                                     });
             _collectionMode = _collectionModes[0];
         }
-
-        public HomeViewModelBase Self { get { return this; } }
 
         public ICommand AddServiceCommand
         {
