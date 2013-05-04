@@ -12,6 +12,9 @@ using ODataPad.Platform.WinRT;
 #elif WINDOWS_PHONE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using ODataPad.Platform.WP8;
+#elif MonoDroid
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ODataPad.Platform.Droid;
 #endif
 
 namespace ODataPad.Tests
@@ -29,15 +32,27 @@ namespace ODataPad.Tests
         }
 
         [TestMethod]
+#if !MonoDroid
         public async Task LoadContentAsStringAsync()
+#else
+        public void LoadContentAsStringAsync()
+#endif
         {
             var resourceManager = new ResourceManager();
-            var text = await resourceManager.LoadContentAsStringAsync("Samples", "ContentSampleServices.xml");
+            var text = 
+#if !MonoDroid
+                await 
+#endif
+                resourceManager.LoadContentAsStringAsync("Samples", "ContentSampleServices.xml");
             Assert.IsNotNull(text);
         }
 
         [TestMethod]
+#if !MonoDroid
         public async Task LoadResourceAsStringAsync()
+#else
+        public void LoadResourceAsStringAsync()
+#endif
         {
             const string moduleName =
 #if NET45
@@ -46,9 +61,15 @@ namespace ODataPad.Tests
             "ODataPad.Tests.WinRT";
 #elif WINDOWS_PHONE
             "ODataPad.Tests.WP8";
+#elif MonoDroid
+            "ODataPad.Tests.Droid";
 #endif
             var resourceManager = new ResourceManager();
-            var text = await resourceManager.LoadResourceAsStringAsync(
+            var text =
+#if !MonoDroid
+                await 
+#endif
+                resourceManager.LoadResourceAsStringAsync(
                 moduleName, "Samples", "EmbeddedSampleServices.xml");
             Assert.IsNotNull(text);
         }

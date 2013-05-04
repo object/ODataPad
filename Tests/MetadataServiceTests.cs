@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif WINDOWS_PHONE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#elif MonoDroid
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 
 namespace ODataPad.Tests
@@ -19,6 +21,5 @@ namespace ODataPad.Tests
             var schemaString = MetadataService.GetSchemaAsString("http://services.odata.org/Website/odata.svc/");
             Assert.IsTrue(schemaString.Contains("Consumers"));
         }
-         
     }
 }

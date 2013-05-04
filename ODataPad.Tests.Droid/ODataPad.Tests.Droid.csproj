@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3C0E8F23-6D06-47A2-9863-2C92060BA5FE}</ProjectGuid>
+    <ProjectGuid>{F14BC1CE-4432-47FE-AE8C-072972FF8496}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ODataPad.UI.Droid</RootNamespace>
-    <AssemblyName>ODataPad.UI.Droid</AssemblyName>
+    <RootNamespace>ODataPad.Tests.Droid</RootNamespace>
+    <AssemblyName>ODataPad.Tests.Droid</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -47,9 +47,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activity1.cs" />
+    <Compile Include="..\Tests\MetadataServiceTests.cs">
+      <Link>MetadataServiceTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tests\ResourceManagerTests.cs">
+      <Link>ResourceManagerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tests\SamplesServiceTests.cs">
+      <Link>SamplesServiceTests.cs</Link>
+    </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -65,13 +74,22 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross.Droid\Cirrious.MvvmCross.Droid.csproj">
-      <Project>{7a6be137-d0f1-46a1-ae5c-81faeedddf02}</Project>
-      <Name>Cirrious.MvvmCross.Droid</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross\Cirrious.MvvmCross.csproj">
-      <Project>{b6e27475-e7d0-448c-a5cc-5097dca1e2dd}</Project>
-      <Name>Cirrious.MvvmCross</Name>
+    <Content Include="..\Tests\ContentSampleServices.xml">
+      <Link>ContentSampleServices.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="..\Tests\EmbeddedSampleServices.xml">
+      <Link>EmbeddedSampleServices.xml</Link>
+    </EmbeddedResource>
+    <Content Include="..\Tests\SampleServices.xml">
+      <Link>SampleServices.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonoDroidUnitTest\MonoDroidUnitTesting\MonoDroidUnitTesting.csproj">
+      <Project>{a5f8fb02-00e0-4335-91ef-aeaa2c2f3c48}</Project>
+      <Name>MonoDroidUnitTesting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MvvmCross\CrossCore\Cirrious.CrossCore.Droid\Cirrious.CrossCore.Droid.csproj">
       <Project>{caf8935f-56fe-4485-9d34-4a38fe79f6c9}</Project>
@@ -84,6 +102,10 @@
     <ProjectReference Include="..\..\MvvmCross\PortableSupport\System.Net\System.Net.Droid.csproj">
       <Project>{eb2591f7-1492-4885-ad59-d11d2311bbc7}</Project>
       <Name>System.Net.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MvvmCross\PortableSupport\System.Windows\System.Windows.Droid.csproj">
+      <Project>{72d13ee1-53a3-4a9f-9281-ae44cc5e92ac}</Project>
+      <Name>System.Windows.Droid</Name>
     </ProjectReference>
     <ProjectReference Include="..\ODataPad.Core\ODataPad.Core.csproj">
       <Project>{d30ad8d0-4452-4f6e-be1b-d8097ec3b53d}</Project>
