@@ -8,7 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:samples="clr-namespace:ODataPad.Samples;assembly=ODataPad.Samples"
     xmlns:views="clr-namespace:Cirrious.MvvmCross.WindowsPhone.Views;assembly=Cirrious.MvvmCross.WindowsPhone"
-    DataContext="{Binding RelativeSource={RelativeSource Self}}"
     d:DataContext="{d:DesignInstance Type=samples:DesignHomeViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"

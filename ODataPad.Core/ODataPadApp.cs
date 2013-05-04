@@ -12,7 +12,7 @@ namespace ODataPad.Core
     public class ODataPadApp 
         : MvxApplication
     {
-        public const int ApplicationDataVersion = 4;
+        public const int ApplicationDataVersion = 2;
         private readonly string _samplesModuleName;
         private readonly string _samplesFilename;
 
@@ -25,12 +25,6 @@ namespace ODataPad.Core
             InitializeStartNavigation();
             InitializePlugIns();
         }
-
-        //public IServiceRepository ServiceRepository { get; private set; }
-        //public IResourceManager ResourceManager { get; private set; }
-        //public IServiceLocalStorage ServiceLocalStorage { get; private set; }
-        //public ISamplesService SamplesService { get; private set; }
-        //public IDataVersioningService DataVersioningService { get; private set; }
 
         public HomeViewModel HomeViewModel { get; private set; }
 

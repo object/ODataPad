@@ -7,7 +7,6 @@
              xmlns:common="clr-namespace:ODataPad.UI.Net45.Common"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:samples="clr-namespace:ODataPad.Samples;assembly=ODataPad.Samples"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}"
              d:DataContext="{d:DesignInstance Type=samples:DesignHomeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"

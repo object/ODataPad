@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -26,25 +27,38 @@ namespace ODataPad.Platform.WP8
 
         public int GetCurrentDataVersion()
         {
-            var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder, ServiceLocalStorage.ServiceFile);
-            if (File.Exists(serviceFilePath))
+            var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder,
+                                               ServiceLocalStorage.ServiceFile);
+
+            using (var reader = ServiceLocalStorage.GetStorageReader(serviceFilePath))
             {
-                var document = XDocument.Load(serviceFilePath);
-                var root = document.Element("Services");
-                if (root.Attributes().Any(x => x.Name == DataVersionAttributeName))
+                if (reader != null)
                 {
-                    return int.Parse(root.Attribute(DataVersionAttributeName).Value);
+                    var document = XDocument.Load(reader);
+                    var root = document.Element("Services");
+                    if (root.Attributes().Any(x => x.Name == DataVersionAttributeName))
+                    {
+                        return int.Parse(root.Attribute(DataVersionAttributeName).Value);
+                    }
                 }
+                return 0;
             }
-            return 0;
         }
 
         public void SetCurrentDataVersion(int dataVersion)
         {
+            XDocument document = null;
             var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder, ServiceLocalStorage.ServiceFile);
-            var document = XDocument.Load(serviceFilePath);
-            document.Element("Services").SetAttributeValue(DataVersionAttributeName, dataVersion);
-            //document.Save(serviceFilePath);
+            using (var reader = ServiceLocalStorage.GetStorageReader(serviceFilePath))
+            {
+                document = XDocument.Load(reader);
+            }
+
+            using (var writer = ServiceLocalStorage.GetStorageWriter(serviceFilePath))
+            {
+                document.Element("Services").SetAttributeValue(DataVersionAttributeName, dataVersion);
+                document.Save(writer);
+            }
         }
     }
 }

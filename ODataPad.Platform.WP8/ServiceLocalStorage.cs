@@ -4,11 +4,9 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Xml.Linq;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
-using Windows.Storage;
 
 namespace ODataPad.Platform.WP8
 {
@@ -19,26 +17,25 @@ namespace ODataPad.Platform.WP8
 
         static ServiceLocalStorage()
         {
-            if (!Directory.Exists(ServiceDataFolder))
-            {
-                Directory.CreateDirectory(ServiceDataFolder);
-            }
         }
 
         public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {
             var services = new List<ServiceInfo>();
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
-            if (File.Exists(serviceFilePath))
+
+            using (var reader = GetStorageReader(serviceFilePath))
             {
-                var document = XDocument.Load(serviceFilePath);
-                var root = document.Element("Services");
-                var elements = root.Elements("Service");
-                foreach (var element in elements)
+                if (reader != null)
                 {
-                    var serviceInfo = ServiceInfo.Parse(element.ToString());
-                    await LoadServiceDetailsAsync(serviceInfo);
-                    services.Add(serviceInfo);
+                    var document = XDocument.Load(reader);
+                    var elements = document.Element("Services").Elements("Service");
+                    foreach (var element in elements)
+                    {
+                        var serviceInfo = ServiceInfo.Parse(element.ToString());
+                        await LoadServiceDetailsAsync(serviceInfo);
+                        services.Add(serviceInfo);
+                    }
                 }
             }
             return await Task.Factory.StartNew(() => services.Select(x => x));
@@ -51,8 +48,9 @@ namespace ODataPad.Platform.WP8
             {
                 element.Add(serviceInfo.AsXElement());
             }
+
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
-            using (var writer = new StreamWriter(serviceFilePath))
+            using (var writer = GetStorageWriter(serviceFilePath))
             {
                 await writer.WriteAsync(element.ToString());
             }
@@ -63,26 +61,29 @@ namespace ODataPad.Platform.WP8
             await PurgeServiceInfosAsync(new List<ServiceInfo>());
 
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
-            if (File.Exists(serviceFilePath))
+            using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                File.Delete(serviceFilePath);
+                if (storage.FileExists(serviceFilePath))
+                {
+                    storage.DeleteFile(serviceFilePath);
+                }
             }
         }
 
         public async Task LoadServiceDetailsAsync(ServiceInfo serviceInfo)
         {
             var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
-            if (File.Exists(filename))
+            using (var reader = GetStorageReader(filename))
             {
-                using (var reader = new StreamReader(filename))
+                if (reader != null)
                 {
                     serviceInfo.MetadataCache = await reader.ReadToEndAsync();
                 }
             }
             filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
-            if (File.Exists(filename))
+            using (var reader = GetStorageReader(filename))
             {
-                using (var reader = new StreamReader(filename))
+                if (reader != null)
                 {
                     serviceInfo.ImageBase64 = await reader.ReadToEndAsync();
                 }
@@ -92,12 +93,12 @@ namespace ODataPad.Platform.WP8
         public async Task SaveServiceDetailsAsync(ServiceInfo serviceInfo)
         {
             var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
-            using (var writer = new StreamWriter(filename))
+            using (var writer = GetStorageWriter(filename))
             {
                 await writer.WriteAsync(serviceInfo.MetadataCache);
             }
             filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
-            using (var writer = new StreamWriter(filename))
+            using (var writer = GetStorageWriter(filename))
             {
                 await writer.WriteAsync(serviceInfo.ImageBase64);
             }
@@ -105,32 +106,76 @@ namespace ODataPad.Platform.WP8
 
         public async Task ClearServiceDetailsAsync(ServiceInfo serviceInfo)
         {
-            var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
-            File.Delete(filename);
-            filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
-            File.Delete(filename);
+            using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
+                if (storage.FileExists(filename))
+                {
+                    storage.DeleteFile(filename);
+                }
+                filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
+                if (storage.FileExists(filename))
+                {
+                    storage.DeleteFile(filename);
+                }
+            }
         }
 
         private async Task PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
         {
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
-            if (File.Exists(serviceFilePath))
+            using (var reader = GetStorageReader(serviceFilePath))
             {
-                var document = XDocument.Load(serviceFilePath);
-                var root = document.Element("Services");
-                var elements = root.Elements("Service");
-
-                var elementsToRemove = new List<XElement>();
-                foreach (var element in elements
-                    .Where(x => serviceInfosToKeep.All(y => ServiceInfo.Parse(x).Name != y.Name)))
+                if (reader != null)
                 {
-                    elementsToRemove.Add(element);
-                    var serviceInfo = ServiceInfo.Parse(element.ToString());
-                    await ClearServiceDetailsAsync(serviceInfo);
-                }
+                    var document = XDocument.Load(reader);
+                    var root = document.Element("Services");
+                    var elements = root.Elements("Service");
 
-                elementsToRemove.Remove();
+                    var elementsToRemove = new List<XElement>();
+                    foreach (var element in elements
+                        .Where(x => serviceInfosToKeep.All(y => ServiceInfo.Parse(x).Name != y.Name)))
+                    {
+                        elementsToRemove.Add(element);
+                        var serviceInfo = ServiceInfo.Parse(element.ToString());
+                        await ClearServiceDetailsAsync(serviceInfo);
+                    }
+
+                    elementsToRemove.Remove();
+                }
             }
+        }
+
+        internal static Stream GetStorageStream(string filename, FileMode fileMode, bool checkIfExists = false)
+        {
+            using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (!checkIfExists || storage.FileExists(filename))
+                {
+                    var directory = Path.GetDirectoryName(filename);
+                    if (!storage.DirectoryExists(directory))
+                    {
+                        storage.CreateDirectory(directory);
+                    }
+                    return storage.OpenFile(filename, fileMode);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        internal static StreamReader GetStorageReader(string filename)
+        {
+            var stream = GetStorageStream(filename, FileMode.Open, true);
+            return stream != null ? new StreamReader(stream) : null;
+        }
+
+        internal static StreamWriter GetStorageWriter(string filename)
+        {
+            var stream = GetStorageStream(filename, FileMode.Create, false);
+            return new StreamWriter(stream);
         }
     }
 }
