@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 using ODataPad.Core.ViewModels;
@@ -16,7 +17,7 @@ namespace ODataPad.Samples
             IEnumerable<ServiceInfo> services = null;
             var namespaceName = typeof(DesignHomeViewModel).Namespace;
 
-            var stream = typeof (DesignHomeViewModel).Assembly
+            var stream = Assembly.Load(new AssemblyName("ODataPad.Samples"))
                 .GetManifestResourceStream(string.Join(".", namespaceName, "SampleServices.xml"));
             using (var reader = new StreamReader(stream))
             {
@@ -31,7 +32,7 @@ namespace ODataPad.Samples
 
                 foreach (var service in this.Services)
                 {
-                    stream = typeof(DesignHomeViewModel).Assembly
+                    stream = Assembly.Load(new AssemblyName("ODataPad.Samples"))
                         .GetManifestResourceStream(string.Join(".", namespaceName, "ImagesBase64", service.Name, "png", "base64"));
                     service.ReadImageBase64(stream);
                 }
