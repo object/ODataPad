@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
+using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class CollectionViewModel : BindableBase
+    public class CollectionViewModel : MvxViewModel
     {
         private readonly ServiceCollection _serviceCollection;
         private readonly List<SchemaElementViewModel> _schemaElements;
@@ -28,7 +29,7 @@ namespace ODataPad.Core.ViewModels
         public ObservableResultCollection QueryResults
         {
             get { return _queryResults; }
-            set { this.SetProperty(ref _queryResults, value); }
+            set { _queryResults = value; RaisePropertyChanged(() => QueryResults); }
         }
 
         private string GetCollectionSummary()

@@ -55,7 +55,6 @@
     <Compile Include="Services\DataVersioningService.cs" />
     <Compile Include="AppStart.cs" />
     <Compile Include="ViewModels\HomeViewModelBase.cs" />
-    <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\CollectionViewModel.cs" />
     <Compile Include="ViewModels\ServiceEditViewModel.cs" />
     <Compile Include="ViewModels\ServiceViewModel.cs" />
