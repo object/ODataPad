@@ -18,6 +18,7 @@
     <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,10 +43,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
-    <Reference Include="MonoDroidUnitTesting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\Droid\MonoDroidUnitTesting.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -84,6 +81,7 @@
       <Link>ContentSampleServices.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Properties\AndroidManifest.xml" />
     <EmbeddedResource Include="..\Tests\EmbeddedSampleServices.xml">
       <Link>EmbeddedSampleServices.xml</Link>
     </EmbeddedResource>
@@ -93,6 +91,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\monodroid-unittest\MonoDroidUnitTesting\MonoDroidUnitTesting.csproj">
+      <Project>{a5f8fb02-00e0-4335-91ef-aeaa2c2f3c48}</Project>
+      <Name>MonoDroidUnitTesting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross.Droid\Cirrious.MvvmCross.Droid.csproj">
       <Project>{7a6be137-d0f1-46a1-ae5c-81faeedddf02}</Project>
       <Name>Cirrious.MvvmCross.Droid</Name>

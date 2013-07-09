@@ -79,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cirrious.MvvmCross.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cirrious.MvvmCross.Test.Core", "..\MvvmCross\Cirrious\Test\Cirrious.MvvmCross.Test.Core\Cirrious.MvvmCross.Test.Core.csproj", "{8E788346-A72B-4939-9D95-A44AC5F46D9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoDroidUnitTesting", "..\monodroid-unittest\MonoDroidUnitTesting\MonoDroidUnitTesting.csproj", "{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -597,6 +599,20 @@ Global
 		{8E788346-A72B-4939-9D95-A44AC5F46D9D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8E788346-A72B-4939-9D95-A44AC5F46D9D}.Release|x64.ActiveCfg = Release|Any CPU
 		{8E788346-A72B-4939-9D95-A44AC5F46D9D}.Release|x86.ActiveCfg = Release|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Release|x64.ActiveCfg = Release|Any CPU
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -632,6 +648,7 @@ Global
 		{4E21502E-EA62-4628-A7D8-E37F7DFDBD22} = {004EAF91-0A9C-43C7-B39D-77B142725CF7}
 		{3C0E8F23-6D06-47A2-9863-2C92060BA5FE} = {004EAF91-0A9C-43C7-B39D-77B142725CF7}
 		{F14BC1CE-4432-47FE-AE8C-072972FF8496} = {004EAF91-0A9C-43C7-B39D-77B142725CF7}
+		{A5F8FB02-00E0-4335-91EF-AEAA2C2F3C48} = {004EAF91-0A9C-43C7-B39D-77B142725CF7}
 		{5B604207-4748-44A9-B49D-18B931475862} = {77E61407-1999-4D79-87D6-EE3867F6CF24}
 	EndGlobalSection
 EndGlobal

@@ -53,7 +53,7 @@ namespace ODataPad.Samples
 
                 };
 
-                var collections = new ServiceCollection[]
+                var collections = new[]
                                   {
                                       new ServiceCollection("ODataConsumers", selectedProperties,
                                                             selectedAssociations),
