@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Deployment.Internal;
+using System.Linq;
+using System.Threading;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core;
 using ODataPad.Core.ViewModels;
@@ -26,10 +28,11 @@ namespace ODataPad.Specifications
         }
 
         [When(@"I start the application")]
-        public void a()
+        public async void a()
         {
             var viewModel = new HomeViewModel();
             ScenarioContext.Current.Add("HomeViewModel", viewModel);
+            viewModel.Init(null).Wait();
         }
 
         [Then(@"I should see a list of services")]

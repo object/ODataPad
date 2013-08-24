@@ -13,6 +13,10 @@ namespace ODataPad.Core.ViewModels
 {
     public class HomeViewModel : HomeViewModelBase
     {
+        public class NavigationParameters
+        {
+        }
+
         private readonly IServiceRepository _serviceRepository;
         private readonly IServiceLocalStorage _localStorage;
         private readonly IApplicationLocalData _localData;
@@ -25,14 +29,12 @@ namespace ODataPad.Core.ViewModels
             _localData = Mvx.Resolve<IApplicationLocalData>();
             _resultProvider = Mvx.Resolve<IResultProvider>();
 
-            PrepareApplicationDataAsync();
-
             this.SelectedService = null;
             this.IsServiceSelected = false;
             this.IsQueryInProgress = false;
         }
 
-        private async Task PrepareApplicationDataAsync()
+        public async Task Init(NavigationParameters parameters)
         {
             await EnsureDataVersionAsync();
             await PopulateServicesAsync();
