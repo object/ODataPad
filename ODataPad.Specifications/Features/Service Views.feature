@@ -1,7 +1,4 @@
 ﻿Feature: Services
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
 
 Scenario: Initial screen should display a list of available services
 	When I start the application

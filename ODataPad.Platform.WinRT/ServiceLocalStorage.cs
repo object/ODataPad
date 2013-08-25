@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cirrious.CrossCore;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using Windows.Storage;
@@ -11,10 +12,6 @@ namespace ODataPad.Platform.WinRT
     public class ServiceLocalStorage : IServiceLocalStorage
     {
         private const string ServicesKey = "Services";
-
-        public ServiceLocalStorage()
-        {
-        }
 
         public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {

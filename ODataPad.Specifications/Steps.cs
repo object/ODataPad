@@ -23,12 +23,30 @@ namespace ODataPad.Specifications
         [BeforeScenario]
         public void BeforeScenario()
         {
-            var app = _appDriver.CreateApp();
-            ScenarioContext.Current.Add("App", app);
+            _appDriver.ClearData();
+            _appDriver.CreateApp();
+        }
+
+        [Given(@"Service repository has no entries")]
+        public void c()
+        {
+            _appDriver.ClearData();
+        }
+
+        [Given(@"Service repository has following entries")]
+        public void d(Table table)
+        {
+            _appDriver.CreateServices(table.Rows.Select(x => x[0]));
+        }
+
+        [Given(@"Service repository was created by the previous program version")]
+        public void e()
+        {
+            _appDriver.SetDataVersion(2);
         }
 
         [When(@"I start the application")]
-        public async void a()
+        public void a()
         {
             var viewModel = new HomeViewModel();
             ScenarioContext.Current.Add("HomeViewModel", viewModel);

@@ -14,18 +14,18 @@ namespace ODataPad.Platform.WP8
         : IApplicationLocalData
     {
         private const string DataVersionAttributeName = "DataVersion";
+        private int _currentDataVersion;
 
-        public ApplicationLocalData()
-        {
-        }
+        public int CurrentDataVersion { get { return _currentDataVersion; } }
 
         public async Task SetDataVersionAsync(int requestedDataVersion)
         {
+            (Mvx.Resolve<IServiceLocalStorage>() as ServiceLocalStorage).CurrentDataVersion = requestedDataVersion;
             await Mvx.Resolve<IDataVersioningService>().SetDataVersionAsync(GetCurrentDataVersion(), requestedDataVersion);
             SetCurrentDataVersion(requestedDataVersion);
         }
 
-        public int GetCurrentDataVersion()
+        private int GetCurrentDataVersion()
         {
             var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder,
                                                ServiceLocalStorage.ServiceFile);
@@ -45,7 +45,7 @@ namespace ODataPad.Platform.WP8
             }
         }
 
-        public void SetCurrentDataVersion(int dataVersion)
+        private void SetCurrentDataVersion(int dataVersion)
         {
             XDocument document = null;
             var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder, ServiceLocalStorage.ServiceFile);
@@ -59,6 +59,7 @@ namespace ODataPad.Platform.WP8
                 document.Element("Services").SetAttributeValue(DataVersionAttributeName, dataVersion);
                 document.Save(writer);
             }
+            _currentDataVersion = dataVersion;
         }
     }
 }

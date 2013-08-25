@@ -9,13 +9,14 @@ namespace ODataPad.Platform.WinRT
     public class ApplicationLocalData 
         : IApplicationLocalData
     {
-        public ApplicationLocalData()
-        {
-        }
+        private int _currentDataVersion;
+
+        public int CurrentDataVersion { get { return _currentDataVersion; } }
 
         public async Task SetDataVersionAsync(int requestedDataVersion)
         {
             await ApplicationData.Current.SetVersionAsync((uint)requestedDataVersion, SetVersionHandlerAsync);
+            _currentDataVersion = requestedDataVersion;
         }
 
         private async void SetVersionHandlerAsync(SetVersionRequest request)

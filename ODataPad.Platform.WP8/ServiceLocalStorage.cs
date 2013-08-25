@@ -5,6 +5,7 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Cirrious.CrossCore;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
@@ -14,10 +15,11 @@ namespace ODataPad.Platform.WP8
     {
         internal static readonly string ServiceDataFolder = "Services";
         internal const string ServiceFile = "Services.xml";
+        internal const string DataVersionAttributeName = "DataVersion";
+        private const string ServiceCollectionElementName = "Services";
+        private const string ServiceElementName = "Service";
 
-        static ServiceLocalStorage()
-        {
-        }
+        public int CurrentDataVersion { get; set; }
 
         public async Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {
@@ -29,7 +31,8 @@ namespace ODataPad.Platform.WP8
                 if (reader != null)
                 {
                     var document = XDocument.Load(reader);
-                    var elements = document.Element("Services").Elements("Service");
+                    var root = document.Element(ServiceCollectionElementName);
+                    var elements = root.Elements(ServiceElementName);
                     foreach (var element in elements)
                     {
                         var serviceInfo = ServiceInfo.Parse(element.ToString());
@@ -43,7 +46,8 @@ namespace ODataPad.Platform.WP8
 
         public async Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
-            var element = new XElement("Services");
+            var element = new XElement(ServiceCollectionElementName);
+            element.SetAttributeValue(DataVersionAttributeName, this.CurrentDataVersion);
             foreach (var serviceInfo in serviceInfos)
             {
                 element.Add(serviceInfo.AsXElement());
@@ -129,8 +133,8 @@ namespace ODataPad.Platform.WP8
                 if (reader != null)
                 {
                     var document = XDocument.Load(reader);
-                    var root = document.Element("Services");
-                    var elements = root.Elements("Service");
+                    var root = document.Element(ServiceCollectionElementName);
+                    var elements = root.Elements(ServiceElementName);
 
                     var elementsToRemove = new List<XElement>();
                     foreach (var element in elements

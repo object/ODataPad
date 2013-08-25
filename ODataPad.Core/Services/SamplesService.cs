@@ -134,7 +134,11 @@ namespace ODataPad.Core.Services
         public async Task UpdateSamplesAsync(int fromDataVersion, int toDataVersion)
         {
             var newServices = await GetNewSamplesAsync(fromDataVersion, toDataVersion);
+            newServices = await GetSamplesDetailsAsync(newServices);
+
             var updatedServices = await GetUpdatedSamplesAsync(fromDataVersion, toDataVersion);
+            updatedServices = await GetSamplesDetailsAsync(updatedServices);
+
             var expiredServices = await GetExpiredSamplesAsync(fromDataVersion, toDataVersion);
             newServices = newServices.Where(x => expiredServices.All(y => x.Name != y.Name)).ToList();
             updatedServices = updatedServices.Where(x => expiredServices.All(y => x.Name != y.Name)).ToList();
@@ -162,8 +166,7 @@ namespace ODataPad.Core.Services
             allServices = allServices.Union(newServices).ToList();
 
             await _localStorage.SaveServiceInfosAsync(allServices);
-            var servicesWithMetadata = await GetSamplesDetailsAsync(allServices);
-            foreach (var serviceInfo in servicesWithMetadata)
+            foreach (var serviceInfo in allServices)
             {
                 await _localStorage.SaveServiceDetailsAsync(serviceInfo);
             }

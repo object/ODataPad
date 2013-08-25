@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Cirrious.CrossCore;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
-using ODataPad.Core.Services;
 
 namespace ODataPad.Platform.Net45
 {
@@ -14,6 +14,11 @@ namespace ODataPad.Platform.Net45
     {
         internal static readonly string ServiceDataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Services");
         internal const string ServiceFile = "Services.xml";
+        internal const string DataVersionAttributeName = "DataVersion";
+        private const string ServiceCollectionElementName = "Services";
+        private const string ServiceElementName = "Service";
+
+        public int CurrentDataVersion { get; set; }
 
         static ServiceLocalStorage()
         {
@@ -30,8 +35,8 @@ namespace ODataPad.Platform.Net45
             if (File.Exists(serviceFilePath))
             {
                 var document = XDocument.Load(serviceFilePath);
-                var root = document.Element("Services");
-                var elements = root.Elements("Service");
+                var root = document.Element(ServiceCollectionElementName);
+                var elements = root.Elements(ServiceElementName);
                 foreach (var element in elements)
                 {
                     var serviceInfo = ServiceInfo.Parse(element.ToString());
@@ -44,7 +49,8 @@ namespace ODataPad.Platform.Net45
 
         public async Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
-            var element = new XElement("Services");
+            var element = new XElement(ServiceCollectionElementName);
+            element.SetAttributeValue(DataVersionAttributeName, this.CurrentDataVersion);
             foreach (var serviceInfo in serviceInfos)
             {
                 element.Add(serviceInfo.AsXElement());
@@ -115,8 +121,8 @@ namespace ODataPad.Platform.Net45
             if (File.Exists(serviceFilePath))
             {
                 var document = XDocument.Load(serviceFilePath);
-                var root = document.Element("Services");
-                var elements = root.Elements("Service");
+                var root = document.Element(ServiceCollectionElementName);
+                var elements = root.Elements(ServiceElementName);
 
                 var elementsToRemove = new List<XElement>();
                 foreach (var element in elements

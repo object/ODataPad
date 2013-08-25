@@ -12,39 +12,39 @@ namespace ODataPad.Platform.Net45
     public class ApplicationLocalData
         : IApplicationLocalData
     {
-        private const string DataVersionAttributeName = "DataVersion";
+        private int _currentDataVersion;
 
-        public ApplicationLocalData()
-        {
-        }
+        public int CurrentDataVersion { get { return _currentDataVersion; } }
 
         public async Task SetDataVersionAsync(int requestedDataVersion)
         {
+            (Mvx.Resolve<IServiceLocalStorage>() as ServiceLocalStorage).CurrentDataVersion = requestedDataVersion;
             await Mvx.Resolve<IDataVersioningService>().SetDataVersionAsync(GetCurrentDataVersion(), requestedDataVersion);
             SetCurrentDataVersion(requestedDataVersion);
         }
 
-        public int GetCurrentDataVersion()
+        private int GetCurrentDataVersion()
         {
             var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder, ServiceLocalStorage.ServiceFile);
             if (File.Exists(serviceFilePath))
             {
                 var document = XDocument.Load(serviceFilePath);
                 var root = document.Element("Services");
-                if (root.Attributes().Any(x => x.Name == DataVersionAttributeName))
+                if (root.Attributes().Any(x => x.Name == ServiceLocalStorage.DataVersionAttributeName))
                 {
-                    return int.Parse(root.Attribute(DataVersionAttributeName).Value);
+                    return int.Parse(root.Attribute(ServiceLocalStorage.DataVersionAttributeName).Value);
                 }
             }
             return 0;
         }
 
-        public void SetCurrentDataVersion(int dataVersion)
+        private void SetCurrentDataVersion(int dataVersion)
         {
             var serviceFilePath = Path.Combine(ServiceLocalStorage.ServiceDataFolder, ServiceLocalStorage.ServiceFile);
             var document = XDocument.Load(serviceFilePath);
-            document.Element("Services").SetAttributeValue(DataVersionAttributeName, dataVersion);
+            document.Element("Services").SetAttributeValue(ServiceLocalStorage.DataVersionAttributeName, dataVersion);
             document.Save(serviceFilePath);
+            _currentDataVersion = dataVersion;
         }
     }
 }
