@@ -26,10 +26,8 @@ namespace ODataPad.Tests.Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::ODataPad.Platform.Droid.Resource.Drawable.monoandroidsplash = global::ODataPad.Tests.Droid.Resource.Drawable.monoandroidsplash;
 			global::ODataPad.Platform.Droid.Resource.String.ApplicationName = global::ODataPad.Tests.Droid.Resource.String.ApplicationName;
 			global::ODataPad.Platform.Droid.Resource.String.Hello = global::ODataPad.Tests.Droid.Resource.String.Hello;
-			global::ODataPad.Platform.Droid.Resource.Style.Mono_Android_Theme_Splash = global::ODataPad.Tests.Droid.Resource.Style.Mono_Android_Theme_Splash;
 		}
 		
 		public partial class Attribute
@@ -51,9 +49,6 @@ namespace ODataPad.Tests.Droid
 			// aapt resource value: 0x7f020000
 			public const int Icon = 2130837504;
 			
-			// aapt resource value: 0x7f020001
-			public const int monoandroidsplash = 2130837505;
-			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -67,8 +62,8 @@ namespace ODataPad.Tests.Droid
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f060000
-			public const int MyButton = 2131099648;
+			// aapt resource value: 0x7f050000
+			public const int MyButton = 2131034112;
 			
 			static Id()
 			{
@@ -111,22 +106,6 @@ namespace ODataPad.Tests.Droid
 			}
 			
 			private String()
-			{
-			}
-		}
-		
-		public partial class Style
-		{
-			
-			// aapt resource value: 0x7f050000
-			public const int Mono_Android_Theme_Splash = 2131034112;
-			
-			static Style()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
-			private Style()
 			{
 			}
 		}

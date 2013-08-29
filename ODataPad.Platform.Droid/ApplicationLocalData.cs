@@ -14,15 +14,18 @@ namespace ODataPad.Platform.Droid
         : IApplicationLocalData
     {
         private const string DataVersionAttributeName = "DataVersion";
+        private int _currentDataVersion;
 
         public ApplicationLocalData()
         {
         }
 
-        public Task SetDataVersionAsync(int requestedDataVersion)
+        public int CurrentDataVersion { get { return _currentDataVersion; } }
+
+        public async Task SetDataVersionAsync(int requestedDataVersion)
         {
-            Mvx.Resolve<IDataVersioningService>().SetDataVersionAsync(GetCurrentDataVersion(), requestedDataVersion);
-            SetCurrentDataVersion(requestedDataVersion);
+            (Mvx.Resolve<IServiceLocalStorage>() as ServiceLocalStorage).CurrentDataVersion = requestedDataVersion;
+            await Mvx.Resolve<IDataVersioningService>().SetDataVersionAsync(GetCurrentDataVersion(), requestedDataVersion);
             throw new NotImplementedException();
         }
 
@@ -60,6 +63,7 @@ namespace ODataPad.Platform.Droid
                 document.Element("Services").SetAttributeValue(DataVersionAttributeName, dataVersion);
                 document.Save(writer);
             }
+            _currentDataVersion = dataVersion;
         }
     }
 }

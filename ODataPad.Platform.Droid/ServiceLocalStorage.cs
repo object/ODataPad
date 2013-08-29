@@ -14,10 +14,11 @@ namespace ODataPad.Platform.Droid
     {
         internal static readonly string ServiceDataFolder = "Services";
         internal const string ServiceFile = "Services.xml";
+        internal const string DataVersionAttributeName = "DataVersion";
+        private const string ServiceCollectionElementName = "Services";
+        private const string ServiceElementName = "Service";
 
-        static ServiceLocalStorage()
-        {
-        }
+        public int CurrentDataVersion { get; set; }
 
         public Task<IEnumerable<ServiceInfo>> LoadServiceInfosAsync()
         {
@@ -29,7 +30,8 @@ namespace ODataPad.Platform.Droid
                 if (reader != null)
                 {
                     var document = XDocument.Load(reader);
-                    var elements = document.Element("Services").Elements("Service");
+                    var root = document.Element(ServiceCollectionElementName);
+                    var elements = root.Elements(ServiceElementName);
                     foreach (var element in elements)
                     {
                         var serviceInfo = ServiceInfo.Parse(element.ToString());
@@ -41,9 +43,9 @@ namespace ODataPad.Platform.Droid
             return Task.Factory.StartNew(() => services.Select(x => x));
         }
 
-        public Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
+        public async Task SaveServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfos)
         {
-            var element = new XElement("Services");
+            var element = new XElement(ServiceCollectionElementName);
             foreach (var serviceInfo in serviceInfos)
             {
                 element.Add(serviceInfo.AsXElement());
@@ -52,14 +54,13 @@ namespace ODataPad.Platform.Droid
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
             using (var writer = GetStorageWriter(serviceFilePath))
             {
-                writer.Write(element.ToString());
+                await writer.WriteAsync(element.ToString());
             }
-            throw new NotImplementedException();
         }
 
-        public Task ClearServiceInfosAsync()
+        public async Task ClearServiceInfosAsync()
         {
-            PurgeServiceInfosAsync(new List<ServiceInfo>());
+            await PurgeServiceInfosAsync(new List<ServiceInfo>());
 
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
             using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
@@ -69,17 +70,16 @@ namespace ODataPad.Platform.Droid
                     storage.DeleteFile(serviceFilePath);
                 }
             }
-            throw new NotImplementedException();
         }
 
-        public Task LoadServiceDetailsAsync(ServiceInfo serviceInfo)
+        public async Task LoadServiceDetailsAsync(ServiceInfo serviceInfo)
         {
             var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
             using (var reader = GetStorageReader(filename))
             {
                 if (reader != null)
                 {
-                    serviceInfo.MetadataCache = reader.ReadToEnd();
+                    serviceInfo.MetadataCache = await reader.ReadToEndAsync();
                 }
             }
             filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
@@ -87,28 +87,26 @@ namespace ODataPad.Platform.Droid
             {
                 if (reader != null)
                 {
-                    serviceInfo.ImageBase64 = reader.ReadToEnd();
+                    serviceInfo.ImageBase64 = await reader.ReadToEndAsync();
                 }
             }
-            throw new NotImplementedException();
         }
 
-        public Task SaveServiceDetailsAsync(ServiceInfo serviceInfo)
+        public async Task SaveServiceDetailsAsync(ServiceInfo serviceInfo)
         {
             var filename = Path.Combine(ServiceDataFolder, serviceInfo.MetadataCacheFilename);
             using (var writer = GetStorageWriter(filename))
             {
-                writer.Write(serviceInfo.MetadataCache);
+                await writer.WriteAsync(serviceInfo.MetadataCache);
             }
             filename = Path.Combine(ServiceDataFolder, serviceInfo.ImageBase64Filename);
             using (var writer = GetStorageWriter(filename))
             {
-                writer.Write(serviceInfo.ImageBase64);
+                await writer.WriteAsync(serviceInfo.ImageBase64);
             }
-            throw new NotImplementedException();
         }
 
-        public Task ClearServiceDetailsAsync(ServiceInfo serviceInfo)
+        public async Task ClearServiceDetailsAsync(ServiceInfo serviceInfo)
         {
             using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -123,10 +121,9 @@ namespace ODataPad.Platform.Droid
                     storage.DeleteFile(filename);
                 }
             }
-            throw new NotImplementedException();
         }
 
-        private Task PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
+        private async Task PurgeServiceInfosAsync(IEnumerable<ServiceInfo> serviceInfosToKeep)
         {
             var serviceFilePath = Path.Combine(ServiceDataFolder, ServiceFile);
             using (var reader = GetStorageReader(serviceFilePath))
@@ -143,13 +140,12 @@ namespace ODataPad.Platform.Droid
                     {
                         elementsToRemove.Add(element);
                         var serviceInfo = ServiceInfo.Parse(element.ToString());
-                        ClearServiceDetailsAsync(serviceInfo);
+                        await ClearServiceDetailsAsync(serviceInfo);
                     }
 
                     elementsToRemove.Remove();
                 }
             }
-            throw new NotImplementedException();
         }
 
         internal static Stream GetStorageStream(string filename, FileMode fileMode, bool checkIfExists = false)
