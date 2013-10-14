@@ -15,26 +15,26 @@ namespace ODataPad.Core.Services
             return ODataClient.GetSchemaAsString(serviceUrl);
         }
 
-        public static IEnumerable<ServiceCollection> ParseServiceMetadata(string schemaString)
+        public static IEnumerable<ResourceSet> ParseServiceMetadata(string schemaString)
         {
-            var collections = new List<ServiceCollection>();
+            var collections = new List<ResourceSet>();
             var schema = ODataClient.ParseSchemaString(schemaString);
 
             foreach (var table in schema.Tables)
             {
                 var properties = table.Columns.Select(x =>
-                    new CollectionProperty(
+                    new ResourceProperty(
                         x.ActualName,
                         x.PropertyType.Name.Split('.').Last(),
                         table.GetKeyNames().Contains(x.ActualName),
                         x.IsNullable)).ToList();
 
                 var associations = table.Associations.Select(x =>
-                    new CollectionAssociation(
+                    new ResourceAssociation(
                         x.ActualName,
                         x.Multiplicity)).ToList();
 
-                collections.Add(new ServiceCollection(table.ActualName, properties, associations));
+                collections.Add(new ResourceSet(table.ActualName, properties, associations));
             }
             return collections;
         }

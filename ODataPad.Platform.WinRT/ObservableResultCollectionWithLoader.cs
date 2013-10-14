@@ -13,10 +13,10 @@ namespace ODataPad.Platform.WinRT
     {
         public ObservableResultCollectionWithLoader(
             string serviceUrl, 
-            string collectionName,
-            IEnumerable<CollectionProperty> collectionProperties, 
+            string resourceSetName,
+            IEnumerable<ResourceProperty> resourceProperties, 
             INotifyInProgress notifyInProgress)
-            : base(serviceUrl, collectionName, collectionProperties, notifyInProgress)
+            : base(serviceUrl, resourceSetName, resourceProperties, notifyInProgress)
         {
         }
 

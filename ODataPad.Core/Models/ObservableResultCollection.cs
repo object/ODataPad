@@ -9,19 +9,19 @@ namespace ODataPad.Core.Models
     public class ObservableResultCollection : ObservableCollection<ResultViewModel>
     {
         public string ServiceUrl { get; private set; }
-        public string CollectionName { get; private set; }
-        public IEnumerable<CollectionProperty> CollectionProperties { get; private set; }
+        public string ResourceSetName { get; private set; }
+        public IEnumerable<ResourceProperty> ResourceProperties { get; private set; }
         public INotifyInProgress NotifyInProgress { get; private set; }
 
         public ObservableResultCollection(
             string serviceUrl,
-            string collectionName,
-            IEnumerable<CollectionProperty> collectionProperties,
+            string resourceSetName,
+            IEnumerable<ResourceProperty> resourceProperties,
             INotifyInProgress notifyInProgress)
         {
             this.ServiceUrl = serviceUrl;
-            this.CollectionName = collectionName;
-            this.CollectionProperties = collectionProperties;
+            this.ResourceSetName = resourceSetName;
+            this.ResourceProperties = resourceProperties;
             this.NotifyInProgress = notifyInProgress;
 
             this.HasMoreItems = true;

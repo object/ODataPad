@@ -146,13 +146,13 @@
                         Background="{StaticResource ApplicationPageBackgroundThemeBrush}" 
                         Foreground="{StaticResource ApplicationForegroundThemeBrush}" 
                         BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
-                        ItemsSource="{Binding CollectionModes}"
-                        SelectedItem="{Binding CollectionMode, Mode=TwoWay}"
+                        ItemsSource="{Binding ResourceSetModes}"
+                        SelectedItem="{Binding ResourceSetMode, Mode=TwoWay}"
                         Visibility="{Binding Path=IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectCollectionModeCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding SelectResourceModeCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
@@ -174,13 +174,13 @@
                         Grid.Row="0"
                         Grid.Column="0"
                     TabIndex="2"
-                    ItemsSource="{Binding Collections, Mode=TwoWay}"
+                    ItemsSource="{Binding Resources, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}" 
-                    SelectedItem="{Binding SelectedCollection, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedResource, Mode=TwoWay}"
                     SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectCollectionCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding SelectResourceCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListView>
@@ -196,7 +196,7 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding SelectedCollection}"
+                DataContext="{Binding SelectedResource}"
                 ItemsSource="{Binding SchemaElements}" 
                 ItemTemplate="{StaticResource CollectionElementItemTemplate}" 
                 Visibility="{Binding Path=Home.IsPropertyViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
@@ -207,7 +207,7 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding SelectedCollection}"
+                DataContext="{Binding SelectedResource}"
                 ItemsSource="{Binding QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
                 Visibility="{Binding Path=Home.IsResultViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"

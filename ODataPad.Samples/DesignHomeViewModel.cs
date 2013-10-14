@@ -40,33 +40,33 @@ namespace ODataPad.Samples
                 this.SelectedService = this.Services.First();
                 this.IsServiceSelected = true;
 
-                var selectedProperties = new Collection<CollectionProperty>
+                var selectedProperties = new Collection<ResourceProperty>
                                  {
-                                     new CollectionProperty("Id", "Int32", true, false),
-                                     new CollectionProperty("Name", "String", false, false),
-                                     new CollectionProperty("Description", "String", false, false),
-                                     new CollectionProperty("ApplicationUrl", "String", false, true),
+                                     new ResourceProperty("Id", "Int32", true, false),
+                                     new ResourceProperty("Name", "String", false, false),
+                                     new ResourceProperty("Description", "String", false, false),
+                                     new ResourceProperty("ApplicationUrl", "String", false, true),
                                  };
 
-                var selectedAssociations = new Collection<CollectionAssociation>
+                var selectedAssociations = new Collection<ResourceAssociation>
                 {
 
                 };
 
                 var collections = new[]
                                   {
-                                      new ServiceCollection("ODataConsumers", selectedProperties,
+                                      new ResourceSet("ODataConsumers", selectedProperties,
                                                             selectedAssociations),
-                                      new ServiceCollection("ODataProducerApplications", new Collection<CollectionProperty>(),
-                                                            new Collection<CollectionAssociation>()),
-                                      new ServiceCollection("ODataProducerLiveServices", new Collection<CollectionProperty>(),
-                                                            new Collection<CollectionAssociation>()),
+                                      new ResourceSet("ODataProducerApplications", new Collection<ResourceProperty>(),
+                                                            new Collection<ResourceAssociation>()),
+                                      new ResourceSet("ODataProducerLiveServices", new Collection<ResourceProperty>(),
+                                                            new Collection<ResourceAssociation>()),
                                   };
 
-                this.Collections = new ObservableCollection<CollectionViewModel>(
-                    collections.Select(x => new CollectionViewModel(this, x)));
+                this.Resources = new ObservableCollection<ResourceSetViewModel>(
+                    collections.Select(x => new ResourceSetViewModel(this, x)));
 
-                this.SelectedCollection = this.Collections.First();
+                this.SelectedResource = this.Resources.First();
             }
         }
     }

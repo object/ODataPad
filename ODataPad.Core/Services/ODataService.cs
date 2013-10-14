@@ -10,7 +10,7 @@ namespace ODataPad.Core.Services
     public class ODataService
     {
         public async Task<QueryResult> LoadResultsAsync(
-            string serviceUrl, string collectionName, int skipCount, int maxCount, INotifyInProgress notify)
+            string serviceUrl, string resourceSetName, int skipCount, int maxCount, INotifyInProgress notify)
         {
             var task = Task<QueryResult>.Factory.StartNew(() =>
             {
@@ -19,7 +19,7 @@ namespace ODataPad.Core.Services
                 {
                     var odataClient = new ODataClient(serviceUrl);
                     result.Rows = odataClient
-                        .For(collectionName)
+                        .For(resourceSetName)
                         .Skip(skipCount)
                         .Top(maxCount)
                         .FindEntries();

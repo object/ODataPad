@@ -6,13 +6,13 @@ namespace ODataPad.Core.ViewModels
 {
     public class SchemaElementViewModel
     {
-        public SchemaElementViewModel(CollectionProperty property)
+        public SchemaElementViewModel(ResourceProperty property)
         {
             this.Name = property.Name;
             this.Summary = GetPropertySummary(property);
         }
 
-        public SchemaElementViewModel(CollectionAssociation association)
+        public SchemaElementViewModel(ResourceAssociation association)
         {
             this.Name = association.Name;
             this.Summary = GetAssociationSummary(association);
@@ -21,7 +21,7 @@ namespace ODataPad.Core.ViewModels
         public string Name { get; private set; }
         public string Summary { get; private set; }
 
-        private string GetPropertySummary(CollectionProperty property)
+        private string GetPropertySummary(ResourceProperty property)
         {
             var summary = property.Type;
             var items = new List<string>();
@@ -34,7 +34,7 @@ namespace ODataPad.Core.ViewModels
             return summary;
         }
 
-        private string GetAssociationSummary(CollectionAssociation association)
+        private string GetAssociationSummary(ResourceAssociation association)
         {
             return association.Multiplicity;
         }

@@ -11,14 +11,14 @@ namespace ODataPad.Platform.WinRT
     {
         public ObservableResultCollection CreateResultCollection(
             string serviceUrl,
-            string collectionName,
-            IEnumerable<CollectionProperty> collectionProperties,
+            string resourceSetName,
+            IEnumerable<ResourceProperty> resourceProperties,
             INotifyInProgress notifyInProgress)
         {
-            return new ObservableResultCollectionWithLoader(serviceUrl, collectionName, collectionProperties, notifyInProgress);
+            return new ObservableResultCollectionWithLoader(serviceUrl, resourceSetName, resourceProperties, notifyInProgress);
         }
 
-        public async Task AddResultsAsync(ObservableResultCollection collection)
+        public async Task AddResultsAsync(ObservableResultCollection resultCollection)
         {
         }
     }

@@ -11,13 +11,13 @@ namespace ODataPad.Core.ViewModels
         protected HomeViewModelBase()
         {
             _services = new ObservableCollection<ServiceViewModel>();
-            _collections = new ObservableCollection<CollectionViewModel>();
-            _collectionModes = new ObservableCollection<string>(new[]
+            _resources = new ObservableCollection<ResourceSetViewModel>();
+            _resourceSetModes = new ObservableCollection<string>(new[]
                                                                     {
                                                                         "Show collection properties", 
                                                                         "Show collection data"
                                                                     });
-            _collectionMode = _collectionModes[0];
+            _resourceSetMode = _resourceSetModes[0];
         }
 
         public ICommand AddServiceCommand
@@ -101,55 +101,55 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
-        private ObservableCollection<CollectionViewModel> _collections;
-        public ObservableCollection<CollectionViewModel> Collections
+        private ObservableCollection<ResourceSetViewModel> _resources;
+        public ObservableCollection<ResourceSetViewModel> Resources
         {
-            get { return _collections; }
-            set { _collections = value; RaisePropertyChanged(() => Collections); }
+            get { return _resources; }
+            set { _resources = value; RaisePropertyChanged(() => Resources); }
         }
 
-        private CollectionViewModel _selectedCollection;
-        public CollectionViewModel SelectedCollection
+        private ResourceSetViewModel _selectedResource;
+        public ResourceSetViewModel SelectedResource
         {
-            get { return _selectedCollection; }
-            set { _selectedCollection = value; RaisePropertyChanged(() => SelectedCollection); }
+            get { return _selectedResource; }
+            set { _selectedResource = value; RaisePropertyChanged(() => SelectedResource); }
         }
 
-        public ICommand SelectCollectionCommand
+        public ICommand SelectResourceCommand
         {
-            get { return new MvxCommand(SelectCollection); }
+            get { return new MvxCommand(SelectResource); }
         }
 
-        public virtual void SelectCollection()
+        public virtual void SelectResource()
         {
         }
 
-        private readonly ObservableCollection<string> _collectionModes; 
-        public IEnumerable<string> CollectionModes
+        private readonly ObservableCollection<string> _resourceSetModes; 
+        public IEnumerable<string> ResourceSetModes
         {
-            get { return _collectionModes; }
+            get { return _resourceSetModes; }
         }
 
-        private string _collectionMode;
-        public string CollectionMode
+        private string _resourceSetMode;
+        public string ResourceSetMode
         {
-            get { return _collectionMode; }
+            get { return _resourceSetMode; }
             set
             {
-                _collectionMode = value;
-                RaisePropertyChanged(() => CollectionMode);
+                _resourceSetMode = value;
+                RaisePropertyChanged(() => ResourceSetMode);
                 RaisePropertyChanged(() => IsPropertyViewSelected);
                 RaisePropertyChanged(() => IsResultViewSelected);
                 RaisePropertyChanged(() => IsSingleResultSelected);
             }
         }
 
-        public ICommand SelectCollectionModeCommand
+        public ICommand SelectResourceModeCommand
         {
-            get { return new MvxCommand(SelectCollectionMode); }
+            get { return new MvxCommand(SelectResourceMode); }
         }
 
-        public virtual void SelectCollectionMode()
+        public virtual void SelectResourceMode()
         {
         }
 
@@ -208,8 +208,8 @@ namespace ODataPad.Core.ViewModels
             set { _selectedResultDetails = value; RaisePropertyChanged(() => SelectedResultDetails); }
         }
 
-        public bool IsPropertyViewSelected { get { return this.CollectionMode == this.CollectionModes.First(); } }
-        public bool IsResultViewSelected { get { return this.CollectionMode != this.CollectionModes.First() && this.SelectedResult == null; } }
-        public bool IsSingleResultSelected { get { return this.CollectionMode != this.CollectionModes.First() && this.SelectedResult != null; } }
+        public bool IsPropertyViewSelected { get { return this.ResourceSetMode == this.ResourceSetModes.First(); } }
+        public bool IsResultViewSelected { get { return this.ResourceSetMode != this.ResourceSetModes.First() && this.SelectedResult == null; } }
+        public bool IsSingleResultSelected { get { return this.ResourceSetMode != this.ResourceSetModes.First() && this.SelectedResult != null; } }
     }
 }

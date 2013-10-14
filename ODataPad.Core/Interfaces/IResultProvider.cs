@@ -10,10 +10,10 @@ namespace ODataPad.Core.Interfaces
     {
         ObservableResultCollection CreateResultCollection(
             string serviceUrl,
-            string collectionName,
-            IEnumerable<CollectionProperty> collectionProperties,
+            string resourceSetName,
+            IEnumerable<ResourceProperty> resourceProperties,
             INotifyInProgress notifyInProgress);
 
-        Task AddResultsAsync(ObservableResultCollection collection);
+        Task AddResultsAsync(ObservableResultCollection resultCollection);
     }
 }

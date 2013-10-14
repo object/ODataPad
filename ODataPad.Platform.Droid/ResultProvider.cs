@@ -14,22 +14,22 @@ namespace ODataPad.Platform.Droid
     {
         public ObservableResultCollection CreateResultCollection(
             string serviceUrl, 
-            string collectionName,
-            IEnumerable<CollectionProperty> collectionProperties, 
+            string resourceSetName,
+            IEnumerable<ResourceProperty> resourceProperties, 
             INotifyInProgress notifyInProgress)
         {
-            return new ObservableResultCollection(serviceUrl, collectionName, collectionProperties, notifyInProgress);
+            return new ObservableResultCollection(serviceUrl, resourceSetName, resourceProperties, notifyInProgress);
         }
 
-        public Task AddResultsAsync(ObservableResultCollection collection)
+        public Task AddResultsAsync(ObservableResultCollection resultCollection)
         {
-            var resultLoader = new PartialResultLoader(collection.ServiceUrl, collection.CollectionName, collection.CollectionProperties, collection.NotifyInProgress);
-            var resultRows = Task.Factory.StartNew(() => resultLoader.LoadResults(collection.Count, 100).Result).Result;
+            var resultLoader = new PartialResultLoader(resultCollection.ServiceUrl, resultCollection.ResourceSetName, resultCollection.ResourceProperties, resultCollection.NotifyInProgress);
+            var resultRows = Task.Factory.StartNew(() => resultLoader.LoadResults(resultCollection.Count, 100).Result).Result;
 
             foreach (var row in resultRows)            {
-                collection.Add(new ResultViewModel(row));
+                resultCollection.Add(new ResultViewModel(row));
             }
-            collection.HasMoreItems = resultLoader.HasMoreItems;
+            resultCollection.HasMoreItems = resultLoader.HasMoreItems;
             throw new NotImplementedException();
         }
     }

@@ -6,23 +6,23 @@ using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class CollectionViewModel : MvxViewModel
+    public class ResourceSetViewModel : MvxViewModel
     {
-        private readonly ServiceCollection _serviceCollection;
+        private readonly ResourceSet _resourceSet;
         private readonly List<SchemaElementViewModel> _schemaElements;
 
-        public CollectionViewModel(HomeViewModelBase home, ServiceCollection serviceCollection)
+        public ResourceSetViewModel(HomeViewModelBase home, ResourceSet resourceSet)
         {
             this.Home = home;
-            _serviceCollection = serviceCollection;
+            _resourceSet = resourceSet;
             _schemaElements = PopulateSchemaElements();
         }
 
         public HomeViewModelBase Home { get; set; }
-        public string Name { get { return _serviceCollection.Name; } }
-        public string Summary { get { return GetCollectionSummary(); } }
-        public ObservableCollection<CollectionProperty> Properties { get { return _serviceCollection.Properties; } }
-        public ObservableCollection<CollectionAssociation> Associations { get { return _serviceCollection.Associations; } }
+        public string Name { get { return _resourceSet.Name; } }
+        public string Summary { get { return GetResourceSetSummary(); } }
+        public ObservableCollection<ResourceProperty> Properties { get { return _resourceSet.Properties; } }
+        public ObservableCollection<ResourceAssociation> Associations { get { return _resourceSet.Associations; } }
         public List<SchemaElementViewModel> SchemaElements { get { return _schemaElements; } }
 
         private ObservableResultCollection _queryResults;
@@ -32,7 +32,7 @@ namespace ODataPad.Core.ViewModels
             set { _queryResults = value; RaisePropertyChanged(() => QueryResults); }
         }
 
-        private string GetCollectionSummary()
+        private string GetResourceSetSummary()
         {
             return string.Format("{0} properties, {1} relations", this.Properties.Count, this.Associations.Count);
         }

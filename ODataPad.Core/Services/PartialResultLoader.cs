@@ -16,15 +16,15 @@ namespace ODataPad.Core.Services
         public bool HasMoreItems { get; set; }
 
         private readonly string _serviceUrl;
-        private readonly string _collectionName;
-        private readonly IEnumerable<CollectionProperty> _collectionProperties;
+        private readonly string _resourceSetName;
+        private readonly IEnumerable<ResourceProperty> _resourceProperties;
         private readonly INotifyInProgress _notify;
 
-        public PartialResultLoader(string serviceUrl, string collectionName, IEnumerable<CollectionProperty> collectionProperties, INotifyInProgress notify)
+        public PartialResultLoader(string serviceUrl, string resourceSetName, IEnumerable<ResourceProperty> resourceProperties, INotifyInProgress notify)
         {
             _serviceUrl = serviceUrl;
-            _collectionName = collectionName;
-            _collectionProperties = collectionProperties;
+            _resourceSetName = resourceSetName;
+            _resourceProperties = resourceProperties;
             _notify = notify;
 
             this.HasMoreItems = true;
@@ -36,7 +36,7 @@ namespace ODataPad.Core.Services
 
             var result = await odataService.LoadResultsAsync(
                 _serviceUrl,
-                _collectionName,
+                _resourceSetName,
                 skipCount,
                 Math.Max(maxCount, PageSize),
                 _notify);
@@ -46,7 +46,7 @@ namespace ODataPad.Core.Services
             {
                 this.HasMoreItems = result.Rows.Any() && !result.IsError;
                 resultRows = new ObservableCollection<ResultRow>(result.Rows.Select(row => 
-                    new ResultRow(row, _collectionProperties.Where(x => x.IsKey).Select(x => x.Name))));
+                    new ResultRow(row, _resourceProperties.Where(x => x.IsKey).Select(x => x.Name))));
             }
             else
             {

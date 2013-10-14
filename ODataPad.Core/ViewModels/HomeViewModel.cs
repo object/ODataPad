@@ -53,7 +53,7 @@ namespace ODataPad.Core.ViewModels
             foreach (var serviceInfo in _serviceRepository.Services)
             {
                 var serviceItem = new ServiceViewModel(this, serviceInfo);
-                //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+                //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Add(serviceItem);
             }
         }
@@ -61,10 +61,10 @@ namespace ODataPad.Core.ViewModels
         public async Task AddServiceItemAsync(ServiceInfo serviceInfo)
         {
             var serviceItem = new ServiceViewModel(this, serviceInfo);
-            //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+            //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
             this.Services.Add(serviceItem);
             await RefreshMetadataCacheAsync(serviceInfo);
-            //RefreshServiceCollectionsFromMetadataCache(serviceItem, serviceInfo);
+            //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
             await _serviceRepository.AddServiceAsync(serviceInfo);
         }
 
@@ -73,7 +73,7 @@ namespace ODataPad.Core.ViewModels
             var originalTitle = item.Name;
             item.UpdateDefinition(serviceInfo);
             await RefreshMetadataCacheAsync(serviceInfo);
-            //RefreshServiceCollectionsFromMetadataCache(item, serviceInfo);
+            //RefreshServiceResourcesFromMetadataCache(item, serviceInfo);
             await _serviceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
         }
 
@@ -104,33 +104,34 @@ namespace ODataPad.Core.ViewModels
 
         public override void SelectService()
         {
-            RefreshServiceCollectionsFromMetadataCache(this.SelectedService);
+            if (this.SelectedService != null)
+                RefreshServiceResourcesFromMetadataCache(this.SelectedService);
             this.IsServiceSelected = this.SelectedService != null;
         }
 
-        public override void SelectCollection()
+        public override void SelectResource()
         {
-            if (!this.IsPropertyViewSelected && this.SelectedCollection != null)
+            if (!this.IsPropertyViewSelected && this.SelectedResource != null)
             {
-                RequestCollectionData();
+                RequestResourceData();
             }
         }
 
-        public override void SelectCollectionMode()
+        public override void SelectResourceMode()
         {
-            if (!this.IsPropertyViewSelected && this.SelectedCollection != null)
+            if (!this.IsPropertyViewSelected && this.SelectedResource != null)
             {
-                RequestCollectionData();
+                RequestResourceData();
             }
         }
 
         public override void LoadMoreResults()
         {
-            if (this.SelectedCollection.QueryResults != null 
-                && this.SelectedCollection.QueryResults.HasMoreItems
+            if (this.SelectedResource.QueryResults != null 
+                && this.SelectedResource.QueryResults.HasMoreItems
                 && !this.IsQueryInProgress)
             {
-                _resultProvider.AddResultsAsync(this.SelectedCollection.QueryResults);
+                _resultProvider.AddResultsAsync(this.SelectedResource.QueryResults);
             }
         }
 
@@ -142,38 +143,38 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewModel item)
+        private void RefreshServiceResourcesFromMetadataCache(ServiceViewModel item)
         {
-            this.Collections.Clear();
+            this.Resources.Clear();
             if (!string.IsNullOrEmpty(item.MetadataCache))
             {
-                var collections = MetadataService.ParseServiceMetadata(item.MetadataCache);
-                foreach (var collection in collections)
+                var resources = MetadataService.ParseServiceMetadata(item.MetadataCache);
+                foreach (var resource in resources)
                 {
-                    this.Collections.Add(new CollectionViewModel(this, collection));
+                    this.Resources.Add(new ResourceSetViewModel(this, resource));
                 }
             }
         }
 
-        private void RefreshServiceCollectionsFromMetadataCache(ServiceViewModel item, ServiceInfo service)
+        private void RefreshServiceResourcesFromMetadataCache(ServiceViewModel item, ServiceInfo service)
         {
-            //item.Collections.Clear();
+            //item.Resources.Clear();
             if (!string.IsNullOrEmpty(service.MetadataCache))
             {
                 var element = XElement.Parse(service.MetadataCache);
                 if (element.Name == "Error")
                 {
-                    //item.Collections.Add(new ServiceError(
+                    //item.Resources.Add(new ServiceError(
                     //    service.Name, 
                     //    "Unable to load service metadata",
                     //    element.Element("Message").Value));
                 }
                 else
                 {
-                    var collections = MetadataService.ParseServiceMetadata(service.MetadataCache);
-                    foreach (var collection in collections)
+                    var resources = MetadataService.ParseServiceMetadata(service.MetadataCache);
+                    foreach (var resource in resources)
                     {
-                        //item.Collections.Add(collection);
+                        //item.Resources.Add(collection);
                     }
                 }
             }
@@ -192,15 +193,15 @@ namespace ODataPad.Core.ViewModels
             await _localStorage.SaveServiceDetailsAsync(service);
         }
 
-        private async Task RequestCollectionData()
+        private async Task RequestResourceData()
         {
-            this.SelectedCollection.QueryResults = _resultProvider.CreateResultCollection(
+            this.SelectedResource.QueryResults = _resultProvider.CreateResultCollection(
                 this.SelectedService.Url,
-                this.SelectedCollection.Name,
-                this.SelectedCollection.Properties,
+                this.SelectedResource.Name,
+                this.SelectedResource.Properties,
                 new QueryInProgress(this));
 
-            await _resultProvider.AddResultsAsync(this.SelectedCollection.QueryResults);
+            await _resultProvider.AddResultsAsync(this.SelectedResource.QueryResults);
         }
 
         private void ShowResultDetails()

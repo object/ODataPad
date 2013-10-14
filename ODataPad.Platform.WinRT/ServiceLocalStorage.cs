@@ -18,7 +18,7 @@ namespace ODataPad.Platform.WinRT
             var localSettings = ApplicationData.Current.LocalSettings;
             GetOrCreateContainer(ServicesKey);
             var services = localSettings.Containers[ServicesKey].Values
-                .Select(x => ServiceInfo.Parse(x.Value as string));
+                .Select(x => ServiceInfo.Parse(x.Value as string)).ToList();
             foreach (var serviceInfo in services)
             {
                 await LoadServiceDetailsAsync(serviceInfo);

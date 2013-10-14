@@ -63,8 +63,8 @@
             <ListView 
             DataContext="{Binding SelectedService}"
                 HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
-                    ItemsSource="{Binding Home.Collections, Mode=TwoWay}"
-                    SelectedItem="{Binding Home.SelectedCollection, Mode=TwoWay}"
+                    ItemsSource="{Binding Home.Resources, Mode=TwoWay}"
+                    SelectedItem="{Binding Home.SelectedResource, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}"
                     SelectionMode="Single" 
                     Background="{StaticResource MainBackgroundBrush}" 
@@ -72,7 +72,7 @@
                 >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding Home.SelectCollectionCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding Home.SelectResourceCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
@@ -90,13 +90,13 @@
                     Margin="10" 
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" 
                     Background="Black"
-                    ItemsSource="{Binding CollectionModes}"
-                    SelectedItem="{Binding CollectionMode, Mode=TwoWay}"
+                    ItemsSource="{Binding ResourceSetModes}"
+                    SelectedItem="{Binding ResourceSetMode, Mode=TwoWay}"
                     Visibility="{Binding IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectCollectionModeCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding SelectResourceModeCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -110,7 +110,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         TabIndex="3"
-                        DataContext="{Binding SelectedCollection}"
+                        DataContext="{Binding SelectedResource}"
                         ItemsSource="{Binding SchemaElements}" 
                         Visibility="{Binding Path=Home.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                         ItemTemplate="{StaticResource CollectionElementItemTemplate}"
@@ -123,7 +123,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         TabIndex="3"
-                        DataContext="{Binding SelectedCollection}"
+                        DataContext="{Binding SelectedResource}"
                         ItemsSource="{Binding QueryResults}"
                         Visibility="{Binding Path=Home.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
                         SelectedItem="{Binding Home.SelectedResult, Mode=TwoWay}"

@@ -16,24 +16,24 @@ namespace ODataPad.Platform.WinRT
     {
         private AsyncStatus _asyncStatus = AsyncStatus.Started;
         private LoadMoreItemsResult _results;
-        private readonly ObservableResultCollectionWithLoader _collection;
+        private readonly ObservableResultCollectionWithLoader _resultCollection;
 
-        public PartialResultLoaderWithAsyncOperation(ObservableResultCollectionWithLoader collection)
-            : base(collection.ServiceUrl, collection.CollectionName, collection.CollectionProperties, collection.NotifyInProgress)
+        public PartialResultLoaderWithAsyncOperation(ObservableResultCollectionWithLoader resultCollection)
+            : base(resultCollection.ServiceUrl, resultCollection.ResourceSetName, resultCollection.ResourceProperties, resultCollection.NotifyInProgress)
         {
-            _collection = collection;
+            _resultCollection = resultCollection;
         }
 
         public override async Task<ObservableCollection<ResultRow>> LoadResults(int skipCount, int maxCount)
         {
             var resultRows = await base.LoadResults(skipCount, maxCount);
-            _collection.HasMoreItems = this.HasMoreItems;
+            _resultCollection.HasMoreItems = this.HasMoreItems;
 
             if (resultRows != null)
             {
                 foreach (var row in resultRows)
                 {
-                    _collection.Add(new ResultViewModel(row));
+                    _resultCollection.Add(new ResultViewModel(row));
                 }
                 _results.Count = (uint)resultRows.Count();
             }
