@@ -19,6 +19,11 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n />
+    <JavaMaximumHeapSize />
+    <JavaOptions />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +48,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
+    <Reference Include="MonoDroidUnitTesting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MonoDroidUnitTesting.1.0.0\lib\MonoAndroid\MonoDroidUnitTesting.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,6 +73,7 @@
     <Compile Include="TestActivity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -91,10 +101,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\monodroid-unittest\MonoDroidUnitTesting\MonoDroidUnitTesting.csproj">
-      <Project>{a5f8fb02-00e0-4335-91ef-aeaa2c2f3c48}</Project>
-      <Name>MonoDroidUnitTesting</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MvvmCross\Cirrious\Cirrious.MvvmCross.Droid\Cirrious.MvvmCross.Droid.csproj">
       <Project>{7a6be137-d0f1-46a1-ae5c-81faeedddf02}</Project>
       <Name>Cirrious.MvvmCross.Droid</Name>
