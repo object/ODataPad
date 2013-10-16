@@ -109,9 +109,9 @@ namespace ODataPad.Core.ViewModels
             this.IsServiceSelected = this.SelectedService != null;
         }
 
-        public override void SelectResource()
+        public override void SelectResourceSet()
         {
-            if (!this.IsPropertyViewSelected && this.SelectedResource != null)
+            if (!this.IsPropertyViewSelected && this.SelectedResourceSet != null)
             {
                 RequestResourceData();
             }
@@ -119,7 +119,7 @@ namespace ODataPad.Core.ViewModels
 
         public override void SelectResourceMode()
         {
-            if (!this.IsPropertyViewSelected && this.SelectedResource != null)
+            if (!this.IsPropertyViewSelected && this.SelectedResourceSet != null)
             {
                 RequestResourceData();
             }
@@ -127,11 +127,11 @@ namespace ODataPad.Core.ViewModels
 
         public override void LoadMoreResults()
         {
-            if (this.SelectedResource.QueryResults != null 
-                && this.SelectedResource.QueryResults.HasMoreItems
+            if (this.SelectedResourceSet.Results.QueryResults != null
+                && this.SelectedResourceSet.Results.QueryResults.HasMoreItems
                 && !this.IsQueryInProgress)
             {
-                _resultProvider.AddResultsAsync(this.SelectedResource.QueryResults);
+                _resultProvider.AddResultsAsync(this.SelectedResourceSet.Results.QueryResults);
             }
         }
 
@@ -145,13 +145,13 @@ namespace ODataPad.Core.ViewModels
 
         private void RefreshServiceResourcesFromMetadataCache(ServiceViewModel item)
         {
-            this.Resources.Clear();
+            this.ResourceSets.Clear();
             if (!string.IsNullOrEmpty(item.MetadataCache))
             {
                 var resources = MetadataService.ParseServiceMetadata(item.MetadataCache);
                 foreach (var resource in resources)
                 {
-                    this.Resources.Add(new ResourceSetViewModel(this, resource));
+                    this.ResourceSets.Add(new ResourceSetViewModel(this, resource));
                 }
             }
         }
@@ -195,13 +195,13 @@ namespace ODataPad.Core.ViewModels
 
         private async Task RequestResourceData()
         {
-            this.SelectedResource.QueryResults = _resultProvider.CreateResultCollection(
+            this.SelectedResourceSet.Results.QueryResults = _resultProvider.CreateResultCollection(
                 this.SelectedService.Url,
-                this.SelectedResource.Name,
-                this.SelectedResource.Properties,
+                this.SelectedResourceSet.Name,
+                this.SelectedResourceSet.Properties,
                 new QueryInProgress(this));
 
-            await _resultProvider.AddResultsAsync(this.SelectedResource.QueryResults);
+            await _resultProvider.AddResultsAsync(this.SelectedResourceSet.Results.QueryResults);
         }
 
         private void ShowResultDetails()

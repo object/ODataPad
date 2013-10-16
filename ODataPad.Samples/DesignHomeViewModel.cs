@@ -63,10 +63,10 @@ namespace ODataPad.Samples
                                                             new Collection<ResourceAssociation>()),
                                   };
 
-                this.Resources = new ObservableCollection<ResourceSetViewModel>(
+                this.ResourceSets = new ObservableCollection<ResourceSetViewModel>(
                     collections.Select(x => new ResourceSetViewModel(this, x)));
 
-                this.SelectedResource = this.Resources.First();
+                this.SelectedResourceSet = this.ResourceSets.First();
             }
         }
     }

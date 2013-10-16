@@ -33,7 +33,7 @@ namespace ODataPad.Specifications.Steps
         public void d(Table table)
         {
             var viewModel = GetHomeViewModel();
-            table.CompareToSet(viewModel.Resources.Select(x => new { x.Name }));
+            table.CompareToSet(viewModel.ResourceSets.Select(x => new { x.Name }));
         }
 
         [Given(@"selected service is (.*)")]

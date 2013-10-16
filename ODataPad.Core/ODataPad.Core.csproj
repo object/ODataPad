@@ -45,6 +45,7 @@
     <Compile Include="Services\PartialResultLoader.cs" />
     <Compile Include="Services\SamplesService.cs" />
     <Compile Include="ViewModels\QueryInProgress.cs" />
+    <Compile Include="ViewModels\ResultListViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
     <Compile Include="ViewModels\SchemaElementViewModel.cs" />
     <Compile Include="Models\ResourceProperty.cs" />
@@ -56,7 +57,7 @@
     <Compile Include="AppStart.cs" />
     <Compile Include="ViewModels\HomeViewModelBase.cs" />
     <Compile Include="ViewModels\ResourceSetViewModel.cs" />
-    <Compile Include="ViewModels\ServiceCollectionViewModel.cs" />
+    <Compile Include="ViewModels\ServiceListViewModel.cs" />
     <Compile Include="ViewModels\ServiceEditViewModel.cs" />
     <Compile Include="ViewModels\ServiceViewModel.cs" />
     <Compile Include="Services\MetadataService.cs" />

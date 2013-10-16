@@ -1,6 +1,6 @@
 ﻿namespace ODataPad.Core.ViewModels
 {
-    public class ServiceCollectionViewModel
+    public class ServiceListViewModel
     {
          
     }

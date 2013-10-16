@@ -10,12 +10,14 @@ namespace ODataPad.Core.ViewModels
     {
         private readonly ResourceSet _resourceSet;
         private readonly List<SchemaElementViewModel> _schemaElements;
+        private readonly ResultListViewModel _results;
 
         public ResourceSetViewModel(HomeViewModelBase home, ResourceSet resourceSet)
         {
             this.Home = home;
             _resourceSet = resourceSet;
             _schemaElements = PopulateSchemaElements();
+            _results = new ResultListViewModel(home);
         }
 
         public HomeViewModelBase Home { get; set; }
@@ -24,13 +26,7 @@ namespace ODataPad.Core.ViewModels
         public ObservableCollection<ResourceProperty> Properties { get { return _resourceSet.Properties; } }
         public ObservableCollection<ResourceAssociation> Associations { get { return _resourceSet.Associations; } }
         public List<SchemaElementViewModel> SchemaElements { get { return _schemaElements; } }
-
-        private ObservableResultCollection _queryResults;
-        public ObservableResultCollection QueryResults
-        {
-            get { return _queryResults; }
-            set { _queryResults = value; RaisePropertyChanged(() => QueryResults); }
-        }
+        public ResultListViewModel Results { get { return _results; } }
 
         private string GetResourceSetSummary()
         {

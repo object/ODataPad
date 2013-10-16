@@ -174,9 +174,9 @@
                         Grid.Row="0"
                         Grid.Column="0"
                     TabIndex="2"
-                    ItemsSource="{Binding Resources, Mode=TwoWay}"
+                    ItemsSource="{Binding ResourceSets, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}" 
-                    SelectedItem="{Binding SelectedResource, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedResourceSet, Mode=TwoWay}"
                     SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
@@ -196,7 +196,7 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding SelectedResource}"
+                DataContext="{Binding SelectedResourceSet}"
                 ItemsSource="{Binding SchemaElements}" 
                 ItemTemplate="{StaticResource CollectionElementItemTemplate}" 
                 Visibility="{Binding Path=Home.IsPropertyViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
@@ -207,8 +207,8 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding SelectedResource}"
-                ItemsSource="{Binding QueryResults}"
+                DataContext="{Binding SelectedResourceSet}"
+                ItemsSource="{Binding Results.QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
                 Visibility="{Binding Path=Home.IsResultViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
                 SelectedItem="{Binding Home.SelectedResult, Mode=TwoWay}"

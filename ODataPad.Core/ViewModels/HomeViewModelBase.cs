@@ -11,7 +11,7 @@ namespace ODataPad.Core.ViewModels
         protected HomeViewModelBase()
         {
             _services = new ObservableCollection<ServiceViewModel>();
-            _resources = new ObservableCollection<ResourceSetViewModel>();
+            _resourceSets = new ObservableCollection<ResourceSetViewModel>();
             _resourceSetModes = new ObservableCollection<string>(new[]
                                                                     {
                                                                         "Show collection properties", 
@@ -101,26 +101,26 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
-        private ObservableCollection<ResourceSetViewModel> _resources;
-        public ObservableCollection<ResourceSetViewModel> Resources
+        private ObservableCollection<ResourceSetViewModel> _resourceSets;
+        public ObservableCollection<ResourceSetViewModel> ResourceSets
         {
-            get { return _resources; }
-            set { _resources = value; RaisePropertyChanged(() => Resources); }
+            get { return _resourceSets; }
+            set { _resourceSets = value; RaisePropertyChanged(() => ResourceSets); }
         }
 
-        private ResourceSetViewModel _selectedResource;
-        public ResourceSetViewModel SelectedResource
+        private ResourceSetViewModel _selectedResourceSet;
+        public ResourceSetViewModel SelectedResourceSet
         {
-            get { return _selectedResource; }
-            set { _selectedResource = value; RaisePropertyChanged(() => SelectedResource); }
+            get { return _selectedResourceSet; }
+            set { _selectedResourceSet = value; RaisePropertyChanged(() => SelectedResourceSet); }
         }
 
         public ICommand SelectResourceCommand
         {
-            get { return new MvxCommand(SelectResource); }
+            get { return new MvxCommand(SelectResourceSet); }
         }
 
-        public virtual void SelectResource()
+        public virtual void SelectResourceSet()
         {
         }
 
