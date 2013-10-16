@@ -57,6 +57,7 @@
     <Compile Include="AppStart.cs" />
     <Compile Include="ViewModels\HomeViewModelBase.cs" />
     <Compile Include="ViewModels\ResourceSetViewModel.cs" />
+    <Compile Include="ViewModels\SchemaViewModel.cs" />
     <Compile Include="ViewModels\ServiceListViewModel.cs" />
     <Compile Include="ViewModels\ServiceEditViewModel.cs" />
     <Compile Include="ViewModels\ServiceViewModel.cs" />

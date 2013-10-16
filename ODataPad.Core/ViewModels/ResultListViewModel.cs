@@ -13,12 +13,12 @@ namespace ODataPad.Core.ViewModels
     {
         private readonly IResultProvider _resultProvider;
 
-        public ResultListViewModel(HomeViewModelBase home)
+        public ResultListViewModel(ResourceSetViewModel parent)
         {
-            if (!home.IsDesignTime)
+            if (!parent.Home.IsDesignTime)
                 _resultProvider = Mvx.Resolve<IResultProvider>();
 
-            this.Home = home;
+            this.Home = parent.Home;
             this.IsQueryInProgress = false;
         }
 

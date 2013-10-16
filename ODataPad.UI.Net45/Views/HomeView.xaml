@@ -111,7 +111,7 @@
                         Grid.Column="1"
                         TabIndex="3"
                         DataContext="{Binding SelectedResourceSet}"
-                        ItemsSource="{Binding SchemaElements}" 
+                        ItemsSource="{Binding Schema.Elements}" 
                         Visibility="{Binding Path=Home.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                         ItemTemplate="{StaticResource CollectionElementItemTemplate}"
                         Background="{StaticResource MainBackgroundBrush}" 
