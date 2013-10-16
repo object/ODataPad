@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
     public class ResultListViewModel : MvxViewModel
     {
+        private readonly IResultProvider _resultProvider;
+
         public ResultListViewModel(HomeViewModelBase home)
         {
+            if (!home.IsDesignTime)
+                _resultProvider = Mvx.Resolve<IResultProvider>();
+
             this.Home = home;
+            this.IsQueryInProgress = false;
         }
 
         public HomeViewModelBase Home { get; set; }
@@ -62,6 +71,41 @@ namespace ODataPad.Core.ViewModels
         public virtual void CollapseResult()
         {
             this.SelectedResult = null;
+        }
+
+        public bool IsQueryInProgress
+        {
+            get { return this.Home.IsQueryInProgress; }
+            set { this.Home.IsQueryInProgress = value; }
+        }
+
+        public ICommand LoadMoreResultsCommand
+        {
+            get { return new MvxCommand<bool>(x => { if (x) LoadMoreResults(); }); }
+        }
+
+        public void LoadMoreResults()
+        {
+            if (this.Home.IsDesignTime)
+                return;
+
+            if (this.QueryResults != null
+                && this.QueryResults.HasMoreItems
+                && !this.IsQueryInProgress)
+            {
+                _resultProvider.AddResultsAsync(this.QueryResults);
+            }
+        }
+
+        public async Task RequestResourceData()
+        {
+            this.QueryResults = _resultProvider.CreateResultCollection(
+                this.Home.SelectedService.Url,
+                this.Home.SelectedResourceSet.Name,
+                this.Home.SelectedResourceSet.Properties,
+                new QueryInProgress(this));
+
+            await _resultProvider.AddResultsAsync(this.QueryResults);
         }
 
         public bool IsSingleResultSelected { get { return this.SelectedResult != null; } }

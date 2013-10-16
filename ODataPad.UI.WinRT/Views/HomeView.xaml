@@ -137,7 +137,7 @@
 
             <StackPanel x:Name="modeAndProgress" Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="1">
                 <ProgressBar x:Name="resultProgress" IsIndeterminate="True"  
-                        Visibility="{Binding Path=IsQueryInProgress, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
                         />
                 <ComboBox 
                     x:Name="collectionMode" 

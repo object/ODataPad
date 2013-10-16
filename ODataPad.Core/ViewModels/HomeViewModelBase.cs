@@ -20,6 +20,8 @@ namespace ODataPad.Core.ViewModels
             _resourceSetMode = _resourceSetModes[0];
         }
 
+        public virtual bool IsDesignTime { get { return true; } }
+
         public ICommand AddServiceCommand
         {
             get { return new MvxCommand(AddService); }
@@ -156,16 +158,11 @@ namespace ODataPad.Core.ViewModels
         public bool IsQueryInProgress
         {
             get { return _isQueryInProgress; }
-            set { _isQueryInProgress = value; RaisePropertyChanged(() => IsQueryInProgress); }
-        }
-
-        public ICommand LoadMoreResultsCommand
-        {
-            get { return new MvxCommand<bool>(x => { if (x) LoadMoreResults(); }); }
-        }
-
-        public virtual void LoadMoreResults()
-        {
+            set
+            {
+                _isQueryInProgress = value;
+                RaisePropertyChanged(() => IsQueryInProgress);
+            }
         }
 
         public bool IsPropertyViewSelected { get { return this.ResourceSetMode == this.ResourceSetModes.First(); } }

@@ -20,19 +20,18 @@ namespace ODataPad.Core.ViewModels
         private readonly IServiceRepository _serviceRepository;
         private readonly IServiceLocalStorage _localStorage;
         private readonly IApplicationLocalData _localData;
-        private readonly IResultProvider _resultProvider;
 
         public HomeViewModel()
         {
             _serviceRepository = Mvx.Resolve<IServiceRepository>();
             _localStorage = Mvx.Resolve<IServiceLocalStorage>();
             _localData = Mvx.Resolve<IApplicationLocalData>();
-            _resultProvider = Mvx.Resolve<IResultProvider>();
 
             this.SelectedService = null;
             this.IsServiceSelected = false;
-            this.IsQueryInProgress = false;
         }
+
+        public override bool IsDesignTime { get { return false; } }
 
         public async Task Init(NavigationParameters parameters)
         {
@@ -109,29 +108,19 @@ namespace ODataPad.Core.ViewModels
             this.IsServiceSelected = this.SelectedService != null;
         }
 
-        public override void SelectResourceSet()
+        public async override void SelectResourceSet()
         {
-            if (!this.IsPropertyViewSelected && this.SelectedResourceSet != null)
+            if (this.IsResultViewSelected && this.SelectedResourceSet != null)
             {
-                RequestResourceData();
+                await this.SelectedResourceSet.Results.RequestResourceData();
             }
         }
 
-        public override void SelectResourceMode()
+        public async override void SelectResourceMode()
         {
-            if (!this.IsPropertyViewSelected && this.SelectedResourceSet != null)
+            if (this.IsResultViewSelected && this.SelectedResourceSet != null)
             {
-                RequestResourceData();
-            }
-        }
-
-        public override void LoadMoreResults()
-        {
-            if (this.SelectedResourceSet.Results.QueryResults != null
-                && this.SelectedResourceSet.Results.QueryResults.HasMoreItems
-                && !this.IsQueryInProgress)
-            {
-                _resultProvider.AddResultsAsync(this.SelectedResourceSet.Results.QueryResults);
+                await this.SelectedResourceSet.Results.RequestResourceData();
             }
         }
 
@@ -183,17 +172,6 @@ namespace ODataPad.Core.ViewModels
                 serviceItem.UpdateMetadata(service.MetadataCache);
             }
             await _localStorage.SaveServiceDetailsAsync(service);
-        }
-
-        private async Task RequestResourceData()
-        {
-            this.SelectedResourceSet.Results.QueryResults = _resultProvider.CreateResultCollection(
-                this.SelectedService.Url,
-                this.SelectedResourceSet.Name,
-                this.SelectedResourceSet.Properties,
-                new QueryInProgress(this));
-
-            await _resultProvider.AddResultsAsync(this.SelectedResourceSet.Results.QueryResults);
         }
     }
 }

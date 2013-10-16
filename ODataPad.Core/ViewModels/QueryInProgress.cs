@@ -4,9 +4,9 @@ namespace ODataPad.Core.ViewModels
 {
     class QueryInProgress : INotifyInProgress
     {
-        private readonly HomeViewModel _viewModel;
+        private readonly ResultListViewModel _viewModel;
 
-        public QueryInProgress(HomeViewModel viewModel)
+        public QueryInProgress(ResultListViewModel viewModel)
         {
             _viewModel = viewModel;
         }
