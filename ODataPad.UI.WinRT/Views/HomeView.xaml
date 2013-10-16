@@ -211,7 +211,7 @@
                 ItemsSource="{Binding Results.QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
                 Visibility="{Binding Path=Home.IsResultViewSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}"
-                SelectedItem="{Binding Home.SelectedResult, Mode=TwoWay}"
+                SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                 SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
@@ -228,13 +228,14 @@
                 Padding="10,0"
                 Style="{StaticResource ItemRichTextStyle}" 
                 IsTextSelectionEnabled="False"
-                Visibility="{Binding IsSingleResultSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}">
+                DataContext="{Binding SelectedResourceSet}"
+                Visibility="{Binding Results.IsSingleResultSelected, Mode=TwoWay, Converter={StaticResource BoolToVisibility}}">
                     <Paragraph>
-                        <Run Text="{Binding SelectedResultDetails, Mode=TwoWay}" />
+                        <Run Text="{Binding Results.SelectedResultDetails, Mode=TwoWay}" />
                     </Paragraph>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Tapped">
-                            <i:InvokeCommandAction Command="{Binding UnselectResultCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding Results.UnselectResultCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </RichTextBlock>

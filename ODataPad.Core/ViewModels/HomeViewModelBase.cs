@@ -140,7 +140,6 @@ namespace ODataPad.Core.ViewModels
                 RaisePropertyChanged(() => ResourceSetMode);
                 RaisePropertyChanged(() => IsPropertyViewSelected);
                 RaisePropertyChanged(() => IsResultViewSelected);
-                RaisePropertyChanged(() => IsSingleResultSelected);
             }
         }
 
@@ -169,47 +168,7 @@ namespace ODataPad.Core.ViewModels
         {
         }
 
-        private ResultViewModel _selectedResult;
-        public ResultViewModel SelectedResult
-        {
-            get { return _selectedResult; }
-            set
-            {
-                _selectedResult = value;
-                RaisePropertyChanged(() => SelectedResult);
-                RaisePropertyChanged(() => IsResultViewSelected);
-                RaisePropertyChanged(() => IsSingleResultSelected);
-            }
-        }
-
-        public ICommand SelectResultCommand
-        {
-            get { return new MvxCommand(SelectResult); }
-        }
-
-        public virtual void SelectResult()
-        {
-        }
-
-        public ICommand UnselectResultCommand
-        {
-             get { return new MvxCommand(CollapseResult); } 
-        }
-
-        public virtual void CollapseResult()
-        {
-            this.SelectedResult = null;
-        }
-
-        private string _selectedResultDetails;
-        public string SelectedResultDetails
-        {
-            get { return _selectedResultDetails; }
-            set { _selectedResultDetails = value; RaisePropertyChanged(() => SelectedResultDetails); }
-        }
-
         public bool IsPropertyViewSelected { get { return this.ResourceSetMode == this.ResourceSetModes.First(); } }
-        public bool IsResultViewSelected { get { return this.ResourceSetMode != this.ResourceSetModes.First() && this.SelectedResult == null; } }
-        public bool IsSingleResultSelected { get { return this.ResourceSetMode != this.ResourceSetModes.First() && this.SelectedResult != null; } }
+        public bool IsResultViewSelected { get { return this.ResourceSetMode != this.ResourceSetModes.First(); } }
     }
 }

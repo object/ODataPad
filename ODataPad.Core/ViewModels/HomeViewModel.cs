@@ -135,14 +135,6 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public override void SelectResult()
-        {
-            if (this.SelectedResult != null)
-            {
-                ShowResultDetails();
-            }
-        }
-
         private void RefreshServiceResourcesFromMetadataCache(ServiceViewModel item)
         {
             this.ResourceSets.Clear();
@@ -202,13 +194,6 @@ namespace ODataPad.Core.ViewModels
                 new QueryInProgress(this));
 
             await _resultProvider.AddResultsAsync(this.SelectedResourceSet.Results.QueryResults);
-        }
-
-        private void ShowResultDetails()
-        {
-            this.SelectedResultDetails = string.Join(Environment.NewLine + Environment.NewLine,
-                this.SelectedResult.Properties
-                    .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
         }
     }
 }

@@ -126,7 +126,7 @@
                         DataContext="{Binding SelectedResourceSet}"
                         ItemsSource="{Binding Results.QueryResults}"
                         Visibility="{Binding Path=Home.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
-                        SelectedItem="{Binding Home.SelectedResult, Mode=TwoWay}"
+                        SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                         SelectionMode="Single" 
                         ItemTemplate="{StaticResource ResultItemTemplate}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -134,7 +134,7 @@
                         BorderBrush="{StaticResource MainBackgroundBrush}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding Home.SelectResultCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding Results.SelectResultCommand}"/>
                             </i:EventTrigger>
                             <common:RoutedEventTrigger RoutedEvent="ScrollViewer.ScrollChanged">
                                 <common:ScrollChangedEventToCommand Command="{Binding Home.LoadMoreResultsCommand}"/>
@@ -152,16 +152,17 @@
                         Background="{StaticResource MainBackgroundBrush}"
                         Foreground="{StaticResource TextForegroundBrush}"
                         BorderThickness="0"
-                        Visibility="{Binding Path=IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
+                        DataContext="{Binding SelectedResourceSet}"
+                        Visibility="{Binding Path=Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                         <FlowDocument>
                             <Paragraph>
-                                <Run Text="{Binding Path=SelectedResultDetails}" />
+                                <Run Text="{Binding Path=Results.SelectedResultDetails}" />
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
-                                        <i:InvokeCommandAction Command="{Binding UnselectResultCommand}"/>
+                                        <i:InvokeCommandAction Command="{Binding Results.UnselectResultCommand}"/>
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="TouchDown">
-                                        <i:InvokeCommandAction Command="{Binding UnselectResultCommand}"/>
+                                        <i:InvokeCommandAction Command="{Binding Results.UnselectResultCommand}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Paragraph>
