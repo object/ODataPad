@@ -9,17 +9,14 @@ namespace ODataPad.Core.ViewModels
     public class HomeViewModelBase : MvxViewModel
     {
         private readonly ServiceListViewModel _services;
-        private readonly ResourceSetListViewModel _resourceSets;
 
         protected HomeViewModelBase()
         {
             _services = new ServiceListViewModel(this);
-            _resourceSets = new ResourceSetListViewModel(this);
         }
 
         public virtual bool IsDesignTime { get { return true; } }
         public ServiceListViewModel Services { get { return _services; } }
-        public ResourceSetListViewModel ResourceSets { get { return _resourceSets; } }
 
         public ICommand AddServiceCommand
         {
@@ -76,9 +73,9 @@ namespace ODataPad.Core.ViewModels
             get { return ResourceSetDetailsViewModel.ResourceSetMode; }
             set
             {
-                if (this.ResourceSets.SelectedItem != null)
+                if (this.Services.SelectedService.ResourceSets.SelectedItem != null)
                 {
-                    this.ResourceSets.SelectedItem.SelectedResourceSetMode = value;
+                    this.Services.SelectedService.ResourceSets.SelectedItem.SelectedResourceSetMode = value;
                 }
                 else
                 {

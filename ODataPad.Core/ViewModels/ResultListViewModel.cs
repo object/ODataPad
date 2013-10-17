@@ -18,11 +18,12 @@ namespace ODataPad.Core.ViewModels
             if (!parent.Home.IsDesignTime)
                 _resultProvider = Mvx.Resolve<IResultProvider>();
 
-            this.Home = parent.Home;
+            this.Parent = parent;
             this.IsQueryInProgress = false;
         }
 
-        public HomeViewModelBase Home { get; set; }
+        public HomeViewModelBase Home { get { return this.Parent.Home; } }
+        public ResourceSetDetailsViewModel Parent { get; set; }
 
         private ObservableResultCollection _queryResults;
         public ObservableResultCollection QueryResults
@@ -101,8 +102,8 @@ namespace ODataPad.Core.ViewModels
         {
             this.QueryResults = _resultProvider.CreateResultCollection(
                 this.Home.Services.SelectedService.Url,
-                this.Home.ResourceSets.SelectedItem.Name,
-                this.Home.ResourceSets.SelectedItem.Properties,
+                this.Parent.Name,
+                this.Parent.Properties,
                 new QueryInProgress(this));
 
             await _resultProvider.AddResultsAsync(this.QueryResults);

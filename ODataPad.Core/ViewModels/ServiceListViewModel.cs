@@ -64,13 +64,13 @@ namespace ODataPad.Core.ViewModels
 
         private void RefreshServiceMetadataFromCache(ServiceDetailsViewModel item)
         {
-            this.Home.ResourceSets.Items.Clear();
+            this.SelectedService.ResourceSets.Items.Clear();
             if (!string.IsNullOrEmpty(item.MetadataCache))
             {
                 var resources = MetadataService.ParseServiceMetadata(item.MetadataCache);
                 foreach (var resource in resources)
                 {
-                    this.Home.ResourceSets.Items.Add(new ResourceSetDetailsViewModel(this.Home, resource));
+                    this.SelectedService.ResourceSets.Items.Add(new ResourceSetDetailsViewModel(this.Home, resource));
                 }
             }
         }

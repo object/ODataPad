@@ -63,8 +63,8 @@
             <ListView 
             DataContext="{Binding Services.SelectedService}"
                 HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
-                    ItemsSource="{Binding Home.ResourceSets.Items, Mode=TwoWay}"
-                    SelectedItem="{Binding Home.ResourceSets.SelectedItem, Mode=TwoWay}"
+                    ItemsSource="{Binding ResourceSets.Items, Mode=TwoWay}"
+                    SelectedItem="{Binding ResourceSets.SelectedItem, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}"
                     SelectionMode="Single" 
                     Background="{StaticResource MainBackgroundBrush}" 
@@ -96,7 +96,7 @@
                     >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding ResourceSets.SelectedItem.SelectResourceSetModeCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding Services.SelectedService.ResourceSets.SelectedItem.SelectResourceSetModeCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -110,9 +110,9 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         TabIndex="3"
-                        DataContext="{Binding ResourceSets.SelectedItem}"
+                        DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
                         ItemsSource="{Binding Schema.Elements}" 
-                        Visibility="{Binding Path=Home.ResourceSets.SelectedItem.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                         ItemTemplate="{StaticResource CollectionElementItemTemplate}"
                         Background="{StaticResource MainBackgroundBrush}" 
                         BorderBrush="{StaticResource MainBackgroundBrush}">
@@ -123,9 +123,9 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         TabIndex="3"
-                        DataContext="{Binding ResourceSets.SelectedItem}"
+                        DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
                         ItemsSource="{Binding Results.QueryResults}"
-                        Visibility="{Binding Path=Home.ResourceSets.SelectedItem.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
                         SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                         SelectionMode="Single" 
                         ItemTemplate="{StaticResource ResultItemTemplate}"
@@ -152,7 +152,7 @@
                         Background="{StaticResource MainBackgroundBrush}"
                         Foreground="{StaticResource TextForegroundBrush}"
                         BorderThickness="0"
-                        DataContext="{Binding ResourceSets.SelectedItem}"
+                        DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
                         Visibility="{Binding Path=Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                         <FlowDocument>
                             <Paragraph>

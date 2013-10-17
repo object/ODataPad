@@ -8,19 +8,25 @@ namespace ODataPad.Core.ViewModels
     public class ServiceDetailsViewModel
     {
         private readonly ServiceInfo _serviceInfo;
+        private readonly ResourceSetListViewModel _resourceSets;
 
         public ServiceDetailsViewModel(HomeViewModelBase home, ServiceInfo serviceInfo)
         {
             this.Home = home;
+
             _serviceInfo = serviceInfo;
+            _resourceSets = new ResourceSetListViewModel(home);
         }
 
         public HomeViewModelBase Home { get; set; }
+
         public string Name { get { return _serviceInfo.Name; } }
         public string Description { get { return _serviceInfo.Description; } }
         public string Url { get { return _serviceInfo.Url; } }
         public string ImageBase64 { get { return _serviceInfo.ImageBase64; } }
         public string MetadataCache { get { return _serviceInfo.MetadataCache; } }
+
+        public ResourceSetListViewModel ResourceSets { get { return _resourceSets; } }
 
         public void UpdateDefinition(ServiceInfo serviceInfo)
         {

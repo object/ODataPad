@@ -152,7 +152,7 @@
                     >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding ResourceSets.SelectedItem.SelectResourceSetModeCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding Services.SelectedService.ResourceSets.SelectedItem.SelectResourceSetModeCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
@@ -174,13 +174,13 @@
                         Grid.Row="0"
                         Grid.Column="0"
                     TabIndex="2"
-                    ItemsSource="{Binding ResourceSets.Items, Mode=TwoWay}"
+                    ItemsSource="{Binding Services.SelectedService.ResourceSets.Items, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}" 
-                    SelectedItem="{Binding ResourceSets.SelectedItem, Mode=TwoWay}"
+                    SelectedItem="{Binding Services.SelectedService.ResourceSets.SelectedItem, Mode=TwoWay}"
                     SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding ResourceSets.SelectResourceSetCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding Services.SelectedService.ResourceSets.SelectResourceSetCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListView>
@@ -196,10 +196,10 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding ResourceSets.SelectedItem}"
+                DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
                 ItemsSource="{Binding Schema.Elements}" 
                 ItemTemplate="{StaticResource CollectionElementItemTemplate}" 
-                Visibility="{Binding Path=Home.ResourceSets.SelectedItem.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
+                Visibility="{Binding Path=IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                 SelectionMode="None" />
 
                 <ListView 
@@ -207,10 +207,10 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding ResourceSets.SelectedItem}"
+                DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
                 ItemsSource="{Binding Results.QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
-                Visibility="{Binding Path=Home.ResourceSets.SelectedItem.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+                Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
                 SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                 SelectionMode="Single" >
                     <i:Interaction.Triggers>
@@ -228,7 +228,7 @@
                 Padding="10,0"
                 Style="{StaticResource ItemRichTextStyle}" 
                 IsTextSelectionEnabled="False"
-                DataContext="{Binding ResourceSets.SelectedItem}"
+                DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
                 Visibility="{Binding Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                     <Paragraph>
                         <Run Text="{Binding Results.SelectedResultDetails, Mode=TwoWay}" />
