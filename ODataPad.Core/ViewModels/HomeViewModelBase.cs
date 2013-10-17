@@ -18,51 +18,6 @@ namespace ODataPad.Core.ViewModels
         public virtual bool IsDesignTime { get { return true; } }
         public ServiceListViewModel Services { get { return _services; } }
 
-        public ICommand AddServiceCommand
-        {
-            get { return new MvxCommand(AddService); }
-        }
-
-        public virtual void AddService()
-        {
-        }
-
-        public ICommand EditServiceCommand
-        {
-            get { return new MvxCommand(AddService); }
-        }
-
-        public virtual void EditService()
-        {
-        }
-
-        public ICommand RemoveServiceCommand
-        {
-            get { return new MvxCommand(AddService); }
-        }
-
-        public virtual void RemoveService()
-        {
-        }
-
-        private bool _isServiceEditInProgress;
-        public bool IsServiceEditInProgress
-        {
-            get { return _isServiceEditInProgress; }
-            set { _isServiceEditInProgress = value; RaisePropertyChanged(() => IsServiceEditInProgress); }
-        }
-
-        private ServiceDetailsViewModel _editedService;
-        public ServiceDetailsViewModel EditedService
-        {
-            get { return _editedService; }
-            set
-            {
-                _editedService = value;
-                RaisePropertyChanged(() => EditedService);
-            }
-        }
-
         public IEnumerable<string> ResourceSetModes
         {
             get { return ResourceSetDetailsViewModel.ResourceSetModes; }

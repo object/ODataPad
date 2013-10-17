@@ -75,12 +75,12 @@ namespace ODataPad.Core.ViewModels
         {
             // TODO: add or update service
 
-            this.Home.IsServiceEditInProgress = false;
+            this.Home.Services.IsServiceEditInProgress = false;
         }
 
         private void CancelServiceEdit()
         {
-            this.Home.IsServiceEditInProgress = false;
+            this.Home.Services.IsServiceEditInProgress = false;
         }
 
         private void RefreshSaveButtonState()

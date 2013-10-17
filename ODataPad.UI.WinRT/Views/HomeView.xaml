@@ -30,15 +30,15 @@
                     <!--Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/-->
                     <Button Style="{StaticResource EditAppBarButtonStyle}" 
                             Visibility="{Binding Path=Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
-                            Command="{Binding EditServiceCommand, Mode=OneWay}"/>
+                            Command="{Binding Services.EditServiceCommand, Mode=OneWay}"/>
                     <Button Style="{StaticResource RemoveAppBarButtonStyle}" 
                             Visibility="{Binding Path=Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
-                            Command="{Binding RemoveServiceCommand, Mode=OneWay}"/>
+                            Command="{Binding Services.RemoveServiceCommand, Mode=OneWay}"/>
                     <!--Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="refreshButton_Click"/-->
                 </StackPanel>
                 <StackPanel x:Name="rightStackPanel" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource AddAppBarButtonStyle}" 
-                            Command="{Binding AddServiceCommand, Mode=OneWay}"/>
+                            Command="{Binding Services.AddServiceCommand, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
         </AppBar>
@@ -84,13 +84,14 @@
                 TabIndex="1"
                 Margin="-10,128,0,0"
                 Padding="120,0,0,60"
-                ItemsSource="{Binding Services.Items}"
+                DataContext="{Binding Services}"
+                ItemsSource="{Binding Items}"
                 IsSwipeEnabled="False"
-                SelectedItem="{Binding Services.SelectedService, Mode=TwoWay}"
+                SelectedItem="{Binding SelectedService, Mode=TwoWay}"
                 ItemTemplate="{StaticResource ServiceItemTemplate}" SelectionMode="Single" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding Services.SelectServiceCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding SelectServiceCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ListView>

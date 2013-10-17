@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
 
@@ -40,6 +43,16 @@ namespace ODataPad.Core.ViewModels
             {
                 await this.SelectedItem.Results.RequestResourceData();
             }
+        }
+
+        public void Populate(IEnumerable<ResourceSetDetailsViewModel> details)
+        {
+            this.Items = new ObservableCollection<ResourceSetDetailsViewModel>(details);
+        }
+
+        public void SelectTopItem()
+        {
+            this.SelectedItem = this.Items.First();
         }
     }
 }

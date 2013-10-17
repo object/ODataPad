@@ -20,15 +20,16 @@
 
         <ListView 
             HorizontalAlignment="Left" Height="500" Margin="31,27,0,0" VerticalAlignment="Top" Width="350"
-            ItemsSource="{Binding Services.Items}"
-            SelectedItem="{Binding Services.SelectedService, Mode=TwoWay}"
+            DataContext="{Binding Services}"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding SelectedService, Mode=TwoWay}"
             SelectionMode="Single" 
             ItemTemplate="{StaticResource ServiceItemTemplate}"
             Background="{StaticResource MainBackgroundBrush}" 
             BorderBrush="{StaticResource MainBackgroundBrush}" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding Services.SelectServiceCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding SelectServiceCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ListView.ContextMenu>
@@ -39,11 +40,11 @@
                     </MenuItem>
                     <MenuItem Header="_Edit" 
                           Command="{Binding EditServiceCommand}"
-                          IsEnabled="{Binding Services.IsServiceSelected}">
+                          IsEnabled="{Binding IsServiceSelected}">
                     </MenuItem>
                     <MenuItem Header="_Remove" 
                           Command="{Binding RemoveServiceCommand}"
-                          IsEnabled="{Binding Services.IsServiceSelected}">
+                          IsEnabled="{Binding IsServiceSelected}">
                     </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
@@ -72,7 +73,7 @@
                 >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding Home.ResourceSets.SelectResourceSetCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding ResourceSets.SelectResourceSetCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>

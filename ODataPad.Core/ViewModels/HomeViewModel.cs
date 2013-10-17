@@ -80,24 +80,6 @@ namespace ODataPad.Core.ViewModels
             await _serviceRepository.DeleteServiceAsync(serviceInfo);
         }
 
-        public override void AddService()
-        {
-            this.IsServiceEditInProgress = true;
-            this.EditedService = null;
-        }
-
-        public override void EditService()
-        {
-            this.IsServiceEditInProgress = true;
-            this.EditedService = this.Services.SelectedService;
-        }
-
-        public override void RemoveService()
-        {
-            this.IsServiceEditInProgress = true;
-            this.EditedService = this.Services.SelectedService;
-        }
-
         private async Task RefreshMetadataCacheAsync(ServiceInfo service)
         {
             var metadata = await MetadataService.LoadServiceMetadataAsync(service);

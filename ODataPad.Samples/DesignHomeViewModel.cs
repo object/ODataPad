@@ -27,7 +27,7 @@ namespace ODataPad.Samples
 
             if (services != null)
             {
-                this.Services.Items = new ObservableCollection<ServiceDetailsViewModel>(
+                this.Services.Populate(
                     services.Select(x => new ServiceDetailsViewModel(this, x)));
 
                 foreach (var service in this.Services.Items)
@@ -37,8 +37,7 @@ namespace ODataPad.Samples
                     service.ReadImageBase64(stream);
                 }
 
-                this.Services.SelectedService = this.Services.Items.First();
-                this.Services.IsServiceSelected = true;
+                this.Services.SelectTopItem();
 
                 var selectedProperties = new Collection<ResourceProperty>
                                  {
@@ -63,10 +62,9 @@ namespace ODataPad.Samples
                                                             new Collection<ResourceAssociation>()),
                                   };
 
-                this.Services.SelectedService.ResourceSets.Items = new ObservableCollection<ResourceSetDetailsViewModel>(
+                this.Services.SelectedService.ResourceSets.Populate(
                     collections.Select(x => new ResourceSetDetailsViewModel(this, x)));
-
-                this.Services.SelectedService.ResourceSets.SelectedItem = this.Services.SelectedService.ResourceSets.Items.First();
+                this.Services.SelectedService.ResourceSets.SelectTopItem();
             }
         }
     }
