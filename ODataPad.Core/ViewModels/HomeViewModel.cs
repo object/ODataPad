@@ -108,23 +108,15 @@ namespace ODataPad.Core.ViewModels
             this.IsServiceSelected = this.SelectedService != null;
         }
 
-        public async override void SelectResourceSet()
-        {
-            if (this.SelectedResourceSet != null && this.SelectedResourceSet.IsResultViewSelected)
-            {
-                await this.SelectedResourceSet.Results.RequestResourceData();
-            }
-        }
-
         private void RefreshServiceResourcesFromMetadataCache(ServiceDetailsViewModel item)
         {
-            this.ResourceSets.Clear();
+            this.ResourceSets.Items.Clear();
             if (!string.IsNullOrEmpty(item.MetadataCache))
             {
                 var resources = MetadataService.ParseServiceMetadata(item.MetadataCache);
                 foreach (var resource in resources)
                 {
-                    this.ResourceSets.Add(new ResourceSetDetailsViewModel(this, resource));
+                    this.ResourceSets.Items.Add(new ResourceSetDetailsViewModel(this, resource));
                 }
             }
         }

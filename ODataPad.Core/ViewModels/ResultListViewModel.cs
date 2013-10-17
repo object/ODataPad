@@ -101,8 +101,8 @@ namespace ODataPad.Core.ViewModels
         {
             this.QueryResults = _resultProvider.CreateResultCollection(
                 this.Home.SelectedService.Url,
-                this.Home.SelectedResourceSet.Name,
-                this.Home.SelectedResourceSet.Properties,
+                this.Home.ResourceSets.SelectedItem.Name,
+                this.Home.ResourceSets.SelectedItem.Properties,
                 new QueryInProgress(this));
 
             await _resultProvider.AddResultsAsync(this.QueryResults);

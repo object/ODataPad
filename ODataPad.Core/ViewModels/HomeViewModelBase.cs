@@ -8,13 +8,16 @@ namespace ODataPad.Core.ViewModels
 {
     public class HomeViewModelBase : MvxViewModel
     {
+        private readonly ResourceSetListViewModel _resourceSets;
+
         protected HomeViewModelBase()
         {
             _services = new ObservableCollection<ServiceDetailsViewModel>();
-            _resourceSets = new ObservableCollection<ResourceSetDetailsViewModel>();
+            _resourceSets = new ResourceSetListViewModel(this);
         }
 
         public virtual bool IsDesignTime { get { return true; } }
+        public ResourceSetListViewModel ResourceSets { get { return _resourceSets; } }
 
         public ICommand AddServiceCommand
         {
@@ -97,29 +100,6 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
-        private ObservableCollection<ResourceSetDetailsViewModel> _resourceSets;
-        public ObservableCollection<ResourceSetDetailsViewModel> ResourceSets
-        {
-            get { return _resourceSets; }
-            set { _resourceSets = value; RaisePropertyChanged(() => ResourceSets); }
-        }
-
-        private ResourceSetDetailsViewModel _selectedResourceSet;
-        public ResourceSetDetailsViewModel SelectedResourceSet
-        {
-            get { return _selectedResourceSet; }
-            set { _selectedResourceSet = value; RaisePropertyChanged(() => SelectedResourceSet); }
-        }
-
-        public ICommand SelectResourceSetCommand
-        {
-            get { return new MvxCommand(SelectResourceSet); }
-        }
-
-        public virtual void SelectResourceSet()
-        {
-        }
-
         public IEnumerable<string> ResourceSetModes
         {
             get { return ResourceSetDetailsViewModel.ResourceSetModes; }
@@ -130,9 +110,9 @@ namespace ODataPad.Core.ViewModels
             get { return ResourceSetDetailsViewModel.ResourceSetMode; }
             set
             {
-                if (this.SelectedResourceSet != null)
+                if (this.ResourceSets.SelectedItem != null)
                 {
-                    this.SelectedResourceSet.SelectedResourceSetMode = value;
+                    this.ResourceSets.SelectedItem.SelectedResourceSetMode = value;
                 }
                 else
                 {
