@@ -13,7 +13,7 @@ namespace ODataPad.Core.ViewModels
     {
         private readonly IResultProvider _resultProvider;
 
-        public ResultListViewModel(ResourceSetViewModel parent)
+        public ResultListViewModel(ResourceSetDetailsViewModel parent)
         {
             if (!parent.Home.IsDesignTime)
                 _resultProvider = Mvx.Resolve<IResultProvider>();
@@ -38,8 +38,8 @@ namespace ODataPad.Core.ViewModels
             set { _selectedResultDetails = value; RaisePropertyChanged(() => SelectedResultDetails); }
         }
 
-        private ResultViewModel _selectedResult;
-        public ResultViewModel SelectedResult
+        private ResultDetailsViewModel _selectedResult;
+        public ResultDetailsViewModel SelectedResult
         {
             get { return _selectedResult; }
             set

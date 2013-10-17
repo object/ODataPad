@@ -5,11 +5,11 @@ using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ResultViewModel
+    public class ResultDetailsViewModel
     {
         private readonly ResultRow _resultRow;
 
-        public ResultViewModel(ResultRow resultRow)
+        public ResultDetailsViewModel(ResultRow resultRow)
         {
             _resultRow = resultRow;
         }

@@ -9,7 +9,7 @@ namespace ODataPad.Core.ViewModels
     {
         private readonly List<SchemaElementViewModel> _schemaElements;
 
-        public SchemaViewModel(ResourceSetViewModel parent)
+        public SchemaViewModel(ResourceSetDetailsViewModel parent)
         {
             this.Home = parent.Home;
 

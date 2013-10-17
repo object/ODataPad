@@ -10,8 +10,8 @@ namespace ODataPad.Core.ViewModels
     {
         protected HomeViewModelBase()
         {
-            _services = new ObservableCollection<ServiceViewModel>();
-            _resourceSets = new ObservableCollection<ResourceSetViewModel>();
+            _services = new ObservableCollection<ServiceDetailsViewModel>();
+            _resourceSets = new ObservableCollection<ResourceSetDetailsViewModel>();
             _resourceSetModes = new ObservableCollection<string>(new[]
                                                                     {
                                                                         "Show collection properties", 
@@ -56,8 +56,8 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceEditInProgress = value; RaisePropertyChanged(() => IsServiceEditInProgress); }
         }
 
-        private ServiceViewModel _editedService;
-        public ServiceViewModel EditedService
+        private ServiceDetailsViewModel _editedService;
+        public ServiceDetailsViewModel EditedService
         {
             get { return _editedService; }
             set
@@ -67,16 +67,16 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private ObservableCollection<ServiceViewModel> _services;
-        public ObservableCollection<ServiceViewModel> Services
+        private ObservableCollection<ServiceDetailsViewModel> _services;
+        public ObservableCollection<ServiceDetailsViewModel> Services
         {
             get { return _services; }
             set { _services = value; RaisePropertyChanged(() => Services);
             }
         }
 
-        private ServiceViewModel _selectedService;
-        public ServiceViewModel SelectedService
+        private ServiceDetailsViewModel _selectedService;
+        public ServiceDetailsViewModel SelectedService
         {
             get { return _selectedService; }
             set 
@@ -103,15 +103,15 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
-        private ObservableCollection<ResourceSetViewModel> _resourceSets;
-        public ObservableCollection<ResourceSetViewModel> ResourceSets
+        private ObservableCollection<ResourceSetDetailsViewModel> _resourceSets;
+        public ObservableCollection<ResourceSetDetailsViewModel> ResourceSets
         {
             get { return _resourceSets; }
             set { _resourceSets = value; RaisePropertyChanged(() => ResourceSets); }
         }
 
-        private ResourceSetViewModel _selectedResourceSet;
-        public ResourceSetViewModel SelectedResourceSet
+        private ResourceSetDetailsViewModel _selectedResourceSet;
+        public ResourceSetDetailsViewModel SelectedResourceSet
         {
             get { return _selectedResourceSet; }
             set { _selectedResourceSet = value; RaisePropertyChanged(() => SelectedResourceSet); }

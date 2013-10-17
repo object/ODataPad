@@ -65,7 +65,7 @@ namespace ODataPad.UI.WinRT.Views
         {
             if (this.itemsViewSource.View != null)
             {
-                var selectedItem = (ServiceViewModel)this.itemsViewSource.View.CurrentItem;
+                var selectedItem = (ServiceDetailsViewModel)this.itemsViewSource.View.CurrentItem;
                 if (selectedItem != null) pageState["SelectedItem"] = selectedItem.Name;
             }
         }
@@ -173,7 +173,7 @@ namespace ODataPad.UI.WinRT.Views
         //private void editButton_Click(object sender, RoutedEventArgs e)
         //{
         //    this.bottomAppBar.IsOpen = false;
-        //    _editedItem = this.itemListView.SelectedItem as ServiceViewModel;
+        //    _editedItem = this.itemListView.SelectedItem as ServiceDetailsViewModel;
         //    this.serviceName.Text = _editedItem.Name;
         //    this.serviceUrl.Text = _editedItem.Url;
         //    this.serviceDescription.Text = _editedItem.Description;
@@ -230,7 +230,7 @@ namespace ODataPad.UI.WinRT.Views
 
         private async void RemoveServiceAsync()
         {
-            var item = this.itemListView.SelectedItem as ServiceViewModel;
+            var item = this.itemListView.SelectedItem as ServiceDetailsViewModel;
             await this.ViewModel.RemoveServiceItemAsync(item);
         }
     }

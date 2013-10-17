@@ -28,7 +28,7 @@ namespace ODataPad.Platform.WP8
 
             foreach (var row in resultRows)
             {
-                resultCollection.Add(new ResultViewModel(row));
+                resultCollection.Add(new ResultDetailsViewModel(row));
             }
             resultCollection.HasMoreItems = resultLoader.HasMoreItems;
         }

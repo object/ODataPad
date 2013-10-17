@@ -5,13 +5,13 @@ using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ResourceSetViewModel : MvxViewModel
+    public class ResourceSetDetailsViewModel : MvxViewModel
     {
         private readonly ResourceSet _resourceSet;
         private readonly SchemaViewModel _schema;
         private readonly ResultListViewModel _results;
 
-        public ResourceSetViewModel(HomeViewModelBase home, ResourceSet resourceSet)
+        public ResourceSetDetailsViewModel(HomeViewModelBase home, ResourceSet resourceSet)
         {
             this.Home = home;
 

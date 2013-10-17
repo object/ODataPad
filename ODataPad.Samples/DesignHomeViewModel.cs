@@ -27,8 +27,8 @@ namespace ODataPad.Samples
 
             if (services != null)
             {
-                this.Services = new ObservableCollection<ServiceViewModel>(
-                    services.Select(x => new ServiceViewModel(this, x)));
+                this.Services = new ObservableCollection<ServiceDetailsViewModel>(
+                    services.Select(x => new ServiceDetailsViewModel(this, x)));
 
                 foreach (var service in this.Services)
                 {
@@ -63,8 +63,8 @@ namespace ODataPad.Samples
                                                             new Collection<ResourceAssociation>()),
                                   };
 
-                this.ResourceSets = new ObservableCollection<ResourceSetViewModel>(
-                    collections.Select(x => new ResourceSetViewModel(this, x)));
+                this.ResourceSets = new ObservableCollection<ResourceSetDetailsViewModel>(
+                    collections.Select(x => new ResourceSetDetailsViewModel(this, x)));
 
                 this.SelectedResourceSet = this.ResourceSets.First();
             }

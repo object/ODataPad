@@ -5,11 +5,11 @@ using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ServiceViewModel
+    public class ServiceDetailsViewModel
     {
         private readonly ServiceInfo _serviceInfo;
 
-        public ServiceViewModel(HomeViewModelBase home, ServiceInfo serviceInfo)
+        public ServiceDetailsViewModel(HomeViewModelBase home, ServiceInfo serviceInfo)
         {
             this.Home = home;
             _serviceInfo = serviceInfo;

@@ -22,3 +22,4 @@ packages/
 *_mm_cache.bin
 *.user
 AppPackages/
+*.userprefs

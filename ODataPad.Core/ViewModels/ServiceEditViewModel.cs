@@ -11,8 +11,8 @@ namespace ODataPad.Core.ViewModels
         public ServiceEditViewModel Self { get { return this; } }
         public HomeViewModelBase Home { get; set; }
 
-        private ServiceViewModel _sourceService;
-        public ServiceViewModel SourceService
+        private ServiceDetailsViewModel _sourceService;
+        public ServiceDetailsViewModel SourceService
         {
             get { return _sourceService; }
             set { _sourceService = value; RaisePropertyChanged(() => SourceService); }
