@@ -8,15 +8,17 @@ namespace ODataPad.Core.ViewModels
 {
     public class HomeViewModelBase : MvxViewModel
     {
+        private readonly ServiceListViewModel _services;
         private readonly ResourceSetListViewModel _resourceSets;
 
         protected HomeViewModelBase()
         {
-            _services = new ObservableCollection<ServiceDetailsViewModel>();
+            _services = new ServiceListViewModel(this);
             _resourceSets = new ResourceSetListViewModel(this);
         }
 
         public virtual bool IsDesignTime { get { return true; } }
+        public ServiceListViewModel Services { get { return _services; } }
         public ResourceSetListViewModel ResourceSets { get { return _resourceSets; } }
 
         public ICommand AddServiceCommand
@@ -62,42 +64,6 @@ namespace ODataPad.Core.ViewModels
                 _editedService = value;
                 RaisePropertyChanged(() => EditedService);
             }
-        }
-
-        private ObservableCollection<ServiceDetailsViewModel> _services;
-        public ObservableCollection<ServiceDetailsViewModel> Services
-        {
-            get { return _services; }
-            set { _services = value; RaisePropertyChanged(() => Services);
-            }
-        }
-
-        private ServiceDetailsViewModel _selectedService;
-        public ServiceDetailsViewModel SelectedService
-        {
-            get { return _selectedService; }
-            set 
-            { 
-                _selectedService = value; 
-                RaisePropertyChanged(() => SelectedService);
-                RaisePropertyChanged(() => IsServiceSelected);
-            }
-        }
-
-        public ICommand SelectServiceCommand
-        {
-            get { return new MvxCommand(SelectService); }
-        }
-
-        public virtual void SelectService()
-        {
-        }
-
-        private bool _isServiceSelected;
-        public bool IsServiceSelected
-        {
-            get { return _isServiceSelected; }
-            set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
         public IEnumerable<string> ResourceSetModes

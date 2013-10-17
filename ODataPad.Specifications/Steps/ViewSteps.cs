@@ -19,7 +19,7 @@ namespace ODataPad.Specifications.Steps
         public void b(Table table)
         {
             var viewModel = GetHomeViewModel();
-            table.CompareToSet(viewModel.Services.Select(x => new { x.Name }));
+            table.CompareToSet(viewModel.Services.Items.Select(x => new { x.Name }));
         }
 
         [When(@"I select service (.*)")]

@@ -27,18 +27,18 @@ namespace ODataPad.Samples
 
             if (services != null)
             {
-                this.Services = new ObservableCollection<ServiceDetailsViewModel>(
+                this.Services.Items = new ObservableCollection<ServiceDetailsViewModel>(
                     services.Select(x => new ServiceDetailsViewModel(this, x)));
 
-                foreach (var service in this.Services)
+                foreach (var service in this.Services.Items)
                 {
                     stream = Assembly.Load(new AssemblyName("ODataPad.Samples"))
                         .GetManifestResourceStream(string.Join(".", namespaceName, "ImagesBase64", service.Name, "png", "base64"));
                     service.ReadImageBase64(stream);
                 }
 
-                this.SelectedService = this.Services.First();
-                this.IsServiceSelected = true;
+                this.Services.SelectedService = this.Services.Items.First();
+                this.Services.IsServiceSelected = true;
 
                 var selectedProperties = new Collection<ResourceProperty>
                                  {

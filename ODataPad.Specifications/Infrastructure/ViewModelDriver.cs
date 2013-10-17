@@ -7,9 +7,9 @@ namespace ODataPad.Specifications.Infrastructure
     {
         public void SelectService(HomeViewModel viewModel, string serviceName)
         {
-            var service = viewModel.Services.Single(x => x.Name == serviceName);
-            viewModel.SelectedService = service;
-            viewModel.SelectServiceCommand.Execute(service);
+            var service = viewModel.Services.Items.Single(x => x.Name == serviceName);
+            viewModel.Services.SelectedService = service;
+            viewModel.Services.SelectServiceCommand.Execute(service);
         }
     }
 }

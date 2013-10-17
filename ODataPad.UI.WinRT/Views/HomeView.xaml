@@ -16,7 +16,7 @@
         <!-- Collection of items displayed by this page -->
         <CollectionViewSource
             x:Name="itemsViewSource"
-            Source="{Binding Services}"/>
+            Source="{Binding Services.Items}"/>
 
         <common:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <common:BooleanNegationConverter x:Key="BoolInverted" />
@@ -29,10 +29,10 @@
                 <StackPanel x:Name="leftStackPanel" Orientation="Horizontal" HorizontalAlignment="Left">
                     <!--Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/-->
                     <Button Style="{StaticResource EditAppBarButtonStyle}" 
-                            Visibility="{Binding Path=IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
+                            Visibility="{Binding Path=Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
                             Command="{Binding EditServiceCommand, Mode=OneWay}"/>
                     <Button Style="{StaticResource RemoveAppBarButtonStyle}" 
-                            Visibility="{Binding Path=IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
+                            Visibility="{Binding Path=Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
                             Command="{Binding RemoveServiceCommand, Mode=OneWay}"/>
                     <!--Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="refreshButton_Click"/-->
                 </StackPanel>
@@ -84,13 +84,13 @@
                 TabIndex="1"
                 Margin="-10,128,0,0"
                 Padding="120,0,0,60"
-                ItemsSource="{Binding Services}"
+                ItemsSource="{Binding Services.Items}"
                 IsSwipeEnabled="False"
-                SelectedItem="{Binding SelectedService, Mode=TwoWay}"
+                SelectedItem="{Binding Services.SelectedService, Mode=TwoWay}"
                 ItemTemplate="{StaticResource ServiceItemTemplate}" SelectionMode="Single" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding SelectServiceCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding Services.SelectServiceCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ListView>
@@ -114,7 +114,7 @@
             <Grid 
                 x:Name="itemHeaderGrid" 
                 Grid.ColumnSpan="1"
-                DataContext="{Binding SelectedService}"
+                DataContext="{Binding Services.SelectedService}"
                 Margin="20,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -148,7 +148,7 @@
                         BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
                         ItemsSource="{Binding ResourceSetModes}"
                         SelectedItem="{Binding SelectedResourceSetMode, Mode=TwoWay}"
-                        Visibility="{Binding Path=IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
+                        Visibility="{Binding Path=Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">

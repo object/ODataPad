@@ -93,7 +93,7 @@ namespace ODataPad.Core.ViewModels
 
         public bool ServiceHasUniqueName()
         {
-            return this.Home.Services.All(x => x.Name != this.Name);
+            return this.Home.Services.Items.All(x => x.Name != this.Name);
         }
 
 

@@ -40,7 +40,7 @@ namespace ODataPad.UI.WinRT.Views
         {
             if (this.ViewModel == null)
                 return;
-            var item = this.ViewModel.Services.Where(x => x.Name == navigationParameter.ToString());
+            var item = this.ViewModel.Services.Items.Where(x => x.Name == navigationParameter.ToString());
             if (item == null)
                 return;
 
@@ -55,7 +55,7 @@ namespace ODataPad.UI.WinRT.Views
             {
                 if (pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null)
                 {
-                    var selectedItem = this.ViewModel.Services.Single(x => x.Name == (String)pageState["SelectedItem"]);
+                    var selectedItem = this.ViewModel.Services.Items.Single(x => x.Name == (String)pageState["SelectedItem"]);
                     this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }

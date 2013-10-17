@@ -20,15 +20,15 @@
 
         <ListView 
             HorizontalAlignment="Left" Height="500" Margin="31,27,0,0" VerticalAlignment="Top" Width="350"
-            ItemsSource="{Binding Services}"
-            SelectedItem="{Binding SelectedService, Mode=TwoWay}"
+            ItemsSource="{Binding Services.Items}"
+            SelectedItem="{Binding Services.SelectedService, Mode=TwoWay}"
             SelectionMode="Single" 
             ItemTemplate="{StaticResource ServiceItemTemplate}"
             Background="{StaticResource MainBackgroundBrush}" 
             BorderBrush="{StaticResource MainBackgroundBrush}" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding SelectServiceCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding Services.SelectServiceCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ListView.ContextMenu>
@@ -39,11 +39,11 @@
                     </MenuItem>
                     <MenuItem Header="_Edit" 
                           Command="{Binding EditServiceCommand}"
-                          IsEnabled="{Binding IsServiceSelected}">
+                          IsEnabled="{Binding Services.IsServiceSelected}">
                     </MenuItem>
                     <MenuItem Header="_Remove" 
                           Command="{Binding RemoveServiceCommand}"
-                          IsEnabled="{Binding IsServiceSelected}">
+                          IsEnabled="{Binding Services.IsServiceSelected}">
                     </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
@@ -61,7 +61,7 @@
             </Grid.ColumnDefinitions>
 
             <ListView 
-            DataContext="{Binding SelectedService}"
+            DataContext="{Binding Services.SelectedService}"
                 HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
                     ItemsSource="{Binding Home.ResourceSets.Items, Mode=TwoWay}"
                     SelectedItem="{Binding Home.ResourceSets.SelectedItem, Mode=TwoWay}"
@@ -92,7 +92,7 @@
                     Background="Black"
                     ItemsSource="{Binding ResourceSetModes}"
                     SelectedItem="{Binding SelectedResourceSetMode, Mode=TwoWay}"
-                    Visibility="{Binding IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
+                    Visibility="{Binding Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">

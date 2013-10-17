@@ -26,9 +26,6 @@ namespace ODataPad.Core.ViewModels
             _serviceRepository = Mvx.Resolve<IServiceRepository>();
             _localStorage = Mvx.Resolve<IServiceLocalStorage>();
             _localData = Mvx.Resolve<IApplicationLocalData>();
-
-            this.SelectedService = null;
-            this.IsServiceSelected = false;
         }
 
         public override bool IsDesignTime { get { return false; } }
@@ -46,14 +43,14 @@ namespace ODataPad.Core.ViewModels
 
         private async Task PopulateServicesAsync()
         {
-            this.Services.Clear();
+            this.Services.Items.Clear();
             await _serviceRepository.LoadServicesAsync();
 
             foreach (var serviceInfo in _serviceRepository.Services)
             {
                 var serviceItem = new ServiceDetailsViewModel(this, serviceInfo);
                 //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
-                this.Services.Add(serviceItem);
+                this.Services.Items.Add(serviceItem);
             }
         }
 
@@ -61,7 +58,7 @@ namespace ODataPad.Core.ViewModels
         {
             var serviceItem = new ServiceDetailsViewModel(this, serviceInfo);
             //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
-            this.Services.Add(serviceItem);
+            this.Services.Items.Add(serviceItem);
             await RefreshMetadataCacheAsync(serviceInfo);
             //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
             await _serviceRepository.AddServiceAsync(serviceInfo);
@@ -78,7 +75,7 @@ namespace ODataPad.Core.ViewModels
 
         public async Task RemoveServiceItemAsync(ServiceDetailsViewModel item)
         {
-            this.Services.Remove(item);
+            this.Services.Items.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };
             await _serviceRepository.DeleteServiceAsync(serviceInfo);
         }
@@ -92,57 +89,13 @@ namespace ODataPad.Core.ViewModels
         public override void EditService()
         {
             this.IsServiceEditInProgress = true;
-            this.EditedService = this.SelectedService;
+            this.EditedService = this.Services.SelectedService;
         }
 
         public override void RemoveService()
         {
             this.IsServiceEditInProgress = true;
-            this.EditedService = this.SelectedService;
-        }
-
-        public override void SelectService()
-        {
-            if (this.SelectedService != null)
-                RefreshServiceResourcesFromMetadataCache(this.SelectedService);
-            this.IsServiceSelected = this.SelectedService != null;
-        }
-
-        private void RefreshServiceResourcesFromMetadataCache(ServiceDetailsViewModel item)
-        {
-            this.ResourceSets.Items.Clear();
-            if (!string.IsNullOrEmpty(item.MetadataCache))
-            {
-                var resources = MetadataService.ParseServiceMetadata(item.MetadataCache);
-                foreach (var resource in resources)
-                {
-                    this.ResourceSets.Items.Add(new ResourceSetDetailsViewModel(this, resource));
-                }
-            }
-        }
-
-        private void RefreshServiceResourcesFromMetadataCache(ServiceDetailsViewModel item, ServiceInfo service)
-        {
-            //item.Resources.Clear();
-            if (!string.IsNullOrEmpty(service.MetadataCache))
-            {
-                var element = XElement.Parse(service.MetadataCache);
-                if (element.Name == "Error")
-                {
-                    //item.Resources.Add(new ServiceError(
-                    //    service.Name, 
-                    //    "Unable to load service metadata",
-                    //    element.Element("Message").Value));
-                }
-                else
-                {
-                    var resources = MetadataService.ParseServiceMetadata(service.MetadataCache);
-                    foreach (var resource in resources)
-                    {
-                        //item.Resources.Add(collection);
-                    }
-                }
-            }
+            this.EditedService = this.Services.SelectedService;
         }
 
         private async Task RefreshMetadataCacheAsync(ServiceInfo service)
@@ -150,7 +103,7 @@ namespace ODataPad.Core.ViewModels
             var metadata = await MetadataService.LoadServiceMetadataAsync(service);
             service.MetadataCache = metadata;
             service.CacheUpdated = DateTimeOffset.UtcNow;
-            var serviceItem = this.Services.Single(x => x.Name == service.Name);
+            var serviceItem = this.Services.Items.Single(x => x.Name == service.Name);
             if (serviceItem != null)
             {
                 serviceItem.UpdateMetadata(service.MetadataCache);

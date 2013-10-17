@@ -100,7 +100,7 @@ namespace ODataPad.Core.ViewModels
         public async Task RequestResourceData()
         {
             this.QueryResults = _resultProvider.CreateResultCollection(
-                this.Home.SelectedService.Url,
+                this.Home.Services.SelectedService.Url,
                 this.Home.ResourceSets.SelectedItem.Name,
                 this.Home.ResourceSets.SelectedItem.Properties,
                 new QueryInProgress(this));
