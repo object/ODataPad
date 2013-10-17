@@ -12,12 +12,6 @@ namespace ODataPad.Core.ViewModels
         {
             _services = new ObservableCollection<ServiceDetailsViewModel>();
             _resourceSets = new ObservableCollection<ResourceSetDetailsViewModel>();
-            _resourceSetModes = new ObservableCollection<string>(new[]
-                                                                    {
-                                                                        "Show collection properties", 
-                                                                        "Show collection data"
-                                                                    });
-            _resourceSetMode = _resourceSetModes[0];
         }
 
         public virtual bool IsDesignTime { get { return true; } }
@@ -117,7 +111,7 @@ namespace ODataPad.Core.ViewModels
             set { _selectedResourceSet = value; RaisePropertyChanged(() => SelectedResourceSet); }
         }
 
-        public ICommand SelectResourceCommand
+        public ICommand SelectResourceSetCommand
         {
             get { return new MvxCommand(SelectResourceSet); }
         }
@@ -126,32 +120,26 @@ namespace ODataPad.Core.ViewModels
         {
         }
 
-        private readonly ObservableCollection<string> _resourceSetModes; 
         public IEnumerable<string> ResourceSetModes
         {
-            get { return _resourceSetModes; }
+            get { return ResourceSetDetailsViewModel.ResourceSetModes; }
         }
 
-        private string _resourceSetMode;
-        public string ResourceSetMode
+        public string SelectedResourceSetMode
         {
-            get { return _resourceSetMode; }
+            get { return ResourceSetDetailsViewModel.ResourceSetMode; }
             set
             {
-                _resourceSetMode = value;
-                RaisePropertyChanged(() => ResourceSetMode);
-                RaisePropertyChanged(() => IsPropertyViewSelected);
-                RaisePropertyChanged(() => IsResultViewSelected);
+                if (this.SelectedResourceSet != null)
+                {
+                    this.SelectedResourceSet.SelectedResourceSetMode = value;
+                }
+                else
+                {
+                    ResourceSetDetailsViewModel.ResourceSetMode = value;
+                    RaisePropertyChanged(() => SelectedResourceSetMode);
+                }
             }
-        }
-
-        public ICommand SelectResourceModeCommand
-        {
-            get { return new MvxCommand(SelectResourceMode); }
-        }
-
-        public virtual void SelectResourceMode()
-        {
         }
 
         private bool _isQueryInProgress;
@@ -164,8 +152,5 @@ namespace ODataPad.Core.ViewModels
                 RaisePropertyChanged(() => IsQueryInProgress);
             }
         }
-
-        public bool IsPropertyViewSelected { get { return this.ResourceSetMode == this.ResourceSetModes.First(); } }
-        public bool IsResultViewSelected { get { return this.ResourceSetMode != this.ResourceSetModes.First(); } }
     }
 }

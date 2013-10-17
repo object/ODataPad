@@ -72,7 +72,7 @@
                 >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding Home.SelectResourceCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding Home.SelectResourceSetCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
@@ -91,12 +91,12 @@
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" 
                     Background="Black"
                     ItemsSource="{Binding ResourceSetModes}"
-                    SelectedItem="{Binding ResourceSetMode, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedResourceSetMode, Mode=TwoWay}"
                     Visibility="{Binding IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectResourceModeCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding SelectedResourceSet.SelectResourceSetModeCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -112,7 +112,7 @@
                         TabIndex="3"
                         DataContext="{Binding SelectedResourceSet}"
                         ItemsSource="{Binding Schema.Elements}" 
-                        Visibility="{Binding Path=Home.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=Home.SelectedResourceSet.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                         ItemTemplate="{StaticResource CollectionElementItemTemplate}"
                         Background="{StaticResource MainBackgroundBrush}" 
                         BorderBrush="{StaticResource MainBackgroundBrush}">
@@ -125,7 +125,7 @@
                         TabIndex="3"
                         DataContext="{Binding SelectedResourceSet}"
                         ItemsSource="{Binding Results.QueryResults}"
-                        Visibility="{Binding Path=Home.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=Home.SelectedResourceSet.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
                         SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                         SelectionMode="Single" 
                         ItemTemplate="{StaticResource ResultItemTemplate}"
@@ -137,7 +137,7 @@
                                 <i:InvokeCommandAction Command="{Binding Results.SelectResultCommand}"/>
                             </i:EventTrigger>
                             <common:RoutedEventTrigger RoutedEvent="ScrollViewer.ScrollChanged">
-                                <common:ScrollChangedEventToCommand Command="{Binding Home.LoadMoreResultsCommand}"/>
+                                <common:ScrollChangedEventToCommand Command="{Binding Results.LoadMoreResultsCommand}"/>
                             </common:RoutedEventTrigger>
                         </i:Interaction.Triggers>
                     </ListView>

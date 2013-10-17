@@ -110,15 +110,7 @@ namespace ODataPad.Core.ViewModels
 
         public async override void SelectResourceSet()
         {
-            if (this.IsResultViewSelected && this.SelectedResourceSet != null)
-            {
-                await this.SelectedResourceSet.Results.RequestResourceData();
-            }
-        }
-
-        public async override void SelectResourceMode()
-        {
-            if (this.IsResultViewSelected && this.SelectedResourceSet != null)
+            if (this.SelectedResourceSet != null && this.SelectedResourceSet.IsResultViewSelected)
             {
                 await this.SelectedResourceSet.Results.RequestResourceData();
             }
