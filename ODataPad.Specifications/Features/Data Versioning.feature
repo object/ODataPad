@@ -1,4 +1,4 @@
-﻿Feature: Data Versioning
+﻿Feature: Data versioning
 
 Scenario: On the first run services should be created from samples
 	Given Service repository has no entries

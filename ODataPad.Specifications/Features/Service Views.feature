@@ -1,4 +1,4 @@
-﻿Feature: Services
+﻿Feature: Service views
 
 Scenario: Initial screen should display a list of available services
 	When I start the application
@@ -29,12 +29,7 @@ Scenario: Displaying collection properties
 	And selected service is OData.org
 	And collections are set to show its properties
 	When I select collection ODataProducerApplications
-	Then I should see collection properties
-	| Name           | Type          |
-	| Id             | Int32 (key)   |
-	| Name           | String        |
-	| Description    | String        |
-	| ApplicationUrl | String (null) |
+	Then I should see collection schema summary "4 properties, 0 relations"
 
 Scenario: Displaying collection data rows
 	Given I see a list of services
@@ -53,8 +48,7 @@ Scenario: Showing collection data details
 	And selected service is OData.org
 	And collections are set to show its data
 	And selected collection is ODataProducerApplications
-	And seleted collection data row is a row with key 4
-	When I tap on selected collection data row
+	When I tap on a collection data row with key "4"
 	Then I should see collection data details that contain
 	| Name           | Data                                                |
 	| Id             | 4                                                   |
@@ -67,9 +61,8 @@ Scenario: Hiding collection data details
 	And selected service is OData.org
 	And collections are set to show its data
 	And selected collection is ODataProducerApplications
-	And seleted collection data row is a row with key 4
-	And collection data view shows collection data details
-	When I tap on collection data view
+	And collection data view shows collection data details for a row with key "4"
+	When I tap on a collection data view
 	Then I should see collection data rows that contain
 	| Key | Data                              |
 	| 1   | SharePoint 2010 (...)             |
