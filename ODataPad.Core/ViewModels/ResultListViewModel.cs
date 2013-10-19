@@ -98,7 +98,7 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        public async Task RequestResourceData()
+        public async Task LoadResultsAsync()
         {
             this.QueryResults = _resultProvider.CreateResultCollection(
                 this.Home.Services.SelectedService.Url,

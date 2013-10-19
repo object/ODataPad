@@ -31,7 +31,7 @@ namespace ODataPad.Specifications.Infrastructure
 
         public void SelectResult(ResultListViewModel viewModel, string key)
         {
-            var result = viewModel.QueryResults.Single(x => x.Keys.Single() == key);
+            var result = viewModel.QueryResults.Single(x => x.Properties[x.Keys.Single()].ToString() == key);
             viewModel.SelectedResult = result;
             viewModel.SelectResultCommand.Execute(result);
         }

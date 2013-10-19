@@ -48,7 +48,7 @@ Scenario: Showing collection data details
 	And selected service is OData.org
 	And collections are set to show its data
 	And selected collection is ODataProducerApplications
-	When I tap on a collection data row with key "4"
+	When I select result row with key "4"
 	Then I should see collection data details that contain
 	| Name           | Data                                                |
 	| Id             | 4                                                   |
@@ -62,8 +62,9 @@ Scenario: Hiding collection data details
 	And collections are set to show its data
 	And selected collection is ODataProducerApplications
 	And collection data view shows collection data details for a row with key "4"
-	When I tap on a collection data view
-	Then I should see collection data rows that contain
+	When I tap within result view
+	Then I should not see collection data details
+	And I should see collection data rows that contain
 	| Key | Data                              |
 	| 1   | SharePoint 2010 (...)             |
 	| 2   | IBM WebSphere (...)               |

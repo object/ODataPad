@@ -28,6 +28,7 @@ namespace ODataPad.Specifications.Steps
             AppDriver.Instance.EnsureHomeViewModel();
         }
 
+        [Given(@"I wait (.*) seconds")]
         [When(@"I wait (.*) seconds")]
         public void b(int numberOfSeconds)
         {

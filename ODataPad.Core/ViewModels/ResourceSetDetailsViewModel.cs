@@ -65,7 +65,7 @@ namespace ODataPad.Core.ViewModels
         {
             if (this.IsResultViewSelected)
             {
-                await this.Results.RequestResourceData();
+                await this.Results.LoadResultsAsync();
             }
         }
 
