@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Interfaces\IApplicationLocalData.cs" />
     <Compile Include="Interfaces\IDataVersioningService.cs" />
+    <Compile Include="Interfaces\IODataService.cs" />
     <Compile Include="Interfaces\IResultProvider.cs" />
     <Compile Include="Interfaces\ISamplesService.cs" />
     <Compile Include="Interfaces\INotifyInProgress.cs" />

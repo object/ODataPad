@@ -36,7 +36,6 @@ Scenario: Displaying collection data rows
 	And selected service is OData.org
 	And collections are set to show its data
 	When I select collection ODataProducerApplications
-	And I wait 5 seconds
 	Then I should see collection data rows that contain
 	| Key | Data                              |
 	| 1   | SharePoint 2010 (...)             |

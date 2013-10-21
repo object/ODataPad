@@ -36,6 +36,8 @@ namespace ODataPad.Core
                 new SamplesService(_samplesModuleName, _samplesFilename));
             Mvx.RegisterSingleton<IDataVersioningService>(
                 new DataVersioningService());
+            Mvx.RegisterSingleton<IODataService>(
+                new ODataService());
         }
 
         private void InitializeStartNavigation()

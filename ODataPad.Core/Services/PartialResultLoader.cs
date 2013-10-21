@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cirrious.CrossCore;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
@@ -32,7 +33,7 @@ namespace ODataPad.Core.Services
 
         public virtual async Task<ObservableCollection<ResultRow>> LoadResults(int skipCount, int maxCount)
         {
-            var odataService = new ODataService();
+            var odataService = Mvx.Resolve<IODataService>();
 
             var result = await odataService.LoadResultsAsync(
                 _serviceUrl,

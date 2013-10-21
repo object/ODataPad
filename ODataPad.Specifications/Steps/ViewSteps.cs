@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Mime;
+using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Platform;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -156,19 +156,19 @@ namespace ODataPad.Specifications.Steps
             return ScenarioContext.Current["HomeViewModel"] as HomeViewModel;
         }
 
+        private void WaitForResults(ResultListViewModel viewModel, int maxSeconds)
+        {
+            for (var seconds = 0; seconds < maxSeconds; seconds++)
+            {
+                Thread.Sleep(1000);
+                if (viewModel.QueryResults.Any())
+                    break;
+            }
+        }
+
         private string RemoveEllipsis(string text)
         {
             return text.EndsWith(Ellipsis) ? text.Replace(Ellipsis, string.Empty) : text;
-        }
-
-        private void WaitForResults(ResultListViewModel viewModel, int maxSeconds)
-        {
-            for (var seconds = 0; seconds < 5; seconds++)
-            {
-                if (viewModel.QueryResults.Any())
-                    break;
-                System.Threading.Thread.Sleep(1000);
-            }
         }
     }
 }

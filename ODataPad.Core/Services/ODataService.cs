@@ -7,7 +7,7 @@ using Simple.OData.Client;
 
 namespace ODataPad.Core.Services
 {
-    public class ODataService
+    public class ODataService : IODataService
     {
         public async Task<QueryResult> LoadResultsAsync(
             string serviceUrl, string resourceSetName, int skipCount, int maxCount, INotifyInProgress notify)

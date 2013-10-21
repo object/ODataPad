@@ -21,7 +21,7 @@ namespace ODataPad.Specifications.Steps
         [Given(@"Service repository has following entries")]
         public void b(Table table)
         {
-            AppDriver.Instance.CreateServices(table.Rows.Select(x => x[0]));
+            AppDriver.Instance.CreateODataServices(table.Rows.Select(x => x[0]));
         }
 
         [Given(@"Service repository was created by the previous program version")]
