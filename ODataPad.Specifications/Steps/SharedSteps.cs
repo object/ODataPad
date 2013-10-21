@@ -25,7 +25,6 @@ namespace ODataPad.Specifications.Steps
         [When(@"I start the application")]
         public void a()
         {
-            AppDriver.Instance.EnsureHomeViewModel();
         }
 
         [Given(@"I wait (.*) seconds")]

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
 
@@ -17,6 +18,16 @@ namespace ODataPad.Core.ViewModels
 
         public virtual bool IsDesignTime { get { return true; } }
         public ServiceListViewModel Services { get { return _services; } }
+
+        public virtual Task Init(HomeViewModel.NavigationParameters parameters)
+        {
+            return InitAsync(parameters);
+        }
+
+        public virtual Task InitAsync(HomeViewModel.NavigationParameters parameters)
+        {
+            return new Task(() => { });
+        }
 
         public IEnumerable<string> ResourceSetModes
         {

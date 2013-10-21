@@ -30,7 +30,7 @@ namespace ODataPad.Core.ViewModels
 
         public override bool IsDesignTime { get { return false; } }
 
-        public async Task Init(NavigationParameters parameters)
+        public override async Task InitAsync(NavigationParameters parameters)
         {
             await EnsureDataVersionAsync();
             await PopulateServicesAsync();

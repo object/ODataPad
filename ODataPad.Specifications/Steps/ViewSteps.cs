@@ -14,10 +14,11 @@ namespace ODataPad.Specifications.Steps
     [Binding]
     public class ViewSteps
     {
-        private readonly ViewModelDriver _viewModelDriver;
+        private ViewModelDriver _viewModelDriver;
         private const string Ellipsis = " (...)";
 
-        public ViewSteps()
+        [BeforeScenario]
+        public void BeforeScenario()
         {
             _viewModelDriver = new ViewModelDriver();
         }
@@ -25,69 +26,60 @@ namespace ODataPad.Specifications.Steps
         [Given(@"I see a list of services")]
         public void a()
         {
-            AppDriver.Instance.EnsureHomeViewModel();
         }
 
         [Then(@"I should see a list of services")]
         public void b(Table table)
         {
-            var viewModel = GetHomeViewModel();
-            table.CompareToSet(viewModel.Services.Items.Select(x => new { x.Name }));
+            table.CompareToSet(_viewModelDriver.ServiceDetails.Select(x => new { x.Name }));
         }
 
         [When(@"I select service (.*)")]
         public void c(string serviceName)
         {
-            var viewModel = GetHomeViewModel();
-            _viewModelDriver.SelectService(viewModel.Services, serviceName);
+            _viewModelDriver.SelectService(serviceName);
         }
 
         [Then(@"I should see service collections")]
         public void d(Table table)
         {
-            var viewModel = GetHomeViewModel();
-            table.CompareToSet(viewModel.Services.SelectedService.ResourceSets.Items.Select(x => new { x.Name }));
+            table.CompareToSet(_viewModelDriver.ResourceSetDetails.Select(x => new { x.Name }));
         }
 
         [Given(@"selected service is (.*)")]
         public void e(string serviceName)
         {
-            var viewModel = GetHomeViewModel();
-            _viewModelDriver.SelectService(viewModel.Services, serviceName);
+            _viewModelDriver.SelectService(serviceName);
         }
 
         [Given(@"collections are set to show its (.*)")]
         public void f(string mode)
         {
-            var viewModel = GetHomeViewModel();
-            _viewModelDriver.SelectResourceSetMode(viewModel, mode);
+            _viewModelDriver.SelectResourceSetMode(mode);
         }
 
         [When(@"I select collection (.*)")]
         [Given(@"selected collection is (.*)")]
         public void g(string collectionName)
         {
-            var viewModel = GetHomeViewModel();
-            _viewModelDriver.SelectResourceSet(viewModel.Services.SelectedService.ResourceSets, collectionName);
-            
-            if (viewModel.SelectedResourceSetMode == viewModel.ResourceSetModes.Last())
-                WaitForResults(viewModel.Services.SelectedService.ResourceSets.SelectedItem.Results, 5);
+            _viewModelDriver.SelectResourceSet(collectionName);
+
+            if (_viewModelDriver.SelectedResourceSetMode == _viewModelDriver.ResourceSetModes.Last())
+                WaitForResults(_viewModelDriver.SelectedResourceSetDetails.Results, 5);
         }
 
         [Then(@"I should see collection schema summary ""(.*)""")]
         public void h(string summary)
         {
-            var viewModel = GetHomeViewModel();
-            Assert.AreEqual(viewModel.ResourceSetModes.First(), viewModel.SelectedResourceSetMode);
-            var schemaSummary = _viewModelDriver.GetSchemaSummary(viewModel.Services.SelectedService.ResourceSets.SelectedItem);
+            Assert.AreEqual(_viewModelDriver.ResourceSetModes.First(), _viewModelDriver.SelectedResourceSetMode);
+            var schemaSummary = _viewModelDriver.SelectedSchemaSummary;
             Assert.AreEqual(summary, schemaSummary);
         }
 
         [Then(@"I should see collection data rows that contain")]
         public void i(Table table)
         {
-            var viewModel = GetHomeViewModel();
-            var results = _viewModelDriver.GetQueryResults(viewModel.Services.SelectedService.ResourceSets.SelectedItem.Results);
+            var results = _viewModelDriver.ResultDetails;
 
             Func<string> messageFunc = null;
             try
@@ -109,22 +101,19 @@ namespace ODataPad.Specifications.Steps
         [When(@"I select result row with key ""(.*)""")]
         public void j(string key)
         {
-            var viewModel = GetHomeViewModel();
-            _viewModelDriver.SelectResult(viewModel.Services.SelectedService.ResourceSets.SelectedItem.Results, key);
+            _viewModelDriver.SelectResult(key);
         }
 
         [Given(@"collection data view shows collection data details for a row with key ""(.*)""")]
         public void k(string key)
         {
-            var viewModel = GetHomeViewModel();
-            _viewModelDriver.SelectResult(viewModel.Services.SelectedService.ResourceSets.SelectedItem.Results, key);
+            _viewModelDriver.SelectResult(key);
         }
 
         [Then(@"I should see collection data details that contain")]
         public void l(Table table)
         {
-            var viewModel = GetHomeViewModel();
-            var details = viewModel.Services.SelectedService.ResourceSets.SelectedItem.Results.SelectedResultDetails
+            var details = _viewModelDriver.SelectedResultSummary
                 .Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
             var expectedDetails = table.Rows.SelectMany(x => x.Values).ToList();
             Assert.AreEqual(expectedDetails.Count(), details.Count());
@@ -140,29 +129,22 @@ namespace ODataPad.Specifications.Steps
         [When(@"I tap within result view")]
         public void m()
         {
-            var viewModel = GetHomeViewModel();
-            viewModel.Services.SelectedService.ResourceSets.SelectedItem.Results.SelectedResult = null;
+            _viewModelDriver.SelectedResultDetails = null;
         }
 
         [Then(@"I should not see collection data details")]
         public void n()
         {
-            var viewModel = GetHomeViewModel();
-            Assert.IsFalse(viewModel.Services.SelectedService.ResourceSets.SelectedItem.Results.IsSingleResultSelected);
-        }
-
-        private HomeViewModel GetHomeViewModel()
-        {
-            return ScenarioContext.Current["HomeViewModel"] as HomeViewModel;
+            Assert.IsFalse(_viewModelDriver.IsSingleResultSelected);
         }
 
         private void WaitForResults(ResultListViewModel viewModel, int maxSeconds)
         {
-            for (var seconds = 0; seconds < maxSeconds; seconds++)
+            for (var seconds = 0; seconds < maxSeconds * 10; seconds++)
             {
-                Thread.Sleep(1000);
                 if (viewModel.QueryResults.Any())
                     break;
+                Thread.Sleep(100);
             }
         }
 

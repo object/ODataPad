@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Cirrious.CrossCore;
-using Cirrious.CrossCore.Core;
-using Cirrious.CrossCore.IoC;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Test.Core;
 using Cirrious.MvvmCross.ViewModels;
@@ -14,7 +11,6 @@ using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using ODataPad.Core.ViewModels;
 using ODataPad.Platform.Net45;
-using TechTalk.SpecFlow;
 
 namespace ODataPad.Specifications.Infrastructure
 {
@@ -87,15 +83,15 @@ namespace ODataPad.Specifications.Infrastructure
             localData.SetDataVersionAsync(versionNumber).Wait();
         }
 
-        public void EnsureHomeViewModel()
-        {
-            ScenarioContext.Current.GetOrAdd("HomeViewModel", () =>
-            {
-                var viewModel = new HomeViewModel();
-                viewModel.Init(null).Wait();
-                return viewModel;
-            });
-        }
+        //public void EnsureHomeViewModel()
+        //{
+        //    ScenarioContext.Current.GetOrAdd("HomeViewModel", () =>
+        //    {
+        //        var viewModel = new HomeViewModel();
+        //        viewModel.Init(null).Wait();
+        //        return viewModel;
+        //    });
+        //}
 
         private class TestTrace : IMvxTrace
         {
