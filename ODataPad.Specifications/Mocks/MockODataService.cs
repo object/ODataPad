@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using ODataPad.Core.Models;
 
-namespace ODataPad.Specifications.Infrastructure
+namespace ODataPad.Specifications.Mocks
 {
-    public class FakeODataService
+    public class MockODataService
     {
         public Task<QueryResult> GetQueryResultAsync()
         {

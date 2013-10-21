@@ -25,6 +25,7 @@ namespace ODataPad.Specifications.Steps
         [When(@"I start the application")]
         public void a()
         {
+            (ScenarioContext.Current["ViewModelDriver"] as ViewModelDriver).EnsureHomeViewModel();
         }
 
         [Given(@"I wait (.*) seconds")]

@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Cirrious.CrossCore;
+using Cirrious.CrossCore.Core;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Test.Core;
 using Cirrious.MvvmCross.ViewModels;
+using Cirrious.MvvmCross.Views;
 using Moq;
 using ODataPad.Core;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 using ODataPad.Core.ViewModels;
 using ODataPad.Platform.Net45;
+using ODataPad.Specifications.Mocks;
 
 namespace ODataPad.Specifications.Infrastructure
 {
@@ -29,7 +32,8 @@ namespace ODataPad.Specifications.Infrastructure
             base.ClearAll();
 
             this.MocksEnabled = true;
-            InitializeServices();
+            InitializeApplicationServices();
+            InitializeMvxServices();
         }
 
         public IMvxApplication CreateApp()
@@ -37,33 +41,14 @@ namespace ODataPad.Specifications.Infrastructure
             var app = new ODataPadApp("ODataPad.Samples", "SampleServices.xml");
 
             if (this.MocksEnabled)
-                MockServices();
+                MockApplicationServices();
 
             return app;
         }
 
-        private void InitializeServices()
-        {
-            Mvx.RegisterSingleton<IMvxTrace>(new TestTrace());
-
-            Mvx.RegisterSingleton<IResourceManager>(new ResourceManager());
-            Mvx.RegisterSingleton<IServiceLocalStorage>(new ServiceLocalStorage());
-            Mvx.RegisterSingleton<IApplicationLocalData>(new ApplicationLocalData());
-            Mvx.RegisterSingleton<IResultProvider>(new ResultProvider());
-        }
-
-        private void MockServices()
-        {
-            _mockODataService = new Mock<IODataService>();
-            _mockODataService.Setup(x => x
-                .LoadResultsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<INotifyInProgress>()))
-                .Returns(new FakeODataService().GetQueryResultAsync);
-            Mvx.RegisterSingleton(_mockODataService.Object);
-        }
-
         public void CreateODataServices(IEnumerable<string> serviceNames)
         {
-            var storage = Mvx.GetSingleton<IServiceLocalStorage>();
+            var storage = Ioc.GetSingleton<IServiceLocalStorage>();
             var services = new List<ServiceInfo>();
             foreach (var serviceName in serviceNames)
             {
@@ -74,24 +59,42 @@ namespace ODataPad.Specifications.Infrastructure
 
         public void ClearData()
         {
-            Mvx.GetSingleton<IServiceLocalStorage>().ClearServiceInfosAsync().Wait();
+            Ioc.GetSingleton<IServiceLocalStorage>().ClearServiceInfosAsync().Wait();
         }
 
         public void SetDataVersion(int versionNumber)
         {
-            var localData = Mvx.GetSingleton<IApplicationLocalData>();
+            var localData = Ioc.GetSingleton<IApplicationLocalData>();
             localData.SetDataVersionAsync(versionNumber).Wait();
         }
 
-        //public void EnsureHomeViewModel()
-        //{
-        //    ScenarioContext.Current.GetOrAdd("HomeViewModel", () =>
-        //    {
-        //        var viewModel = new HomeViewModel();
-        //        viewModel.Init(null).Wait();
-        //        return viewModel;
-        //    });
-        //}
+        private void InitializeMvxServices()
+        {
+            Ioc.RegisterSingleton<IMvxTrace>(new TestTrace());
+
+            var dispatcher = new MockMvxViewDispatcher();
+            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+        }
+
+        private void InitializeApplicationServices()
+        {
+            Ioc.RegisterSingleton<IMvxTrace>(new TestTrace());
+
+            Ioc.RegisterSingleton<IResourceManager>(new ResourceManager());
+            Ioc.RegisterSingleton<IServiceLocalStorage>(new ServiceLocalStorage());
+            Ioc.RegisterSingleton<IApplicationLocalData>(new ApplicationLocalData());
+            Ioc.RegisterSingleton<IResultProvider>(new ResultProvider());
+        }
+
+        private void MockApplicationServices()
+        {
+            _mockODataService = new Mock<IODataService>();
+            _mockODataService.Setup(x => x
+                .LoadResultsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<INotifyInProgress>()))
+                .Returns(new MockODataService().GetQueryResultAsync);
+            Ioc.RegisterSingleton(_mockODataService.Object);
+        }
 
         private class TestTrace : IMvxTrace
         {

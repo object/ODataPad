@@ -57,7 +57,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Data Versioning.feature</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\FakeODataService.cs" />
+    <Compile Include="Mocks\MockMvxViewDispatcher.cs" />
+    <Compile Include="Mocks\MockODataService.cs" />
     <Compile Include="Infrastructure\ViewModelDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Features\Service Views.feature.cs">

@@ -21,11 +21,13 @@ namespace ODataPad.Specifications.Steps
         public void BeforeScenario()
         {
             _viewModelDriver = new ViewModelDriver();
+            ScenarioContext.Current.Add("ViewModelDriver", _viewModelDriver);
         }
 
         [Given(@"I see a list of services")]
         public void a()
         {
+            _viewModelDriver.EnsureHomeViewModel();
         }
 
         [Then(@"I should see a list of services")]
@@ -63,9 +65,6 @@ namespace ODataPad.Specifications.Steps
         public void g(string collectionName)
         {
             _viewModelDriver.SelectResourceSet(collectionName);
-
-            if (_viewModelDriver.SelectedResourceSetMode == _viewModelDriver.ResourceSetModes.Last())
-                WaitForResults(_viewModelDriver.SelectedResourceSetDetails.Results, 5);
         }
 
         [Then(@"I should see collection schema summary ""(.*)""")]
@@ -113,16 +112,13 @@ namespace ODataPad.Specifications.Steps
         [Then(@"I should see collection data details that contain")]
         public void l(Table table)
         {
-            var details = _viewModelDriver.SelectedResultSummary
-                .Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
+            var details = ParseResultSummary(_viewModelDriver.SelectedResultSummary);
             var expectedDetails = table.Rows.SelectMany(x => x.Values).ToList();
+
             Assert.AreEqual(expectedDetails.Count(), details.Count());
             for (var index = 0; index < details.Count(); index++)
             {
-                if (expectedDetails[index].EndsWith(Ellipsis))
-                    Assert.IsTrue(details[index].StartsWith(RemoveEllipsis(expectedDetails[index])), string.Format("Expected \"{0}\"", expectedDetails[index]));
-                else
-                    Assert.AreEqual(expectedDetails[index], details[index]);
+                AssertMatch(expectedDetails[index], details[index]);
             }
         }
 
@@ -138,17 +134,20 @@ namespace ODataPad.Specifications.Steps
             Assert.IsFalse(_viewModelDriver.IsSingleResultSelected);
         }
 
-        private void WaitForResults(ResultListViewModel viewModel, int maxSeconds)
+        private static string[] ParseResultSummary(string text)
         {
-            for (var seconds = 0; seconds < maxSeconds * 10; seconds++)
-            {
-                if (viewModel.QueryResults.Any())
-                    break;
-                Thread.Sleep(100);
-            }
+            return text.Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        private string RemoveEllipsis(string text)
+        private static void AssertMatch(string expectedText, string actualText)
+        {
+            if (expectedText.EndsWith(Ellipsis))
+                Assert.IsTrue(actualText.StartsWith(RemoveEllipsis(expectedText)), string.Format("Expected \"{0}\"", expectedText));
+            else
+                Assert.AreEqual(expectedText, actualText);
+        }
+
+        private static string RemoveEllipsis(string text)
         {
             return text.EndsWith(Ellipsis) ? text.Replace(Ellipsis, string.Empty) : text;
         }
