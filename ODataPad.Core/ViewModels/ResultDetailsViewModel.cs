@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ResultDetailsViewModel
+    public class ResultDetailsViewModel : MvxViewModel
     {
         private readonly ResultRow _resultRow;
 

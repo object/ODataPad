@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;FORMFACTOR_TABLET</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -64,17 +64,42 @@
     <Compile Include="Common\Base64ImageConverter.cs" />
     <Compile Include="Common\RoutedEventTrigger.cs" />
     <Compile Include="Common\ScrollChangedEventToCommand.cs" />
+    <Compile Include="FormFactorAttribute.cs" />
     <Compile Include="Setup.cs" />
+    <Compile Include="Views\PhoneHomeView.xaml.cs">
+      <DependentUpon>PhoneHomeView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Common\CustomStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HomeView.xaml">
+    <Page Include="Views\PhoneResourceSetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhoneResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhoneServiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TabletHomeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Views\HomeView.xaml.cs">
-      <DependentUpon>HomeView.xaml</DependentUpon>
+    <Compile Include="Views\PhoneResourceSetView.xaml.cs">
+      <DependentUpon>PhoneResourceSetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhoneResultView.xaml.cs">
+      <DependentUpon>PhoneResultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhoneServiceView.xaml.cs">
+      <DependentUpon>PhoneServiceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabletHomeView.xaml.cs">
+      <DependentUpon>TabletHomeView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -89,6 +114,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PhoneHomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

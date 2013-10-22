@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class SchemaElementViewModel
+    public class SchemaElementViewModel : MvxViewModel
     {
         public SchemaElementViewModel(ResourceProperty property)
         {

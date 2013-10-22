@@ -1,0 +1,63 @@
+﻿<mvx:MvxWpfView x:Class="ODataPad.UI.Net45.Views.PhoneServiceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mvx="clr-namespace:Cirrious.MvvmCross.Wpf.Views;assembly=Cirrious.MvvmCross.Wpf"
+             xmlns:common="clr-namespace:ODataPad.UI.Net45.Common"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:samples="clr-namespace:ODataPad.Samples;assembly=ODataPad.Samples"
+             d:DataContext="{d:DesignInstance Type=samples:DesignHomeViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="400"
+             >
+
+    <mvx:MvxWpfView.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+    </mvx:MvxWpfView.Resources>
+
+    <Grid Background="{StaticResource MainBackgroundBrush}">
+
+        <Grid 
+                x:Name="itemHeaderGrid" 
+                Grid.ColumnSpan="1"
+                DataContext="{Binding Services.SelectedService}"
+                Margin="20,10,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border x:Name="itemDetailImage" Background="Transparent"  Width="110" Height="110"  Margin="0,0,10,0">
+                <Image Source="{Binding ImageBase64, Converter={StaticResource Base64ToImage}}" Stretch="UniformToFill"/>
+            </Border>
+            <StackPanel x:Name="itemDetailTitlePanel" Grid.Column="1" >
+                <TextBlock x:Name="itemTitle" Margin="0,0,0,0" Text="{Binding Name}" Foreground="{StaticResource TextForegroundBrush}"/>
+                <TextBlock x:Name="itemSubtitle" Margin="0,0,0,0" Text="{Binding Url}" Foreground="{StaticResource TextForegroundBrush}"/>
+                <TextBlock x:Name="itemDescription" Margin="0,0,0,10" Padding="0,0,0,2" TextWrapping="Wrap" Text="{Binding Description}" Foreground="{StaticResource TextForegroundBrush}"/>
+            </StackPanel>
+        </Grid>
+
+        <ListView
+      DataContext="{Binding Services.SelectedService}"
+              HorizontalAlignment="Left" Height="500" Margin="20,130,0,0" VerticalAlignment="Top" Width="340"
+              ItemsSource="{Binding ResourceSets.Items, Mode=TwoWay}"
+              SelectedItem="{Binding ResourceSets.SelectedItem, Mode=TwoWay}"
+              ItemTemplate="{StaticResource CollectionItemTemplate}"
+              SelectionMode="Single"
+              Background="{StaticResource MainBackgroundBrush}"
+              BorderBrush="{StaticResource MainBackgroundBrush}"
+                >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ResourceSets.SelectResourceSetCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+
+    </Grid>
+</mvx:MvxWpfView>

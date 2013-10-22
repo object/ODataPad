@@ -24,6 +24,12 @@ namespace ODataPad.UI.Net45
         public MainWindow()
         {
             InitializeComponent();
+
+#if FORMFACTOR_PHONE
+            this.Width = 400;
+#else
+            this.Width = 1000;
+#endif
         }
 
         public void Present(FrameworkElement frameworkElement)

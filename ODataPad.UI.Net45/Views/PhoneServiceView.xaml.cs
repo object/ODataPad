@@ -10,7 +10,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Cirrious.MvvmCross.Wpf.Views;
 using ODataPad.Core.ViewModels;
@@ -18,18 +17,19 @@ using ODataPad.Core.ViewModels;
 namespace ODataPad.UI.Net45.Views
 {
     /// <summary>
-    /// Interaction logic for HomeView.xaml
+    /// Interaction logic for PhoneServiceView.xaml
     /// </summary>
-    public partial class HomeView : MvxWpfView
+    [FormFactor(FormFactor.Phone)]
+    public partial class PhoneServiceView : MvxWpfView
     {
-        public HomeView()
+        public PhoneServiceView()
         {
             InitializeComponent();
         }
 
-        public new HomeViewModel ViewModel
-        { 
-            get { return base.ViewModel as HomeViewModel; }
+        public new ServiceDetailsViewModel ViewModel
+        {
+            get { return base.ViewModel as ServiceDetailsViewModel; }
             set { base.ViewModel = value; }
         }
 

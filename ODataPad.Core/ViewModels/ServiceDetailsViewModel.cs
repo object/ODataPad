@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ServiceDetailsViewModel
+    public class ServiceDetailsViewModel : MvxViewModel
     {
         private readonly ServiceInfo _serviceInfo;
         private readonly ResourceSetListViewModel _resourceSets;
