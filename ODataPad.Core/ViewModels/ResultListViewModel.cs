@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,19 +12,68 @@ namespace ODataPad.Core.ViewModels
 {
     public class ResultListViewModel : MvxViewModel
     {
-        private readonly IResultProvider _resultProvider;
+        private IResultProvider _resultProvider;
+        private string _serviceUrl;
+        private string _resourceSetName;
+        private List<ResourceProperty> _properties;
 
-        public ResultListViewModel(ResourceSetDetailsViewModel parent)
+        public ResultListViewModel()
         {
-            if (!parent.Home.IsDesignTime)
-                _resultProvider = Mvx.Resolve<IResultProvider>();
-
-            this.Parent = parent;
-            this.IsQueryInProgress = false;
         }
 
-        public HomeViewModelBase Home { get { return this.Parent.Home; } }
-        public ResourceSetDetailsViewModel Parent { get; set; }
+        public ResultListViewModel(string serviceUrl, string resourceSetName, IEnumerable<ResourceProperty> properties)
+        {
+            Init(new NavObject
+            {
+                ServiceUrl = serviceUrl,
+                ResourceSetName = resourceSetName,
+                Properties = new List<ResourceProperty>(properties),
+            });
+        }
+
+        public void Init(NavObject navObject)
+        {
+            if (!HomeViewModelBase.IsDesignTime)
+                _resultProvider = Mvx.Resolve<IResultProvider>();
+
+            _serviceUrl = navObject.ServiceUrl;
+            _resourceSetName = navObject.ResourceSetName;
+            _properties = navObject.Properties;
+        }
+
+        public class NavObject
+        {
+            public string ServiceUrl { get; set; }
+            public string ResourceSetName { get; set; }
+            public List<ResourceProperty> Properties { get; set; }
+        }
+
+        public class SavedState
+        {
+            public string ServiceUrl { get; set; }
+            public string ResourceSetName { get; set; }
+            public List<ResourceProperty> Properties { get; set; }
+        }
+
+        public SavedState SaveState()
+        {
+            return new SavedState()
+            {
+                ServiceUrl = _serviceUrl,
+                ResourceSetName = _resourceSetName,
+                Properties = _properties,
+            };
+        }
+
+        public void ReloadState(SavedState savedState)
+        {
+            Init(new NavObject
+            {
+                ServiceUrl = savedState.ServiceUrl,
+                ResourceSetName = savedState.ResourceSetName,
+                Properties = savedState.Properties
+            });
+        }
 
         private ObservableResultCollection _queryResults;
         public ObservableResultCollection QueryResults
@@ -76,8 +126,12 @@ namespace ODataPad.Core.ViewModels
 
         public bool IsQueryInProgress
         {
-            get { return this.Home.IsQueryInProgress; }
-            set { this.Home.IsQueryInProgress = value; }
+            get { return AppState.Current.IsQueryInProgress; }
+            set
+            {
+                AppState.Current.IsQueryInProgress = value;
+                RaisePropertyChanged(() => IsQueryInProgress);
+            }
         }
 
         public ICommand LoadMoreResultsCommand
@@ -87,7 +141,7 @@ namespace ODataPad.Core.ViewModels
 
         public void LoadMoreResults()
         {
-            if (this.Home.IsDesignTime)
+            if (HomeViewModelBase.IsDesignTime)
                 return;
 
             if (this.QueryResults != null
@@ -101,10 +155,10 @@ namespace ODataPad.Core.ViewModels
         public async Task LoadResultsAsync()
         {
             this.QueryResults = _resultProvider.CreateResultCollection(
-                this.Home.Services.SelectedService.Url,
-                this.Parent.Name,
-                this.Parent.Properties,
-                new QueryInProgress(this));
+                _serviceUrl,
+                _resourceSetName,
+                _properties,
+                new QueryInProgress(x => IsQueryInProgress = x));
 
             await _resultProvider.AddResultsAsync(this.QueryResults);
         }

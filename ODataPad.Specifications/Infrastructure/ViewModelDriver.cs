@@ -42,7 +42,7 @@ namespace ODataPad.Specifications.Infrastructure
                 if (_home == null)
                 {
                     _home = new HomeViewModel();
-                    _home.InitAsync(null).Wait();
+                    _home.InitAsync().Wait();
                 }
             }
         }

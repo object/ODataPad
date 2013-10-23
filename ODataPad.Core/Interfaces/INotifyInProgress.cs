@@ -2,6 +2,6 @@
 {
     public interface INotifyInProgress
     {
-        bool IsInProgress { get; set; }
+        bool IsInProgress { set; }
     }
 }

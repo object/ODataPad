@@ -3,9 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Xml.Linq;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Views;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 
@@ -13,17 +11,15 @@ namespace ODataPad.Core.ViewModels
 {
     public class ServiceListViewModel : MvxViewModel
     {
-        public ServiceListViewModel(HomeViewModelBase home)
+        public ServiceListViewModel()
         {
-            this.Home = home;
-
             _services = new ObservableCollection<ServiceDetailsViewModel>();
 
             this.SelectedService = null;
             this.IsServiceSelected = false;
         }
 
-        public HomeViewModelBase Home { get; set; }
+        public AppState AppState { get { return AppState.Current; } }
 
         public ICommand AddServiceCommand
         {
@@ -93,6 +89,7 @@ namespace ODataPad.Core.ViewModels
             set
             {
                 _selectedService = value;
+                AppState.Current.ActiveService = value;
                 RaisePropertyChanged(() => SelectedService);
                 RaisePropertyChanged(() => IsServiceSelected);
             }
@@ -110,7 +107,7 @@ namespace ODataPad.Core.ViewModels
             {
                 RefreshServiceMetadataFromCache(this.SelectedService);
 
-                if (ODataPadApp.ViewModelsWithOwnViews.Contains(typeof (ServiceDetailsViewModel)))
+                if (AppState.ViewModelsWithOwnViews.Contains(typeof (ServiceDetailsViewModel)))
                 {
                     ShowViewModel<ServiceDetailsViewModel>(this.SelectedService.ServiceInfo);
                 }
@@ -143,7 +140,8 @@ namespace ODataPad.Core.ViewModels
                 var resources = MetadataService.ParseServiceMetadata(item.MetadataCache);
                 foreach (var resource in resources)
                 {
-                    this.SelectedService.ResourceSets.Items.Add(new ResourceSetDetailsViewModel(this.Home, resource));
+                    this.SelectedService.ResourceSets.Items.Add(
+                        new ResourceSetDetailsViewModel(this.SelectedService.Url, resource));
                 }
             }
         }

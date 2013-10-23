@@ -1,20 +1,20 @@
-﻿using ODataPad.Core.Interfaces;
+﻿using System;
+using ODataPad.Core.Interfaces;
 
 namespace ODataPad.Core.ViewModels
 {
     class QueryInProgress : INotifyInProgress
     {
-        private readonly ResultListViewModel _viewModel;
+        private readonly Action<bool> _action;
 
-        public QueryInProgress(ResultListViewModel viewModel)
+        public QueryInProgress(Action<bool> action)
         {
-            _viewModel = viewModel;
+            _action = action;
         }
 
         public bool IsInProgress
         {
-            get { return _viewModel.IsQueryInProgress; }
-            set { _viewModel.IsQueryInProgress = value; }
+            set { _action(value); }
         }
     }
 }

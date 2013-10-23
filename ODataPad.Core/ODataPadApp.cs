@@ -16,7 +16,6 @@ namespace ODataPad.Core
         public const int ApplicationDataVersion = 3;
         private readonly string _samplesModuleName;
         private readonly string _samplesFilename;
-        private static readonly List<Type> _viewModelsWithOwnViews = new List<Type>(new[] { typeof(HomeViewModel) });
 
         public ODataPadApp(string samplesModuleName, string samplesFilename)
         {
@@ -29,7 +28,6 @@ namespace ODataPad.Core
         }
 
         public HomeViewModel HomeViewModel { get; private set; }
-        public static List<Type> ViewModelsWithOwnViews { get { return _viewModelsWithOwnViews; }} 
 
         private void InitalizeServices()
         {
@@ -51,6 +49,7 @@ namespace ODataPad.Core
 
         private void InitializePlugIns()
         {
+            Cirrious.MvvmCross.Plugins.Json.PluginLoader.Instance.EnsureLoaded();
         }
     }
 }

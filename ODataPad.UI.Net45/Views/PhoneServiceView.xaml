@@ -16,12 +16,12 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
     </mvx:MvxWpfView.Resources>
 
-    <Grid Background="{StaticResource MainBackgroundBrush}" DataContext="{Binding SelectedServiceDetails}">
+    <Grid Background="{StaticResource MainBackgroundBrush}" DataContext="{Binding AppState.ActiveService}">
 
         <Grid 
                 x:Name="itemHeaderGrid" 
                 Grid.ColumnSpan="1"
-                Margin="20,10,20,0">
+                Margin="20,10,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -42,9 +42,11 @@
         </Grid>
 
         <ListView
-              HorizontalAlignment="Left" Height="400" Margin="20,130,0,0" VerticalAlignment="Top" Width="340"
+              HorizontalAlignment="Left" Height="400" Margin="20,130,0,0" VerticalAlignment="Top" Width="360"
               DataContext="{Binding ResourceSets}"
+              ItemsSource="{Binding Items}"
               SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+              ItemTemplate="{StaticResource CollectionItemTemplate}"
               SelectionMode="Single"
               Background="{StaticResource MainBackgroundBrush}"
               BorderBrush="{StaticResource MainBackgroundBrush}"

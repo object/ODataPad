@@ -31,7 +31,7 @@ namespace ODataPad.UI.Net45
 
         protected override IMvxApplication CreateApp()
         {
-            ODataPadApp.ViewModelsWithOwnViews.AddRange(new[]
+            AppState.ViewModelsWithOwnViews.AddRange(new[]
             {
                 typeof (ServiceDetailsViewModel), 
                 typeof (ResourceSetDetailsViewModel), 

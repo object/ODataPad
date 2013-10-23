@@ -13,24 +13,20 @@ namespace ODataPad.Core.ViewModels
 {
     public class HomeViewModel : HomeViewModelBase
     {
-        public class NavigationParameters
-        {
-        }
-
         private readonly IServiceRepository _serviceRepository;
         private readonly IServiceLocalStorage _localStorage;
         private readonly IApplicationLocalData _localData;
 
         public HomeViewModel()
         {
+            IsDesignTime = false;
+
             _serviceRepository = Mvx.Resolve<IServiceRepository>();
             _localStorage = Mvx.Resolve<IServiceLocalStorage>();
             _localData = Mvx.Resolve<IApplicationLocalData>();
         }
 
-        public override bool IsDesignTime { get { return false; } }
-
-        public override async Task InitAsync(NavigationParameters parameters)
+        public override async Task InitAsync()
         {
             await EnsureDataVersionAsync();
             await PopulateServicesAsync();

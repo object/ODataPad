@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
+using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
     public class ResourceSetListViewModel : MvxViewModel
     {
-        public ResourceSetListViewModel()
+        private readonly string _serviceUrl;
+
+        public ResourceSetListViewModel(string serviceUrl)
         {
+            _serviceUrl = serviceUrl;
             _resourceSets = new ObservableCollection<ResourceSetDetailsViewModel>();
         }
 
@@ -25,7 +31,12 @@ namespace ODataPad.Core.ViewModels
         public ResourceSetDetailsViewModel SelectedItem
         {
             get { return _selectedResourceSet; }
-            set { _selectedResourceSet = value; RaisePropertyChanged(() => SelectedItem); }
+            set
+            {
+                _selectedResourceSet = value;
+                AppState.Current.ActiveResourceSet = value;
+                RaisePropertyChanged(() => SelectedItem);
+            }
         }
 
         public ICommand SelectResourceSetCommand
@@ -35,9 +46,25 @@ namespace ODataPad.Core.ViewModels
 
         public async void SelectResourceSet()
         {
-            if (this.SelectedItem != null && this.SelectedItem.IsResultViewSelected)
+            if (this.SelectedItem != null)
             {
-                await this.SelectedItem.Results.LoadResultsAsync();
+                if (this.SelectedItem.IsResultViewSelected)
+                {
+                    await this.SelectedItem.Results.LoadResultsAsync();
+                }
+
+                if (AppState.ViewModelsWithOwnViews.Contains(typeof(ResourceSetDetailsViewModel)))
+                {
+                    var converter = Mvx.Resolve<IMvxJsonConverter>();
+
+                    ShowViewModel<ResourceSetDetailsViewModel>(new ResourceSetDetailsViewModel.NavObject
+                    {
+                        ServiceUrl = _serviceUrl,
+                        ResourceSetName = _selectedResourceSet.Name,
+                        SerializedProperties = converter.SerializeObject(_selectedResourceSet.Properties),
+                        SerializedAssociations = converter.SerializeObject(_selectedResourceSet.Associations),
+                    });
+                }
             }
         }
 

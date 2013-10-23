@@ -50,7 +50,7 @@
           Grid.Row="2"
           Grid.Column="1"
           TabIndex="3"
-          DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
+          DataContext="{Binding AppState.ActiveResourceSet}"
           ItemsSource="{Binding Schema.Elements}"
           Visibility="{Binding Path=IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
           ItemTemplate="{StaticResource CollectionElementItemTemplate}"

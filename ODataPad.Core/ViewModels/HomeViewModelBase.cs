@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
@@ -14,33 +12,24 @@ namespace ODataPad.Core.ViewModels
 
         protected HomeViewModelBase()
         {
-            _services = new ServiceListViewModel(this);
+            _services = new ServiceListViewModel();
         }
 
-        public virtual bool IsDesignTime { get { return true; } }
+        public static bool IsDesignTime { get; protected set; }
 
         public ServiceListViewModel Services { get { return _services; } }
-        public IList<ServiceDetailsViewModel> ServiceDetails { get { return Services.Items; } }
-        public ServiceDetailsViewModel SelectedServiceDetails { get { return Services.SelectedService; } }
-        public ResourceSetListViewModel ResourceSets { get { return SelectedServiceDetails.ResourceSets; } }
-        public IList<ResourceSetDetailsViewModel> ResourceSetDetails { get { return ResourceSets.Items; } }
-        public ResourceSetDetailsViewModel SelectedResourceSetDetails { get { return ResourceSets.SelectedItem; } }
-        public string SelectedSchemaSummary { get { return SelectedResourceSetDetails.Summary; } }
-        public ResultListViewModel Results { get { return SelectedResourceSetDetails.Results; } }
-        public ObservableResultCollection ResultDetails { get { return Results.QueryResults; } }
-        public ResultDetailsViewModel SelectedResultDetails { get { return Results.SelectedResult; } set { Results.SelectedResult = value; } }
-        public string SelectedResultSummary { get { return Results.SelectedResultDetails; } }
-        public bool IsSingleResultSelected { get { return Results.IsSingleResultSelected; } }
 
-        public virtual Task Init(HomeViewModel.NavigationParameters parameters)
+        public virtual Task Init()
         {
-            return InitAsync(parameters);
+            return InitAsync();
         }
 
-        public virtual Task InitAsync(HomeViewModel.NavigationParameters parameters)
+        public virtual Task InitAsync()
         {
             return new Task(() => { });
         }
+
+        public AppState AppState { get { return AppState.Current; } }
 
         public IEnumerable<string> ResourceSetModes
         {
@@ -64,14 +53,22 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private bool _isQueryInProgress;
         public bool IsQueryInProgress
         {
-            get { return _isQueryInProgress; }
+            get { return AppState.Current.IsQueryInProgress; }
             set
             {
-                _isQueryInProgress = value;
-                RaisePropertyChanged(() => IsQueryInProgress);
+                if (this.Services.SelectedService != null &&
+                    this.Services.SelectedService.ResourceSets.SelectedItem != null &&
+                    this.Services.SelectedService.ResourceSets.SelectedItem.Results != null)
+                {
+                    this.Services.SelectedService.ResourceSets.SelectedItem.Results.IsQueryInProgress = value;
+                }
+                else
+                {
+                    AppState.Current.IsQueryInProgress = value;
+                    RaisePropertyChanged(() => IsQueryInProgress);
+                }
             }
         }
     }

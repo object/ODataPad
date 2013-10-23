@@ -8,11 +8,41 @@ namespace ODataPad.Core.ViewModels
 {
     public class ResultDetailsViewModel : MvxViewModel
     {
-        private readonly ResultRow _resultRow;
+        private ResultRow _resultRow;
 
         public ResultDetailsViewModel(ResultRow resultRow)
         {
             _resultRow = resultRow;
+        }
+
+        public void Init(NavObject navObject)
+        {
+            _resultRow = navObject.ResultDetails;
+        }
+
+        public class NavObject
+        {
+            public ResultRow ResultDetails { get; set; }
+        }
+
+        public class SavedState
+        {
+            public List<string> Keys { get; set; }
+            public Dictionary<string, object> Properties { get; set; }
+        }
+
+        public SavedState SaveState()
+        {
+            return new SavedState()
+            {
+                Keys = new List<string>(_resultRow.Keys),
+                Properties = new Dictionary<string, object>(_resultRow.Properties)
+            };
+        }
+
+        public void ReloadState(SavedState savedState)
+        {
+            _resultRow = new ResultRow(savedState.Properties, savedState.Keys);
         }
 
         public IEnumerable<string> Keys { get { return _resultRow.Keys; } }

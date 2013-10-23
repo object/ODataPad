@@ -14,6 +14,8 @@ namespace ODataPad.Samples
     {
         public DesignHomeViewModel()
         {
+            IsDesignTime = true;
+
             IEnumerable<ServiceInfo> services = null;
             var namespaceName = typeof(DesignHomeViewModel).Namespace;
 
@@ -63,7 +65,7 @@ namespace ODataPad.Samples
                                   };
 
                 this.Services.SelectedService.ResourceSets.Populate(
-                    collections.Select(x => new ResourceSetDetailsViewModel(this, x)));
+                    collections.Select(x => new ResourceSetDetailsViewModel(this.Services.SelectedService.Url, x)));
                 this.Services.SelectedService.ResourceSets.SelectTopItem();
             }
         }

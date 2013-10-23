@@ -23,10 +23,12 @@ namespace ODataPad.Core.ViewModels
         public void Init(ServiceInfo serviceInfo)
         {
             _serviceInfo = serviceInfo;
-            _resourceSets = new ResourceSetListViewModel();
+            _resourceSets = new ResourceSetListViewModel(_serviceInfo.Url);
         }
 
         internal ServiceInfo ServiceInfo { get { return _serviceInfo; }}
+
+        public AppState AppState { get { return AppState.Current; } }
 
         public string Name { get { return _serviceInfo.Name; } }
         public string Description { get { return _serviceInfo.Description; } }
