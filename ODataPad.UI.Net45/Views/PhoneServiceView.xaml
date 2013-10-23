@@ -16,12 +16,11 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
     </mvx:MvxWpfView.Resources>
 
-    <Grid Background="{StaticResource MainBackgroundBrush}">
+    <Grid Background="{StaticResource MainBackgroundBrush}" DataContext="{Binding SelectedServiceDetails}">
 
         <Grid 
                 x:Name="itemHeaderGrid" 
                 Grid.ColumnSpan="1"
-                DataContext="{Binding Services.SelectedService}"
                 Margin="20,10,20,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -43,18 +42,16 @@
         </Grid>
 
         <ListView
-      DataContext="{Binding Services.SelectedService}"
-              HorizontalAlignment="Left" Height="500" Margin="20,130,0,0" VerticalAlignment="Top" Width="340"
-              ItemsSource="{Binding ResourceSets.Items, Mode=TwoWay}"
-              SelectedItem="{Binding ResourceSets.SelectedItem, Mode=TwoWay}"
-              ItemTemplate="{StaticResource CollectionItemTemplate}"
+              HorizontalAlignment="Left" Height="400" Margin="20,130,0,0" VerticalAlignment="Top" Width="340"
+              DataContext="{Binding ResourceSets}"
+              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
               SelectionMode="Single"
               Background="{StaticResource MainBackgroundBrush}"
               BorderBrush="{StaticResource MainBackgroundBrush}"
                 >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding ResourceSets.SelectResourceSetCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding SelectResourceSetCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ListView>

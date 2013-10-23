@@ -29,7 +29,7 @@ namespace ODataPad.Core.ViewModels
 
             _resourceSet = resourceSet;
 
-            _schema = new SchemaViewModel(this);
+            _schema = new SchemaViewModel(this.Properties, this.Associations);
             _results = new ResultListViewModel(this);
         }
 

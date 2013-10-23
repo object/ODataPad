@@ -28,7 +28,7 @@ namespace ODataPad.Samples
             if (services != null)
             {
                 this.Services.Populate(
-                    services.Select(x => new ServiceDetailsViewModel(this, x)));
+                    services.Select(x => new ServiceDetailsViewModel(x)));
 
                 foreach (var service in this.Services.Items)
                 {

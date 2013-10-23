@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Xml.Linq;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using Cirrious.MvvmCross.Views;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 
@@ -103,9 +105,16 @@ namespace ODataPad.Core.ViewModels
 
         public void SelectService()
         {
-            if (this.SelectedService != null)
-                RefreshServiceMetadataFromCache(this.SelectedService);
             this.IsServiceSelected = this.SelectedService != null;
+            if (this.SelectedService != null)
+            {
+                RefreshServiceMetadataFromCache(this.SelectedService);
+
+                if (ODataPadApp.ViewModelsWithOwnViews.Contains(typeof (ServiceDetailsViewModel)))
+                {
+                    ShowViewModel<ServiceDetailsViewModel>(this.SelectedService.ServiceInfo);
+                }
+            }
         }
 
         private bool _isServiceSelected;

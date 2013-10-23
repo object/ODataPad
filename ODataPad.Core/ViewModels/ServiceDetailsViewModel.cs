@@ -8,18 +8,25 @@ namespace ODataPad.Core.ViewModels
 {
     public class ServiceDetailsViewModel : MvxViewModel
     {
-        private readonly ServiceInfo _serviceInfo;
-        private readonly ResourceSetListViewModel _resourceSets;
+        private ServiceInfo _serviceInfo;
+        private ResourceSetListViewModel _resourceSets;
 
-        public ServiceDetailsViewModel(HomeViewModelBase home, ServiceInfo serviceInfo)
+        public ServiceDetailsViewModel()
         {
-            this.Home = home;
-
-            _serviceInfo = serviceInfo;
-            _resourceSets = new ResourceSetListViewModel(home);
         }
 
-        public HomeViewModelBase Home { get; set; }
+        public ServiceDetailsViewModel(ServiceInfo serviceInfo)
+        {
+            Init(serviceInfo);
+        }
+
+        public void Init(ServiceInfo serviceInfo)
+        {
+            _serviceInfo = serviceInfo;
+            _resourceSets = new ResourceSetListViewModel();
+        }
+
+        internal ServiceInfo ServiceInfo { get { return _serviceInfo; }}
 
         public string Name { get { return _serviceInfo.Name; } }
         public string Description { get { return _serviceInfo.Description; } }

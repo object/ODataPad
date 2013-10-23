@@ -7,13 +7,20 @@ namespace ODataPad.Core.ViewModels
 {
     public class SchemaViewModel : MvxViewModel
     {
-        private readonly List<SchemaElementViewModel> _schemaElements;
+        private List<SchemaElementViewModel> _schemaElements;
 
-        public SchemaViewModel(ResourceSetDetailsViewModel parent)
+        public SchemaViewModel()
         {
-            this.Home = parent.Home;
+        }
 
-            _schemaElements = PopulateSchemaElements(parent.Properties, parent.Associations);
+        public SchemaViewModel(IList<ResourceProperty> properties, IList<ResourceAssociation> associations)
+        {
+            Init(properties, associations);
+        }
+
+        public void Init(IList<ResourceProperty> properties, IList<ResourceAssociation> associations)
+        {
+            _schemaElements = PopulateSchemaElements(properties, associations);
         }
 
         public HomeViewModelBase Home { get; set; }

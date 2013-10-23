@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
+using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
@@ -17,7 +18,19 @@ namespace ODataPad.Core.ViewModels
         }
 
         public virtual bool IsDesignTime { get { return true; } }
+
         public ServiceListViewModel Services { get { return _services; } }
+        public IList<ServiceDetailsViewModel> ServiceDetails { get { return Services.Items; } }
+        public ServiceDetailsViewModel SelectedServiceDetails { get { return Services.SelectedService; } }
+        public ResourceSetListViewModel ResourceSets { get { return SelectedServiceDetails.ResourceSets; } }
+        public IList<ResourceSetDetailsViewModel> ResourceSetDetails { get { return ResourceSets.Items; } }
+        public ResourceSetDetailsViewModel SelectedResourceSetDetails { get { return ResourceSets.SelectedItem; } }
+        public string SelectedSchemaSummary { get { return SelectedResourceSetDetails.Summary; } }
+        public ResultListViewModel Results { get { return SelectedResourceSetDetails.Results; } }
+        public ObservableResultCollection ResultDetails { get { return Results.QueryResults; } }
+        public ResultDetailsViewModel SelectedResultDetails { get { return Results.SelectedResult; } set { Results.SelectedResult = value; } }
+        public string SelectedResultSummary { get { return Results.SelectedResultDetails; } }
+        public bool IsSingleResultSelected { get { return Results.IsSingleResultSelected; } }
 
         public virtual Task Init(HomeViewModel.NavigationParameters parameters)
         {

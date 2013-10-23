@@ -48,7 +48,7 @@ namespace ODataPad.Core.ViewModels
 
             foreach (var serviceInfo in _serviceRepository.Services)
             {
-                var serviceItem = new ServiceDetailsViewModel(this, serviceInfo);
+                var serviceItem = new ServiceDetailsViewModel(serviceInfo);
                 //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
                 this.Services.Items.Add(serviceItem);
             }
@@ -56,7 +56,7 @@ namespace ODataPad.Core.ViewModels
 
         public async Task AddServiceItemAsync(ServiceInfo serviceInfo)
         {
-            var serviceItem = new ServiceDetailsViewModel(this, serviceInfo);
+            var serviceItem = new ServiceDetailsViewModel(serviceInfo);
             //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
             this.Services.Items.Add(serviceItem);
             await RefreshMetadataCacheAsync(serviceInfo);

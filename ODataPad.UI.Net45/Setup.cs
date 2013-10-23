@@ -7,6 +7,7 @@ using Cirrious.MvvmCross.Wpf.Platform;
 using Cirrious.MvvmCross.Wpf.Views;
 using ODataPad.Core;
 using ODataPad.Core.Interfaces;
+using ODataPad.Core.ViewModels;
 using ODataPad.Platform.Net45;
 
 namespace ODataPad.UI.Net45
@@ -30,6 +31,12 @@ namespace ODataPad.UI.Net45
 
         protected override IMvxApplication CreateApp()
         {
+            ODataPadApp.ViewModelsWithOwnViews.AddRange(new[]
+            {
+                typeof (ServiceDetailsViewModel), 
+                typeof (ResourceSetDetailsViewModel), 
+                typeof (ResultDetailsViewModel)
+            });
             return new ODataPadApp("ODataPad.Samples", "SampleServices.xml");
         }
     }

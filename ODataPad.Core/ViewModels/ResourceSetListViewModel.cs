@@ -9,14 +9,10 @@ namespace ODataPad.Core.ViewModels
 {
     public class ResourceSetListViewModel : MvxViewModel
     {
-        public ResourceSetListViewModel(HomeViewModelBase home)
+        public ResourceSetListViewModel()
         {
-            this.Home = home;
-
             _resourceSets = new ObservableCollection<ResourceSetDetailsViewModel>();
         }
-
-        public HomeViewModelBase Home { get; set; }
 
         private ObservableCollection<ResourceSetDetailsViewModel> _resourceSets;
         public ObservableCollection<ResourceSetDetailsViewModel> Items
