@@ -29,7 +29,7 @@ namespace ODataPad.Core.ViewModels
 
             RebuildMetadataFromCache();
 
-            AppState.ActiveService = this;
+            AppState.UI.ActiveService = this;
         }
 
         internal ServiceInfo ServiceInfo { get { return _serviceInfo; }}

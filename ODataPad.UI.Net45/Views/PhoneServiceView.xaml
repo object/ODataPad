@@ -16,7 +16,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
     </mvx:MvxWpfView.Resources>
 
-    <Grid Background="{StaticResource MainBackgroundBrush}" DataContext="{Binding AppState.ActiveService}">
+    <Grid Background="{StaticResource MainBackgroundBrush}" DataContext="{Binding AppState.UI.ActiveService}">
 
         <Grid 
                 x:Name="itemHeaderGrid" 

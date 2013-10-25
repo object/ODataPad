@@ -36,7 +36,7 @@
                     >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding AppState.ActiveResourceSet.SelectResourceSetModeCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding AppState.UI.ActiveResourceSet.SelectResourceSetModeCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
@@ -50,7 +50,7 @@
           Grid.Row="2"
           Grid.Column="1"
           TabIndex="3"
-          DataContext="{Binding AppState.ActiveResourceSet}"
+          DataContext="{Binding AppState.UI.ActiveResourceSet}"
           ItemsSource="{Binding Schema.Elements}"
           Visibility="{Binding Path=IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
           ItemTemplate="{StaticResource CollectionElementItemTemplate}"
@@ -60,10 +60,8 @@
 
             <ListView
           x:Name="itemData"
-          Grid.Row="2"
-          Grid.Column="1"
           TabIndex="3"
-          DataContext="{Binding AppState.ActiveResourceSet}"
+          DataContext="{Binding AppState.UI.ActiveResourceSet}"
           ItemsSource="{Binding Results.QueryResults}"
           Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
           SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
@@ -71,7 +69,7 @@
           ItemTemplate="{StaticResource ResultItemTemplate}"
           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
           Background="{StaticResource MainBackgroundBrush}"
-          BorderBrush="{StaticResource MainBackgroundBrush}">
+          BorderBrush="{StaticResource MainBackgroundBrush}" Margin="2,42,-2,0.4" Grid.RowSpan="3">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding Results.SelectResultCommand}"/>

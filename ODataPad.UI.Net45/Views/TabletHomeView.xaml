@@ -63,7 +63,7 @@
 
             <ListView 
                 HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
-                DataContext="{Binding AppState.ActiveService.ResourceSets}"
+                DataContext="{Binding AppState.UI.ActiveService.ResourceSets}"
                 ItemsSource="{Binding Items, Mode=TwoWay}"
                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                 ItemTemplate="{StaticResource CollectionItemTemplate}"
@@ -97,7 +97,7 @@
                     >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding AppState.ActiveResourceSet.SelectResourceSetModeCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding AppState.UI.ActiveResourceSet.SelectResourceSetModeCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -111,7 +111,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         TabIndex="3"
-                        DataContext="{Binding AppState.ActiveResourceSet}"
+                        DataContext="{Binding AppState.UI.ActiveResourceSet}"
                         ItemsSource="{Binding Schema.Elements}" 
                         Visibility="{Binding Path=IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                         ItemTemplate="{StaticResource CollectionElementItemTemplate}"
@@ -124,7 +124,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         TabIndex="3"
-                        DataContext="{Binding AppState.ActiveResourceSet}"
+                        DataContext="{Binding AppState.UI.ActiveResourceSet}"
                         ItemsSource="{Binding Results.QueryResults}"
                         Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
                         SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
@@ -153,7 +153,7 @@
                         Background="{StaticResource MainBackgroundBrush}"
                         Foreground="{StaticResource TextForegroundBrush}"
                         BorderThickness="0"
-                        DataContext="{Binding AppState.ActiveResourceSet}"
+                        DataContext="{Binding AppState.UI.ActiveResourceSet}"
                         Visibility="{Binding Path=Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                         <FlowDocument>
                             <Paragraph>

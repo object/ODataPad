@@ -175,13 +175,13 @@
                         Grid.Row="0"
                         Grid.Column="0"
                     TabIndex="2"
-                    ItemsSource="{Binding AppState.ActiveService.ResourceSets.Items, Mode=TwoWay}"
+                    ItemsSource="{Binding AppState.UI.ActiveService.ResourceSets.Items, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}" 
-                    SelectedItem="{Binding AppState.ActiveResourceSet, Mode=TwoWay}"
+                    SelectedItem="{Binding AppState.UI.ActiveResourceSet, Mode=TwoWay}"
                     SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding AppState.ActiveService.ResourceSets.SelectResourceSetCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding AppState.UI.ActiveService.ResourceSets.SelectResourceSetCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListView>
@@ -197,7 +197,7 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding AppState.ActiveResourceSet}"
+                DataContext="{Binding AppState.UI.ActiveResourceSet}"
                 ItemsSource="{Binding Schema.Elements}" 
                 ItemTemplate="{StaticResource CollectionElementItemTemplate}" 
                 Visibility="{Binding Path=IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
@@ -208,7 +208,7 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding AppState.ActiveResourceSet}"
+                DataContext="{Binding AppState.UI.ActiveResourceSet}"
                 ItemsSource="{Binding Results.QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
                 Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
@@ -229,7 +229,7 @@
                 Padding="10,0"
                 Style="{StaticResource ItemRichTextStyle}" 
                 IsTextSelectionEnabled="False"
-                DataContext="{Binding AppState.ActiveResourceSet}"
+                DataContext="{Binding AppState.UI.ActiveResourceSet}"
                 Visibility="{Binding Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                     <Paragraph>
                         <Run Text="{Binding Results.SelectedResultDetails, Mode=TwoWay}" />

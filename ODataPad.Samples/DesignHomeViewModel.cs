@@ -62,9 +62,9 @@ namespace ODataPad.Samples
                                                             new Collection<ResourceAssociation>()),
                                   };
 
-                AppState.ActiveService.ResourceSets.Populate(
+                AppState.UI.ActiveService.ResourceSets.Populate(
                     collections.Select(x => new ResourceSetDetailsViewModel(this.Services.SelectedService.Url, x)));
-                SelectTopItem(AppState.ActiveService.ResourceSets);
+                SelectTopItem(AppState.UI.ActiveService.ResourceSets);
             }
         }
 
@@ -72,7 +72,7 @@ namespace ODataPad.Samples
         {
             services.SelectedService = services.Items.First();
             services.IsServiceSelected = true;
-            AppState.ActiveService = new ServiceDetailsViewModel(services.SelectedService);
+            AppState.UI.ActiveService = new ServiceDetailsViewModel(services.SelectedService);
         }
 
         private void SelectTopItem(ResourceSetListViewModel resourceSets)

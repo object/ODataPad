@@ -20,6 +20,8 @@ namespace ODataPad.Core.ViewModels
             _resourceSets = new ObservableCollection<ResourceSetDetailsViewModel>();
         }
 
+        public AppState AppState { get { return AppState.Current; } }
+
         private ObservableCollection<ResourceSetDetailsViewModel> _resourceSets;
         public ObservableCollection<ResourceSetDetailsViewModel> Items
         {
@@ -34,7 +36,7 @@ namespace ODataPad.Core.ViewModels
             set
             {
                 _selectedResourceSet = value;
-                AppState.Current.ActiveResourceSet = value;
+                AppState.UI.ActiveResourceSet = value;
                 RaisePropertyChanged(() => SelectedItem);
             }
         }

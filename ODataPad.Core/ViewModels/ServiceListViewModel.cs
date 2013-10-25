@@ -110,12 +110,12 @@ namespace ODataPad.Core.ViewModels
                 }
                 else
                 {
-                    AppState.ActiveService = new ServiceDetailsViewModel(this.SelectedService);
+                    AppState.UI.ActiveService = new ServiceDetailsViewModel(this.SelectedService);
                 }
             }
             else
             {
-                AppState.ActiveService = null;
+                AppState.UI.ActiveService = null;
             }
         }
 

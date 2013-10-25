@@ -23,7 +23,7 @@ namespace ODataPad.Specifications.Infrastructure
 
         public ServiceListViewModel Services { get { return Home.Services; } }
         public IList<ServiceInfo> ServiceDetails { get { return Services.Items; } }
-        public ServiceDetailsViewModel SelectedServiceDetails { get { return AppState.Current.ActiveService; } }
+        public ServiceDetailsViewModel SelectedServiceDetails { get { return AppState.Current.UI.ActiveService; } }
         public ResourceSetListViewModel ResourceSets { get { return SelectedServiceDetails.ResourceSets; } }
         public IList<ResourceSetDetailsViewModel> ResourceSetDetails { get { return ResourceSets.Items; } }
         public ResourceSetDetailsViewModel SelectedResourceSetDetails { get { return ResourceSets.SelectedItem; } }
