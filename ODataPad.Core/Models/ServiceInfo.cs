@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml.Linq;
 
 namespace ODataPad.Core.Models
@@ -49,6 +50,26 @@ namespace ODataPad.Core.Models
             element.Add(new XElement("CacheUpdated", this.CacheUpdated));
             element.Add(new XElement("Index", this.Index));
             return element;
+        }
+
+        public void ReadImageBase64(Stream stream)
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                this.ImageBase64 = reader.ReadToEnd();
+            }
+        }
+
+        public void UpdateDefinition(ServiceInfo serviceInfo)
+        {
+            this.Name = serviceInfo.Name;
+            this.Url = serviceInfo.Url;
+            this.Description = serviceInfo.Description;
+        }
+
+        public void UpdateMetadata(string metadata)
+        {
+            this.MetadataCache = metadata;
         }
     }
 }

@@ -41,9 +41,9 @@ namespace ODataPad.Core.ViewModels
             get { return ResourceSetDetailsViewModel.ResourceSetMode; }
             set
             {
-                if (this.Services.SelectedService.ResourceSets.SelectedItem != null)
+                if (AppState.ActiveService.ResourceSets.SelectedItem != null)
                 {
-                    this.Services.SelectedService.ResourceSets.SelectedItem.SelectedResourceSetMode = value;
+                    AppState.ActiveService.ResourceSets.SelectedItem.SelectedResourceSetMode = value;
                 }
                 else
                 {
@@ -58,11 +58,11 @@ namespace ODataPad.Core.ViewModels
             get { return AppState.Current.IsQueryInProgress; }
             set
             {
-                if (this.Services.SelectedService != null &&
-                    this.Services.SelectedService.ResourceSets.SelectedItem != null &&
-                    this.Services.SelectedService.ResourceSets.SelectedItem.Results != null)
+                if (AppState.ActiveService != null &&
+                    AppState.ActiveResourceSet != null &&
+                    AppState.ActiveResourceSet.Results != null)
                 {
-                    this.Services.SelectedService.ResourceSets.SelectedItem.Results.IsQueryInProgress = value;
+                    AppState.IsQueryInProgress = value;
                 }
                 else
                 {

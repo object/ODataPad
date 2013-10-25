@@ -13,7 +13,7 @@ namespace ODataPad.Core.ViewModels
     {
         public ServiceListViewModel()
         {
-            _services = new ObservableCollection<ServiceDetailsViewModel>();
+            _services = new ObservableCollection<ServiceInfo>();
 
             this.SelectedService = null;
             this.IsServiceSelected = false;
@@ -61,8 +61,8 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceEditInProgress = value; RaisePropertyChanged(() => IsServiceEditInProgress); }
         }
 
-        private ServiceDetailsViewModel _editedService;
-        public ServiceDetailsViewModel EditedService
+        private ServiceInfo _editedService;
+        public ServiceInfo EditedService
         {
             get { return _editedService; }
             set
@@ -72,8 +72,8 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private ObservableCollection<ServiceDetailsViewModel> _services;
-        public ObservableCollection<ServiceDetailsViewModel> Items
+        private ObservableCollection<ServiceInfo> _services;
+        public ObservableCollection<ServiceInfo> Items
         {
             get { return _services; }
             set
@@ -82,14 +82,13 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private ServiceDetailsViewModel _selectedService;
-        public ServiceDetailsViewModel SelectedService
+        private ServiceInfo _selectedService;
+        public ServiceInfo SelectedService
         {
             get { return _selectedService; }
             set
             {
                 _selectedService = value;
-                AppState.Current.ActiveService = value;
                 RaisePropertyChanged(() => SelectedService);
                 RaisePropertyChanged(() => IsServiceSelected);
             }
@@ -105,12 +104,18 @@ namespace ODataPad.Core.ViewModels
             this.IsServiceSelected = this.SelectedService != null;
             if (this.SelectedService != null)
             {
-                RefreshServiceMetadataFromCache(this.SelectedService);
-
                 if (AppState.ViewModelsWithOwnViews.Contains(typeof (ServiceDetailsViewModel)))
                 {
-                    ShowViewModel<ServiceDetailsViewModel>(this.SelectedService.ServiceInfo);
+                    ShowViewModel<ServiceDetailsViewModel>(this.SelectedService);
                 }
+                else
+                {
+                    AppState.ActiveService = new ServiceDetailsViewModel(this.SelectedService);
+                }
+            }
+            else
+            {
+                AppState.ActiveService = null;
             }
         }
 
@@ -121,53 +126,9 @@ namespace ODataPad.Core.ViewModels
             set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
         }
 
-        public void Populate(IEnumerable<ServiceDetailsViewModel> details)
+        public void Populate(IEnumerable<ServiceInfo> services)
         {
-            this.Items = new ObservableCollection<ServiceDetailsViewModel>(details);
-        }
-
-        public void SelectTopItem()
-        {
-            this.SelectedService = this.Items.First();
-            this.IsServiceSelected = true;
-        }
-
-        private void RefreshServiceMetadataFromCache(ServiceDetailsViewModel item)
-        {
-            this.SelectedService.ResourceSets.Items.Clear();
-            if (!string.IsNullOrEmpty(item.MetadataCache))
-            {
-                var resources = MetadataService.ParseServiceMetadata(item.MetadataCache);
-                foreach (var resource in resources)
-                {
-                    this.SelectedService.ResourceSets.Items.Add(
-                        new ResourceSetDetailsViewModel(this.SelectedService.Url, resource));
-                }
-            }
-        }
-
-        private void RefreshServiceMetadataFromCache(ServiceDetailsViewModel item, ServiceInfo service)
-        {
-            //item.Resources.Clear();
-            if (!string.IsNullOrEmpty(service.MetadataCache))
-            {
-                var element = XElement.Parse(service.MetadataCache);
-                if (element.Name == "Error")
-                {
-                    //item.Resources.Add(new ServiceError(
-                    //    service.Name, 
-                    //    "Unable to load service metadata",
-                    //    element.Element("Message").Value));
-                }
-                else
-                {
-                    var resources = MetadataService.ParseServiceMetadata(service.MetadataCache);
-                    foreach (var resource in resources)
-                    {
-                        //item.Resources.Add(collection);
-                    }
-                }
-            }
+            this.Items = new ObservableCollection<ServiceInfo>(services);
         }
     }
 }

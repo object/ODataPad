@@ -44,32 +44,27 @@ namespace ODataPad.Core.ViewModels
 
             foreach (var serviceInfo in _serviceRepository.Services)
             {
-                var serviceItem = new ServiceDetailsViewModel(serviceInfo);
-                //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
-                this.Services.Items.Add(serviceItem);
+                this.Services.Items.Add(serviceInfo);
             }
         }
 
         public async Task AddServiceItemAsync(ServiceInfo serviceInfo)
         {
-            var serviceItem = new ServiceDetailsViewModel(serviceInfo);
-            //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
-            this.Services.Items.Add(serviceItem);
+            this.Services.Items.Add(serviceInfo);
             await RefreshMetadataCacheAsync(serviceInfo);
-            //RefreshServiceResourcesFromMetadataCache(serviceItem, serviceInfo);
             await _serviceRepository.AddServiceAsync(serviceInfo);
         }
 
-        public async Task UpdateServiceItemAsync(ServiceDetailsViewModel item, ServiceInfo serviceInfo)
+        public async Task UpdateServiceItemAsync(ServiceInfo item, ServiceInfo updatedServiceInfo)
         {
             var originalTitle = item.Name;
-            item.UpdateDefinition(serviceInfo);
-            await RefreshMetadataCacheAsync(serviceInfo);
+            item.UpdateDefinition(updatedServiceInfo);
+            await RefreshMetadataCacheAsync(updatedServiceInfo);
             //RefreshServiceResourcesFromMetadataCache(item, serviceInfo);
-            await _serviceRepository.UpdateServiceAsync(originalTitle, serviceInfo);
+            await _serviceRepository.UpdateServiceAsync(originalTitle, updatedServiceInfo);
         }
 
-        public async Task RemoveServiceItemAsync(ServiceDetailsViewModel item)
+        public async Task RemoveServiceItemAsync(ServiceInfo item)
         {
             this.Services.Items.Remove(item);
             var serviceInfo = new ServiceInfo() { Name = item.Name };

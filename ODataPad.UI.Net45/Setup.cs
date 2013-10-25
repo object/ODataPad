@@ -31,12 +31,14 @@ namespace ODataPad.UI.Net45
 
         protected override IMvxApplication CreateApp()
         {
+#if FORMFACTOR_PHONE
             AppState.ViewModelsWithOwnViews.AddRange(new[]
             {
                 typeof (ServiceDetailsViewModel), 
                 typeof (ResourceSetDetailsViewModel), 
                 typeof (ResultDetailsViewModel)
             });
+#endif
             return new ODataPadApp("ODataPad.Samples", "SampleServices.xml");
         }
     }

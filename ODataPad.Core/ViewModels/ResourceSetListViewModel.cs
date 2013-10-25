@@ -72,10 +72,5 @@ namespace ODataPad.Core.ViewModels
         {
             this.Items = new ObservableCollection<ResourceSetDetailsViewModel>(details);
         }
-
-        public void SelectTopItem()
-        {
-            this.SelectedItem = this.Items.First();
-        }
     }
 }

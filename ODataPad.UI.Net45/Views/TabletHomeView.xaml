@@ -62,18 +62,18 @@
             </Grid.ColumnDefinitions>
 
             <ListView 
-            DataContext="{Binding AppState.ActiveService}"
                 HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
-                    ItemsSource="{Binding ResourceSets.Items, Mode=TwoWay}"
-                    SelectedItem="{Binding ResourceSets.SelectedItem, Mode=TwoWay}"
-                    ItemTemplate="{StaticResource CollectionItemTemplate}"
-                    SelectionMode="Single" 
-                    Background="{StaticResource MainBackgroundBrush}" 
-                    BorderBrush="{StaticResource MainBackgroundBrush}"
+                DataContext="{Binding AppState.ActiveService.ResourceSets}"
+                ItemsSource="{Binding Items, Mode=TwoWay}"
+                SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                ItemTemplate="{StaticResource CollectionItemTemplate}"
+                SelectionMode="Single" 
+                Background="{StaticResource MainBackgroundBrush}" 
+                BorderBrush="{StaticResource MainBackgroundBrush}"
                 >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding ResourceSets.SelectResourceSetCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding SelectResourceSetCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
@@ -97,7 +97,7 @@
                     >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding Services.SelectedService.ResourceSets.SelectedItem.SelectResourceSetModeCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding AppState.ActiveResourceSet.SelectResourceSetModeCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -124,7 +124,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         TabIndex="3"
-                        DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
+                        DataContext="{Binding AppState.ActiveResourceSet}"
                         ItemsSource="{Binding Results.QueryResults}"
                         Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
                         SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
@@ -153,7 +153,7 @@
                         Background="{StaticResource MainBackgroundBrush}"
                         Foreground="{StaticResource TextForegroundBrush}"
                         BorderThickness="0"
-                        DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
+                        DataContext="{Binding AppState.ActiveResourceSet}"
                         Visibility="{Binding Path=Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                         <FlowDocument>
                             <Paragraph>

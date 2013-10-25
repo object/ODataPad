@@ -36,7 +36,7 @@
                     >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding Services.SelectedService.ResourceSets.SelectedItem.SelectResourceSetModeCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding AppState.ActiveResourceSet.SelectResourceSetModeCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
@@ -63,7 +63,7 @@
           Grid.Row="2"
           Grid.Column="1"
           TabIndex="3"
-          DataContext="{Binding Services.SelectedService.ResourceSets.SelectedItem}"
+          DataContext="{Binding AppState.ActiveResourceSet}"
           ItemsSource="{Binding Results.QueryResults}"
           Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
           SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"

@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
+using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
@@ -11,8 +12,8 @@ namespace ODataPad.Core.ViewModels
         public ServiceEditViewModel Self { get { return this; } }
         public HomeViewModelBase Home { get; set; }
 
-        private ServiceDetailsViewModel _sourceService;
-        public ServiceDetailsViewModel SourceService
+        private ServiceInfo _sourceService;
+        public ServiceInfo SourceService
         {
             get { return _sourceService; }
             set { _sourceService = value; RaisePropertyChanged(() => SourceService); }

@@ -230,7 +230,7 @@ namespace ODataPad.UI.WinRT.Views
 
         private async void RemoveServiceAsync()
         {
-            var item = this.itemListView.SelectedItem as ServiceDetailsViewModel;
+            var item = this.itemListView.SelectedItem as ServiceInfo;
             await this.ViewModel.RemoveServiceItemAsync(item);
         }
     }

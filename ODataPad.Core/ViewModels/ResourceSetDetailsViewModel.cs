@@ -34,6 +34,9 @@ namespace ODataPad.Core.ViewModels
         {
             _serviceUrl = serviceUrl;
             _resourceSet = resourceSet;
+
+            _schema = new SchemaViewModel(_resourceSet.Properties, _resourceSet.Associations);
+            _results = new ResultListViewModel(_serviceUrl, _resourceSet.Name, _resourceSet.Properties);
         }
 
         public void Init(NavObject navObject)
@@ -88,8 +91,6 @@ namespace ODataPad.Core.ViewModels
                 SerializedAssociations = savedState.SerializedAssociations,
             });
         }
-
-        //internal ResourceSet ResourceSet { get { return _resourceSet; }}
 
         public AppState AppState { get { return AppState.Current; } }
 

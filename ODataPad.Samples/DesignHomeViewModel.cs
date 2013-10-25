@@ -29,8 +29,7 @@ namespace ODataPad.Samples
 
             if (services != null)
             {
-                this.Services.Populate(
-                    services.Select(x => new ServiceDetailsViewModel(x)));
+                this.Services.Populate(services);
 
                 foreach (var service in this.Services.Items)
                 {
@@ -39,7 +38,7 @@ namespace ODataPad.Samples
                     service.ReadImageBase64(stream);
                 }
 
-                this.Services.SelectTopItem();
+                SelectTopItem(this.Services);
 
                 var selectedProperties = new Collection<ResourceProperty>
                                  {
@@ -51,7 +50,6 @@ namespace ODataPad.Samples
 
                 var selectedAssociations = new Collection<ResourceAssociation>
                 {
-
                 };
 
                 var collections = new[]
@@ -64,10 +62,23 @@ namespace ODataPad.Samples
                                                             new Collection<ResourceAssociation>()),
                                   };
 
-                this.Services.SelectedService.ResourceSets.Populate(
+                AppState.ActiveService.ResourceSets.Populate(
                     collections.Select(x => new ResourceSetDetailsViewModel(this.Services.SelectedService.Url, x)));
-                this.Services.SelectedService.ResourceSets.SelectTopItem();
+                SelectTopItem(AppState.ActiveService.ResourceSets);
             }
+        }
+
+        private void SelectTopItem(ServiceListViewModel services)
+        {
+            services.SelectedService = services.Items.First();
+            services.IsServiceSelected = true;
+            AppState.ActiveService = new ServiceDetailsViewModel(services.SelectedService);
+        }
+
+        private void SelectTopItem(ResourceSetListViewModel resourceSets)
+        {
+            resourceSets.SelectedItem = resourceSets.Items.First();
+            //AppState.ActiveResourceSet = new ResourceSetDetailsViewModel(AppState.ActiveService.Url, resourceSets.SelectedItem);
         }
     }
 }
