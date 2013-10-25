@@ -24,7 +24,7 @@
 
     <common:LayoutAwarePage.BottomAppBar>
         <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" 
-                IsOpen="{Binding IsServiceEditInProgress, Converter={StaticResource BoolInverted}}">
+                IsOpen="{Binding Services.IsServiceEditInProgress, Converter={StaticResource BoolInverted}}">
             <Grid>
                 <StackPanel x:Name="leftStackPanel" Orientation="Horizontal" HorizontalAlignment="Left">
                     <!--Button Style="{StaticResource DataAppBarButtonStyle}" Click="dataButton_Click"/-->
@@ -138,7 +138,7 @@
 
             <StackPanel x:Name="modeAndProgress" Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="1">
                 <ProgressBar x:Name="resultProgress" IsIndeterminate="True"  
-                        Visibility="{Binding Path=IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=StateView.IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
                         />
                 <ComboBox 
                     x:Name="collectionMode" 
@@ -147,13 +147,13 @@
                         Background="{StaticResource ApplicationPageBackgroundThemeBrush}" 
                         Foreground="{StaticResource ApplicationForegroundThemeBrush}" 
                         BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
-                        ItemsSource="{Binding ResourceSetModes}"
-                        SelectedItem="{Binding SelectedResourceSetMode, Mode=TwoWay}"
+                        ItemsSource="{Binding StateView.ResourceSetModes}"
+                        SelectedItem="{Binding StateView.ActiveResourceSetMode, Mode=TwoWay}"
                         Visibility="{Binding Path=Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}" 
                     >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding Services.SelectedService.ResourceSets.SelectedItem.SelectResourceSetModeCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding StateView.ActiveResourceSet.SelectResourceSetModeCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
@@ -175,13 +175,13 @@
                         Grid.Row="0"
                         Grid.Column="0"
                     TabIndex="2"
-                    ItemsSource="{Binding AppState.UI.ActiveService.ResourceSets.Items, Mode=TwoWay}"
+                    ItemsSource="{Binding StateView.ActiveService.ResourceSets.Items, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}" 
-                    SelectedItem="{Binding AppState.UI.ActiveResourceSet, Mode=TwoWay}"
+                    SelectedItem="{Binding StateView.ActiveResourceSet, Mode=TwoWay}"
                     SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding AppState.UI.ActiveService.ResourceSets.SelectResourceSetCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding StateView.ActiveService.ResourceSets.SelectResourceSetCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListView>
@@ -197,10 +197,10 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding AppState.UI.ActiveResourceSet}"
+                DataContext="{Binding StateView.ActiveResourceSet}"
                 ItemsSource="{Binding Schema.Elements}" 
                 ItemTemplate="{StaticResource CollectionElementItemTemplate}" 
-                Visibility="{Binding Path=IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
+                Visibility="{Binding Path=StateView.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
                 SelectionMode="None" />
 
                 <ListView 
@@ -208,10 +208,10 @@
                     Grid.Row="0"
                     Grid.Column="1"
                 TabIndex="3"
-                DataContext="{Binding AppState.UI.ActiveResourceSet}"
+                DataContext="{Binding StateView.ActiveResourceSet}"
                 ItemsSource="{Binding Results.QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
-                Visibility="{Binding Path=IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+                Visibility="{Binding Path=StateView.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
                 SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                 SelectionMode="Single" >
                     <i:Interaction.Triggers>
@@ -229,7 +229,7 @@
                 Padding="10,0"
                 Style="{StaticResource ItemRichTextStyle}" 
                 IsTextSelectionEnabled="False"
-                DataContext="{Binding AppState.UI.ActiveResourceSet}"
+                DataContext="{Binding StateView.ActiveResourceSet}"
                 Visibility="{Binding Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                     <Paragraph>
                         <Run Text="{Binding Results.SelectedResultDetails, Mode=TwoWay}" />
@@ -246,12 +246,12 @@
         </Grid>
 
         <Popup x:Name="editPopup" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="620" HorizontalAlignment="Center"
-               IsOpen="{Binding IsServiceEditInProgress}"
+               IsOpen="{Binding Services.IsServiceEditInProgress}"
                IsLightDismissEnabled="True">
 
             <Border x:Name="editBorder" Background="RoyalBlue">
 
-                <views:ServiceEditControl Visibility="{Binding IsServiceEditInProgress, Converter={StaticResource BoolToVisibility}}"/>
+                <views:ServiceEditControl Visibility="{Binding Services.IsServiceEditInProgress, Converter={StaticResource BoolToVisibility}}"/>
 
             </Border>
         </Popup>

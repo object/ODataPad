@@ -21,20 +21,7 @@ namespace ODataPad.Specifications.Infrastructure
             }
         }
 
-        public ServiceListViewModel Services { get { return Home.Services; } }
-        public IList<ServiceInfo> ServiceDetails { get { return Services.Items; } }
-        public ServiceDetailsViewModel SelectedServiceDetails { get { return AppState.Current.UI.ActiveService; } }
-        public ResourceSetListViewModel ResourceSets { get { return SelectedServiceDetails.ResourceSets; } }
-        public IList<ResourceSetDetailsViewModel> ResourceSetDetails { get { return ResourceSets.Items; } }
-        public ResourceSetDetailsViewModel SelectedResourceSetDetails { get { return ResourceSets.SelectedItem; } }
-        public IEnumerable<string> ResourceSetModes { get { return Home.ResourceSetModes; } }
-        public string SelectedResourceSetMode { get { return Home.SelectedResourceSetMode; } }
-        public string SelectedSchemaSummary { get { return SelectedResourceSetDetails.Summary; } }
-        public ResultListViewModel Results { get { return SelectedResourceSetDetails.Results; } }
-        public ObservableResultCollection ResultDetails { get { return Results.QueryResults; } }
-        public ResultDetailsViewModel SelectedResultDetails { get { return Results.SelectedResult; } set { Results.SelectedResult = value; } }
-        public string SelectedResultSummary { get { return Results.SelectedResultDetails; } }
-        public bool IsSingleResultSelected { get { return Results.IsSingleResultSelected; } }
+        public AppStateViewModel StateView { get { return AppState.Current.View; } }
 
         public void EnsureHomeViewModel()
         {
@@ -50,39 +37,40 @@ namespace ODataPad.Specifications.Infrastructure
 
         public void SelectService(string serviceName)
         {
-            var service = ServiceDetails.Single(x => x.Name == serviceName);
-            Services.SelectServiceCommand.Execute(service);
+            var service = Home.Services.Items.Single(x => x.Name == serviceName);
+            Home.Services.SelectedService = service;
+            Home.Services.SelectServiceCommand.Execute(service);
         }
 
         public void SelectResourceSet(string resourceSetName)
         {
-            var resourceSet = ResourceSetDetails.Single(x => x.Name == resourceSetName);
-            ResourceSets.SelectedItem = resourceSet;
-            ResourceSets.SelectResourceSetCommand.Execute(resourceSet);
+            var resourceSet = StateView.ActiveService.ResourceSets.Items.Single(x => x.Name == resourceSetName);
+            StateView.ActiveService.ResourceSets.SelectedItem = resourceSet;
+            StateView.ActiveService.ResourceSets.SelectResourceSetCommand.Execute(resourceSet);
 
-            if (SelectedResourceSetMode == ResourceSetModes.Last())
+            if (StateView.ActiveResourceSetMode == StateView.ResourceSetModes.Last())
                 WaitForResults(5);
         }
 
         public void SelectResourceSetMode(string mode)
         {
-            Home.SelectedResourceSetMode = mode.ToLower().Contains("data")
-                ? Home.ResourceSetModes.Last()
-                : Home.ResourceSetModes.First();
+            StateView.ActiveResourceSetMode = mode.ToLower().Contains("data")
+                ? StateView.ResourceSetModes.Last()
+                : StateView.ResourceSetModes.First();
         }
 
         public void SelectResult(string key)
         {
-            var result = ResultDetails.Single(x => x.Properties[x.Keys.Single()].ToString() == key);
-            Results.SelectedResult = result;
-            Results.SelectResultCommand.Execute(result);
+            var result = StateView.ActiveResourceSet.Results.QueryResults.Single(x => x.Properties[x.Keys.Single()].ToString() == key);
+            StateView.ActiveResourceSet.Results.SelectedResult = result;
+            StateView.ActiveResourceSet.Results.SelectResultCommand.Execute(result);
         }
 
         private void WaitForResults(int maxSeconds)
         {
             for (var seconds = 0; seconds < maxSeconds * 10; seconds++)
             {
-                if (ResultDetails.Any())
+                if (StateView.ActiveResourceSet.Results.QueryResults.Any())
                     break;
                 Thread.Sleep(100);
             }

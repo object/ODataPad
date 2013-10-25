@@ -15,26 +15,31 @@ Scenario: Initial screen should display a list of available services
 	| nerddinner         |
 	| Northwind Service  |
 
-Scenario: Displaying collection information for a selected service
+Scenario: Displaying details for a selected service
 	Given I see a list of services
+	And no service is selected
 	When I select service OData.org
-	Then I should see service collections
+	Then I should see service information
+	| Name      | URL                                          |
+	| OData.org | http://services.odata.org/Website/odata.svc/ |
+	And I should see service collections
 	| Name                      |
 	| ODataConsumers            |
 	| ODataProducerApplications |
 	| ODataProducerLiveServices |
+	And I shouldn't see collection details
 
 Scenario: Displaying collection properties
 	Given I see a list of services
 	And selected service is OData.org
-	And collections are set to show its properties
+	And collection details mode is set to properties
 	When I select collection ODataProducerApplications
 	Then I should see collection schema summary "4 properties, 0 relations"
 
 Scenario: Displaying collection data rows
 	Given I see a list of services
 	And selected service is OData.org
-	And collections are set to show its data
+	And collection details mode is set to data
 	When I select collection ODataProducerApplications
 	Then I should see collection data rows that contain
 	| Key | Data                              |
@@ -45,10 +50,10 @@ Scenario: Displaying collection data rows
 Scenario: Showing collection data details
 	Given I see a list of services
 	And selected service is OData.org
-	And collections are set to show its data
+	And collection details mode is set to data
 	And selected collection is ODataProducerApplications
 	When I select result row with key "4"
-	Then I should see collection data details that contain
+	Then I should see result details that contain
 	| Name           | Data                                                |
 	| Id             | 4                                                   |
 	| Name           | Windows Azure Table Storage                         |
@@ -58,14 +63,30 @@ Scenario: Showing collection data details
 Scenario: Hiding collection data details
 	Given I see a list of services
 	And selected service is OData.org
-	And collections are set to show its data
+	And collection details mode is set to data
 	And selected collection is ODataProducerApplications
-	And collection data view shows collection data details for a row with key "4"
+	And result view shows details for a row with key "4"
 	When I tap within result view
-	Then I should not see collection data details
+	Then I should not see result details
 	And I should see collection data rows that contain
 	| Key | Data                              |
 	| 1   | SharePoint 2010 (...)             |
 	| 2   | IBM WebSphere (...)               |
 	| 4   | Windows Azure Table Storage (...) |
+
+Scenario: Selecting different service
+	Given I see a list of services
+	And selected service is OData.org
+	And selected collection is ODataProducerApplications
+	And collection details mode is set to properties
+	When I select service Pluralsight
+	Then I should see service collections
+	| Name       |
+	| Modules    |
+	| Courses    |
+	| Categories |
+	| Tags       |
+	| Topics     |
+	| Authors    |
+	And I shouldn't see collection details
 

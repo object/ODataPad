@@ -19,7 +19,7 @@ namespace ODataPad.Core.ViewModels
             this.IsServiceSelected = false;
         }
 
-        public AppState AppState { get { return AppState.Current; } }
+        public AppStateViewModel StateView { get { return AppState.Current.View; } }
 
         public ICommand AddServiceCommand
         {
@@ -88,34 +88,46 @@ namespace ODataPad.Core.ViewModels
             get { return _selectedService; }
             set
             {
+                if (_selectedService != value)
+                {
+                    if (StateView.ActiveService != null)
+                        StateView.ActiveService.ResourceSets.SelectedItem = null;
+                    if (value == null)
+                        StateView.ActiveService = null;
+                }
                 _selectedService = value;
                 RaisePropertyChanged(() => SelectedService);
+                this.IsServiceSelected = this.SelectedService != null;
                 RaisePropertyChanged(() => IsServiceSelected);
             }
         }
 
+        private MvxCommand _selectServiceCommand;
         public ICommand SelectServiceCommand
         {
-            get { return new MvxCommand(SelectService); }
+            get
+            {
+                _selectServiceCommand = _selectServiceCommand ?? new MvxCommand(DoSelectService);
+                return _selectServiceCommand;
+            }
         }
 
-        public void SelectService()
+        private void DoSelectService()
         {
-            this.IsServiceSelected = this.SelectedService != null;
             if (this.SelectedService != null)
             {
-                if (AppState.ViewModelsWithOwnViews.Contains(typeof (ServiceDetailsViewModel)))
+                if (AppState.ViewModelsWithOwnViews.Contains(typeof(ServiceDetailsViewModel)))
                 {
                     ShowViewModel<ServiceDetailsViewModel>(this.SelectedService);
                 }
                 else
                 {
-                    AppState.UI.ActiveService = new ServiceDetailsViewModel(this.SelectedService);
+                    StateView.ActiveService = new ServiceDetailsViewModel(this.SelectedService);
                 }
             }
             else
             {
-                AppState.UI.ActiveService = null;
+                StateView.ActiveService = null;
             }
         }
 
@@ -123,12 +135,21 @@ namespace ODataPad.Core.ViewModels
         public bool IsServiceSelected
         {
             get { return _isServiceSelected; }
-            set { _isServiceSelected = value; RaisePropertyChanged(() => IsServiceSelected); }
+            set
+            {
+                _isServiceSelected = value;
+                RaisePropertyChanged(() => IsServiceSelected);
+            }
         }
 
-        public void Populate(IEnumerable<ServiceInfo> services)
+        public void DesignModePopulate(IEnumerable<ServiceInfo> services)
         {
             this.Items = new ObservableCollection<ServiceInfo>(services);
+        }
+
+        public void DesignModeSetActiveService(ServiceInfo service)
+        {
+            StateView.ActiveService = service == null ? null : new ServiceDetailsViewModel(this.SelectedService);
         }
     }
 }

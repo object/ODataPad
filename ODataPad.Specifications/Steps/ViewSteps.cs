@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Cirrious.MvvmCross.Platform;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ODataPad.Core.ViewModels;
 using ODataPad.Specifications.Infrastructure;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -33,52 +29,66 @@ namespace ODataPad.Specifications.Steps
         [Then(@"I should see a list of services")]
         public void b(Table table)
         {
-            table.CompareToSet(_viewModelDriver.ServiceDetails.Select(x => new { x.Name }));
+            table.CompareToSet(_viewModelDriver.Home.Services.Items.Select(x => new { x.Name }));
         }
 
         [When(@"I select service (.*)")]
+        [Given(@"selected service is (.*)")]
         public void c(string serviceName)
         {
             _viewModelDriver.SelectService(serviceName);
         }
 
+        [Given(@"no service is selected")]
+        public void d()
+        {
+            _viewModelDriver.Home.Services.SelectedService = null;
+        }
+
+        [Then(@"I should see service information")]
+        public void e(Table table)
+        {
+            Assert.AreEqual(table.Rows[0]["Name"], _viewModelDriver.StateView.ActiveService.Name);
+            Assert.AreEqual(table.Rows[0]["URL"], _viewModelDriver.StateView.ActiveService.Url);
+        }
+
         [Then(@"I should see service collections")]
-        public void d(Table table)
+        public void f(Table table)
         {
-            table.CompareToSet(_viewModelDriver.ResourceSetDetails.Select(x => new { x.Name }));
+            table.CompareToSet(_viewModelDriver.StateView.ActiveService.ResourceSets.Items.Select(x => new { x.Name }));
         }
 
-        [Given(@"selected service is (.*)")]
-        public void e(string serviceName)
+        [Then(@"I shouldn't see collection details")]
+        public void g()
         {
-            _viewModelDriver.SelectService(serviceName);
+            Assert.IsNull(_viewModelDriver.StateView.ActiveResourceSet);
         }
 
-        [Given(@"collections are set to show its (.*)")]
-        public void f(string mode)
+        [Given(@"collection details mode is set to (.*)")]
+        public void h(string mode)
         {
             _viewModelDriver.SelectResourceSetMode(mode);
         }
 
         [When(@"I select collection (.*)")]
         [Given(@"selected collection is (.*)")]
-        public void g(string collectionName)
+        public void i(string collectionName)
         {
             _viewModelDriver.SelectResourceSet(collectionName);
         }
 
         [Then(@"I should see collection schema summary ""(.*)""")]
-        public void h(string summary)
+        public void j(string summary)
         {
-            Assert.AreEqual(_viewModelDriver.ResourceSetModes.First(), _viewModelDriver.SelectedResourceSetMode);
-            var schemaSummary = _viewModelDriver.SelectedSchemaSummary;
+            Assert.AreEqual(_viewModelDriver.StateView.ResourceSetModes.First(), _viewModelDriver.StateView.ActiveResourceSetMode);
+            var schemaSummary = _viewModelDriver.StateView.ActiveResourceSet.Summary;
             Assert.AreEqual(summary, schemaSummary);
         }
 
         [Then(@"I should see collection data rows that contain")]
-        public void i(Table table)
+        public void k(Table table)
         {
-            var results = _viewModelDriver.ResultDetails;
+            var results = _viewModelDriver.StateView.ActiveResourceSet.Results.QueryResults;
 
             Func<string> messageFunc = null;
             try
@@ -98,21 +108,21 @@ namespace ODataPad.Specifications.Steps
         }
 
         [When(@"I select result row with key ""(.*)""")]
-        public void j(string key)
+        public void l(string key)
         {
             _viewModelDriver.SelectResult(key);
         }
 
-        [Given(@"collection data view shows collection data details for a row with key ""(.*)""")]
-        public void k(string key)
+        [Given(@"result view shows details for a row with key ""(.*)""")]
+        public void m(string key)
         {
             _viewModelDriver.SelectResult(key);
         }
 
-        [Then(@"I should see collection data details that contain")]
-        public void l(Table table)
+        [Then(@"I should see result details that contain")]
+        public void n(Table table)
         {
-            var details = ParseResultSummary(_viewModelDriver.SelectedResultSummary);
+            var details = ParseResultSummary(_viewModelDriver.StateView.ActiveResourceSet.Results.SelectedResultDetails);
             var expectedDetails = table.Rows.SelectMany(x => x.Values).ToList();
 
             Assert.AreEqual(expectedDetails.Count(), details.Count());
@@ -123,15 +133,15 @@ namespace ODataPad.Specifications.Steps
         }
 
         [When(@"I tap within result view")]
-        public void m()
+        public void o()
         {
-            _viewModelDriver.SelectedResultDetails = null;
+            _viewModelDriver.StateView.ActiveResourceSet.Results.SelectedResult = null;
         }
 
-        [Then(@"I should not see collection data details")]
-        public void n()
+        [Then(@"I should not see result details")]
+        public void p()
         {
-            Assert.IsFalse(_viewModelDriver.IsSingleResultSelected);
+            Assert.IsFalse(_viewModelDriver.StateView.ActiveResourceSet.Results.IsSingleResultSelected);
         }
 
         private static string[] ParseResultSummary(string text)

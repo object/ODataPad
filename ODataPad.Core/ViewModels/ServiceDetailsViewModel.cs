@@ -29,12 +29,12 @@ namespace ODataPad.Core.ViewModels
 
             RebuildMetadataFromCache();
 
-            AppState.UI.ActiveService = this;
+            StateView.ActiveService = this;
         }
 
         internal ServiceInfo ServiceInfo { get { return _serviceInfo; }}
 
-        public AppState AppState { get { return AppState.Current; } }
+        public AppStateViewModel StateView { get { return AppState.Current.View; } }
 
         public string Name { get { return _serviceInfo.Name; } }
         public string Description { get { return _serviceInfo.Description; } }
@@ -49,11 +49,10 @@ namespace ODataPad.Core.ViewModels
             this.ResourceSets.Items.Clear();
             if (!string.IsNullOrEmpty(_serviceInfo.MetadataCache))
             {
-                var resources = MetadataService.ParseServiceMetadata(_serviceInfo.MetadataCache);
-                foreach (var resource in resources)
+                var resourceSets = MetadataService.ParseServiceMetadata(_serviceInfo.MetadataCache);
+                foreach (var resourceSet in resourceSets)
                 {
-                    this.ResourceSets.Items.Add(
-                        new ResourceSetDetailsViewModel(this._serviceInfo.Url, resource));
+                    this.ResourceSets.Items.Add(resourceSet);
                 }
             }
         }

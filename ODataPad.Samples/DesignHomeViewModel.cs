@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ODataPad.Core;
 using ODataPad.Core.Models;
 using ODataPad.Core.Services;
 using ODataPad.Core.ViewModels;
@@ -29,7 +30,7 @@ namespace ODataPad.Samples
 
             if (services != null)
             {
-                this.Services.Populate(services);
+                this.Services.DesignModePopulate(services);
 
                 foreach (var service in this.Services.Items)
                 {
@@ -54,31 +55,33 @@ namespace ODataPad.Samples
 
                 var collections = new[]
                                   {
-                                      new ResourceSet("ODataConsumers", selectedProperties,
-                                                            selectedAssociations),
-                                      new ResourceSet("ODataProducerApplications", new Collection<ResourceProperty>(),
-                                                            new Collection<ResourceAssociation>()),
-                                      new ResourceSet("ODataProducerLiveServices", new Collection<ResourceProperty>(),
-                                                            new Collection<ResourceAssociation>()),
+                                      new ResourceSet("ODataConsumers", 
+                                          selectedProperties, selectedAssociations),
+                                      new ResourceSet("ODataProducerApplications", 
+                                          new Collection<ResourceProperty>(), new Collection<ResourceAssociation>()),
+                                      new ResourceSet("ODataProducerLiveServices", 
+                                          new Collection<ResourceProperty>(), new Collection<ResourceAssociation>()),
                                   };
 
-                AppState.UI.ActiveService.ResourceSets.Populate(
-                    collections.Select(x => new ResourceSetDetailsViewModel(this.Services.SelectedService.Url, x)));
-                SelectTopItem(AppState.UI.ActiveService.ResourceSets);
+                if (StateView.ActiveService != null)
+                {
+                    StateView.ActiveService.ResourceSets.DesignModePopulate(
+                        collections.Select(x => new ResourceSet(this.Services.Items.First().Name, x.Properties, x.Associations)));
+                    SelectTopItem(StateView.ActiveService.ResourceSets);
+                }
             }
         }
 
         private void SelectTopItem(ServiceListViewModel services)
         {
             services.SelectedService = services.Items.First();
-            services.IsServiceSelected = true;
-            AppState.UI.ActiveService = new ServiceDetailsViewModel(services.SelectedService);
+            services.DesignModeSetActiveService(services.SelectedService);
         }
 
         private void SelectTopItem(ResourceSetListViewModel resourceSets)
         {
             resourceSets.SelectedItem = resourceSets.Items.First();
-            //AppState.ActiveResourceSet = new ResourceSetDetailsViewModel(AppState.ActiveService.Url, resourceSets.SelectedItem);
+            resourceSets.DesignModeSetActiveResourceSet(resourceSets.SelectedItem);
         }
     }
 }

@@ -15,7 +15,13 @@ namespace ODataPad.Core.Models
         }
 
         public string Name { get; set; }
+        public string Summary { get { return GetResourceSetSummary(); } }
         public ObservableCollection<ResourceProperty> Properties { get; private set; }
         public ObservableCollection<ResourceAssociation> Associations { get; private set; }
+
+        private string GetResourceSetSummary()
+        {
+            return string.Format("{0} properties, {1} relations", this.Properties.Count, this.Associations.Count);
+        }
     }
 }

@@ -17,26 +17,36 @@ namespace ODataPad.Core.ViewModels
         public ResourceSetListViewModel(string serviceUrl)
         {
             _serviceUrl = serviceUrl;
-            _resourceSets = new ObservableCollection<ResourceSetDetailsViewModel>();
+            _resourceSets = new ObservableCollection<ResourceSet>();
         }
 
-        public AppState AppState { get { return AppState.Current; } }
+        public AppStateViewModel StateView { get { return AppState.Current.View; } }
 
-        private ObservableCollection<ResourceSetDetailsViewModel> _resourceSets;
-        public ObservableCollection<ResourceSetDetailsViewModel> Items
+        private ObservableCollection<ResourceSet> _resourceSets;
+        public ObservableCollection<ResourceSet> Items
         {
             get { return _resourceSets; }
-            set { _resourceSets = value; RaisePropertyChanged(() => Items); }
+            set
+            {
+                _resourceSets = value; 
+                RaisePropertyChanged(() => Items);
+            }
         }
 
-        private ResourceSetDetailsViewModel _selectedResourceSet;
-        public ResourceSetDetailsViewModel SelectedItem
+        private ResourceSet _selectedResourceSet;
+        public ResourceSet SelectedItem
         {
             get { return _selectedResourceSet; }
             set
             {
+                if (_selectedResourceSet != value)
+                {
+                    if (StateView.ActiveResourceSet != null)
+                        StateView.ActiveResourceSet.Results.SelectedResult = null;
+                    if (value == null)
+                        StateView.ActiveResourceSet = null;
+                }
                 _selectedResourceSet = value;
-                AppState.UI.ActiveResourceSet = value;
                 RaisePropertyChanged(() => SelectedItem);
             }
         }
@@ -50,11 +60,6 @@ namespace ODataPad.Core.ViewModels
         {
             if (this.SelectedItem != null)
             {
-                if (this.SelectedItem.IsResultViewSelected)
-                {
-                    await this.SelectedItem.Results.LoadResultsAsync();
-                }
-
                 if (AppState.ViewModelsWithOwnViews.Contains(typeof(ResourceSetDetailsViewModel)))
                 {
                     var converter = Mvx.Resolve<IMvxJsonConverter>();
@@ -67,12 +72,30 @@ namespace ODataPad.Core.ViewModels
                         SerializedAssociations = converter.SerializeObject(_selectedResourceSet.Associations),
                     });
                 }
+                else
+                {
+                    StateView.ActiveResourceSet = new ResourceSetDetailsViewModel(_serviceUrl, _selectedResourceSet);
+                }
+
+                if (StateView.ActiveResourceSetMode == StateView.ResourceSetModes.Last())
+                {
+                    await StateView.ActiveResourceSet.Results.LoadResultsAsync();
+                }
+            }
+            else
+            {
+                StateView.ActiveResourceSet = null;
             }
         }
 
-        public void Populate(IEnumerable<ResourceSetDetailsViewModel> details)
+        public void DesignModePopulate(IEnumerable<ResourceSet> details)
         {
-            this.Items = new ObservableCollection<ResourceSetDetailsViewModel>(details);
+            this.Items = new ObservableCollection<ResourceSet>(details);
+        }
+
+        public void DesignModeSetActiveResourceSet(ResourceSet resourceSet)
+        {
+            StateView.ActiveResourceSet = resourceSet == null ? null : new ResourceSetDetailsViewModel(_serviceUrl, resourceSet);
         }
     }
 }

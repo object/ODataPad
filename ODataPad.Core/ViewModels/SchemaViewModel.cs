@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
@@ -23,7 +22,6 @@ namespace ODataPad.Core.ViewModels
             _schemaElements = PopulateSchemaElements(properties, associations);
         }
 
-        public HomeViewModelBase Home { get; set; }
         public List<SchemaElementViewModel> Elements { get { return _schemaElements; } }
 
         private List<SchemaElementViewModel> PopulateSchemaElements(
