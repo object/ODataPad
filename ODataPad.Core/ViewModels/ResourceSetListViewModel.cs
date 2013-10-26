@@ -20,7 +20,7 @@ namespace ODataPad.Core.ViewModels
             _resourceSets = new ObservableCollection<ResourceSet>();
         }
 
-        public AppStateViewModel StateView { get { return AppState.Current.View; } }
+        public AppState AppState { get { return AppState.Current; } }
 
         private ObservableCollection<ResourceSet> _resourceSets;
         public ObservableCollection<ResourceSet> Items
@@ -41,10 +41,10 @@ namespace ODataPad.Core.ViewModels
             {
                 if (_selectedResourceSet != value)
                 {
-                    if (StateView.ActiveResourceSet != null)
-                        StateView.ActiveResourceSet.Results.SelectedResult = null;
+                    if (AppState.ActiveResourceSet != null)
+                        AppState.ActiveResourceSet.Results.SelectedResult = null;
                     if (value == null)
-                        StateView.ActiveResourceSet = null;
+                        AppState.ActiveResourceSet = null;
                 }
                 _selectedResourceSet = value;
                 RaisePropertyChanged(() => SelectedItem);
@@ -74,17 +74,17 @@ namespace ODataPad.Core.ViewModels
                 }
                 else
                 {
-                    StateView.ActiveResourceSet = new ResourceSetDetailsViewModel(_serviceUrl, _selectedResourceSet);
+                    AppState.ActiveResourceSet = new ResourceSetDetailsViewModel(_serviceUrl, _selectedResourceSet);
                 }
 
-                if (StateView.ActiveResourceSetMode == StateView.ResourceSetModes.Last())
+                if (AppState.ActiveResourceSetMode == AppState.ResourceSetModes.Last())
                 {
-                    await StateView.ActiveResourceSet.Results.LoadResultsAsync();
+                    await AppState.ActiveResourceSet.Results.LoadResultsAsync();
                 }
             }
             else
             {
-                StateView.ActiveResourceSet = null;
+                AppState.ActiveResourceSet = null;
             }
         }
 
@@ -95,7 +95,7 @@ namespace ODataPad.Core.ViewModels
 
         public void DesignModeSetActiveResourceSet(ResourceSet resourceSet)
         {
-            StateView.ActiveResourceSet = resourceSet == null ? null : new ResourceSetDetailsViewModel(_serviceUrl, resourceSet);
+            AppState.ActiveResourceSet = resourceSet == null ? null : new ResourceSetDetailsViewModel(_serviceUrl, resourceSet);
         }
     }
 }

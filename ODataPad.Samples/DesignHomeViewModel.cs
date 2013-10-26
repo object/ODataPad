@@ -63,11 +63,11 @@ namespace ODataPad.Samples
                                           new Collection<ResourceProperty>(), new Collection<ResourceAssociation>()),
                                   };
 
-                if (StateView.ActiveService != null)
+                if (AppState.ActiveService != null)
                 {
-                    StateView.ActiveService.ResourceSets.DesignModePopulate(
+                    AppState.ActiveService.ResourceSets.DesignModePopulate(
                         collections.Select(x => new ResourceSet(this.Services.Items.First().Name, x.Properties, x.Associations)));
-                    SelectTopItem(StateView.ActiveService.ResourceSets);
+                    SelectTopItem(AppState.ActiveService.ResourceSets);
                 }
             }
         }

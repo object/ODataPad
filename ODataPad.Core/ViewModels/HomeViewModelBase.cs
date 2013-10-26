@@ -28,6 +28,6 @@ namespace ODataPad.Core.ViewModels
             return new Task(() => { });
         }
 
-        public AppStateViewModel StateView { get { return AppState.Current.View; } }
+        public AppState AppState { get { return AppState.Current; } }
     }
 }

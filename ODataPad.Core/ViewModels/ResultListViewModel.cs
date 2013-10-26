@@ -75,7 +75,7 @@ namespace ODataPad.Core.ViewModels
             });
         }
 
-        public AppStateViewModel StateView { get { return AppState.Current.View; } }
+        public AppState AppState { get { return AppState.Current; } }
 
         private ObservableResultCollection _queryResults;
         public ObservableResultCollection QueryResults
@@ -99,7 +99,7 @@ namespace ODataPad.Core.ViewModels
             {
                 if (_selectedResult != value)
                 {
-                    StateView.ActiveResult = null;
+                    AppState.ActiveResult = null;
                 }
                 _selectedResult = value;
                 RaisePropertyChanged(() => SelectedResult);
@@ -132,10 +132,10 @@ namespace ODataPad.Core.ViewModels
 
         public bool IsQueryInProgress
         {
-            get { return AppState.Current.View.IsQueryInProgress; }
+            get { return AppState.IsQueryInProgress; }
             set
             {
-                AppState.Current.View.IsQueryInProgress = value;
+                AppState.IsQueryInProgress = value;
                 RaisePropertyChanged(() => IsQueryInProgress);
             }
         }

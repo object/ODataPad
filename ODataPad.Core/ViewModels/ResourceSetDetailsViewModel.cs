@@ -82,7 +82,7 @@ namespace ODataPad.Core.ViewModels
             });
         }
 
-        public AppStateViewModel StateView { get { return AppState.Current.View; } }
+        public AppState AppState { get { return AppState.Current; } }
 
         public string Name { get { return _resourceSet.Name; } }
         public string Summary { get { return _resourceSet.Summary; } }
@@ -93,10 +93,10 @@ namespace ODataPad.Core.ViewModels
 
         public string SelectedResourceSetMode
         {
-            get { return StateView.ActiveResourceSetMode; }
+            get { return AppState.ActiveResourceSetMode; }
             set
             {
-                StateView.ActiveResourceSetMode = value;
+                AppState.ActiveResourceSetMode = value;
                 RaisePropertyChanged(() => SelectedResourceSetMode);
             }
         }
@@ -108,7 +108,7 @@ namespace ODataPad.Core.ViewModels
 
         public async void SelectResourceSetMode()
         {
-            if (StateView.IsResultViewSelected)
+            if (AppState.IsResultViewSelected)
             {
                 await this.Results.LoadResultsAsync();
             }

@@ -30,19 +30,19 @@
   Margin="10"
   HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto"
   Background="Black"
-  ItemsSource="{Binding StateView.ResourceSetModes}"
-  SelectedItem="{Binding StateView.ActiveResourceSetMode, Mode=TwoWay}"
+  ItemsSource="{Binding AppState.ResourceSetModes}"
+  SelectedItem="{Binding AppState.ActiveResourceSetMode, Mode=TwoWay}"
   Visibility="{Binding Services.IsServiceSelected, Converter={StaticResource BoolToVisibility}}"
                     >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding StateView.ActiveResourceSet.SelectResourceSetModeCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding AppState.ActiveResourceSet.SelectResourceSetModeCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
 
             <ProgressBar Grid.Row="1" x:Name="resultProgress" IsIndeterminate="True" Margin="10,0,0,0"
-      Visibility="{Binding StateView.IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
+      Visibility="{Binding AppState.IsQueryInProgress, Converter={StaticResource BoolToVisibility}}"
                         />
 
             <ListView
@@ -50,9 +50,9 @@
           Grid.Row="2"
           Grid.Column="1"
           TabIndex="3"
-          DataContext="{Binding StateView.ActiveResourceSet}"
+          DataContext="{Binding AppState.ActiveResourceSet}"
           ItemsSource="{Binding Schema.Elements}"
-          Visibility="{Binding Path=StateView.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
+          Visibility="{Binding Path=AppState.IsPropertyViewSelected, Converter={StaticResource BoolToVisibility}}"
           ItemTemplate="{StaticResource CollectionElementItemTemplate}"
           Background="{StaticResource MainBackgroundBrush}"
           BorderBrush="{StaticResource MainBackgroundBrush}">
@@ -61,9 +61,9 @@
             <ListView
           x:Name="itemData"
           TabIndex="3"
-          DataContext="{Binding StateView.ActiveResourceSet}"
+          DataContext="{Binding AppState.ActiveResourceSet}"
           ItemsSource="{Binding Results.QueryResults}"
-          Visibility="{Binding Path=StateView.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+          Visibility="{Binding Path=AppState.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
           SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
           SelectionMode="Single"
           ItemTemplate="{StaticResource ResultItemTemplate}"

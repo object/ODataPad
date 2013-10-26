@@ -46,7 +46,6 @@
     <Compile Include="Models\ObservableResultCollection.cs" />
     <Compile Include="Services\PartialResultLoader.cs" />
     <Compile Include="Services\SamplesService.cs" />
-    <Compile Include="ViewModels\AppStateViewModel.cs" />
     <Compile Include="ViewModels\QueryInProgress.cs" />
     <Compile Include="ViewModels\ResourceSetListViewModel.cs" />
     <Compile Include="ViewModels\ResultListViewModel.cs" />

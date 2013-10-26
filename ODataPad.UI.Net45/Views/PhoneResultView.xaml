@@ -29,7 +29,7 @@
       Background="{StaticResource MainBackgroundBrush}"
       Foreground="{StaticResource TextForegroundBrush}"
       BorderThickness="0"
-      DataContext="{Binding StateView.ActiveResourceSet}"
+      DataContext="{Binding AppState.ActiveResourceSet}"
       Visibility="{Binding Path=Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
         <FlowDocument>
           <Paragraph>

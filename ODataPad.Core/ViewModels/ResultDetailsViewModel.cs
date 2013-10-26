@@ -45,7 +45,7 @@ namespace ODataPad.Core.ViewModels
             _resultRow = new ResultRow(savedState.Properties, savedState.Keys);
         }
 
-        public AppStateViewModel StateView { get { return AppState.Current.View; } }
+        public AppState AppState { get { return AppState.Current; } }
 
         public IEnumerable<string> Keys { get { return _resultRow.Keys; } }
         public IDictionary<string, object> Properties { get { return _resultRow.Properties; } }

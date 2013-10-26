@@ -21,7 +21,7 @@ namespace ODataPad.Specifications.Infrastructure
             }
         }
 
-        public AppStateViewModel StateView { get { return AppState.Current.View; } }
+        public AppState AppState { get { return AppState.Current; } }
 
         public void EnsureHomeViewModel()
         {
@@ -44,33 +44,33 @@ namespace ODataPad.Specifications.Infrastructure
 
         public void SelectResourceSet(string resourceSetName)
         {
-            var resourceSet = StateView.ActiveService.ResourceSets.Items.Single(x => x.Name == resourceSetName);
-            StateView.ActiveService.ResourceSets.SelectedItem = resourceSet;
-            StateView.ActiveService.ResourceSets.SelectResourceSetCommand.Execute(resourceSet);
+            var resourceSet = AppState.ActiveService.ResourceSets.Items.Single(x => x.Name == resourceSetName);
+            AppState.ActiveService.ResourceSets.SelectedItem = resourceSet;
+            AppState.ActiveService.ResourceSets.SelectResourceSetCommand.Execute(resourceSet);
 
-            if (StateView.ActiveResourceSetMode == StateView.ResourceSetModes.Last())
+            if (AppState.ActiveResourceSetMode == AppState.ResourceSetModes.Last())
                 WaitForResults(5);
         }
 
         public void SelectResourceSetMode(string mode)
         {
-            StateView.ActiveResourceSetMode = mode.ToLower().Contains("data")
-                ? StateView.ResourceSetModes.Last()
-                : StateView.ResourceSetModes.First();
+            AppState.ActiveResourceSetMode = mode.ToLower().Contains("data")
+                ? AppState.ResourceSetModes.Last()
+                : AppState.ResourceSetModes.First();
         }
 
         public void SelectResult(string key)
         {
-            var result = StateView.ActiveResourceSet.Results.QueryResults.Single(x => x.Properties[x.Keys.Single()].ToString() == key);
-            StateView.ActiveResourceSet.Results.SelectedResult = result;
-            StateView.ActiveResourceSet.Results.SelectResultCommand.Execute(result);
+            var result = AppState.ActiveResourceSet.Results.QueryResults.Single(x => x.Properties[x.Keys.Single()].ToString() == key);
+            AppState.ActiveResourceSet.Results.SelectedResult = result;
+            AppState.ActiveResourceSet.Results.SelectResultCommand.Execute(result);
         }
 
         private void WaitForResults(int maxSeconds)
         {
             for (var seconds = 0; seconds < maxSeconds * 10; seconds++)
             {
-                if (StateView.ActiveResourceSet.Results.QueryResults.Any())
+                if (AppState.ActiveResourceSet.Results.QueryResults.Any())
                     break;
                 Thread.Sleep(100);
             }
