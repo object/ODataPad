@@ -175,9 +175,10 @@
                         Grid.Row="0"
                         Grid.Column="0"
                     TabIndex="2"
-                    ItemsSource="{Binding StateView.ActiveService.ResourceSets.Items, Mode=TwoWay}"
+                    DataContext="{Binding StateView.ActiveService.ResourceSets}"
+                    ItemsSource="{Binding Items, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                     ItemTemplate="{StaticResource CollectionItemTemplate}" 
-                    SelectedItem="{Binding StateView.ActiveResourceSet, Mode=TwoWay}"
                     SelectionMode="Single" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">

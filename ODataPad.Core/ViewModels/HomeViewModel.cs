@@ -27,7 +27,7 @@ namespace ODataPad.Core.ViewModels
         public override async Task InitAsync()
         {
             await EnsureDataVersionAsync();
-            await PopulateServicesAsync();
+            //await PopulateServicesAsync();
         }
 
         private async Task EnsureDataVersionAsync()

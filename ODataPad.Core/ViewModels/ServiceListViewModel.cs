@@ -102,17 +102,15 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private MvxCommand _selectServiceCommand;
         public ICommand SelectServiceCommand
         {
             get
             {
-                _selectServiceCommand = _selectServiceCommand ?? new MvxCommand(DoSelectService);
-                return _selectServiceCommand;
+                return new MvxCommand(SelectService);
             }
         }
 
-        private void DoSelectService()
+        public void SelectService()
         {
             if (this.SelectedService != null)
             {
