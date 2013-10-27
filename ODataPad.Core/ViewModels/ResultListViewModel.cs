@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Interfaces;
 using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ResultListViewModel : MvxViewModel
+    public partial class ResultListViewModel : MvxViewModel
     {
         private IResultProvider _resultProvider;
         private string _serviceUrl;
@@ -28,50 +27,6 @@ namespace ODataPad.Core.ViewModels
                 ServiceUrl = serviceUrl,
                 ResourceSetName = resourceSetName,
                 Properties = new List<ResourceProperty>(properties),
-            });
-        }
-
-        public void Init(NavObject navObject)
-        {
-            if (!HomeViewModelBase.IsDesignTime)
-                _resultProvider = Mvx.Resolve<IResultProvider>();
-
-            _serviceUrl = navObject.ServiceUrl;
-            _resourceSetName = navObject.ResourceSetName;
-            _properties = navObject.Properties;
-        }
-
-        public class NavObject
-        {
-            public string ServiceUrl { get; set; }
-            public string ResourceSetName { get; set; }
-            public List<ResourceProperty> Properties { get; set; }
-        }
-
-        public class SavedState
-        {
-            public string ServiceUrl { get; set; }
-            public string ResourceSetName { get; set; }
-            public List<ResourceProperty> Properties { get; set; }
-        }
-
-        public SavedState SaveState()
-        {
-            return new SavedState()
-            {
-                ServiceUrl = _serviceUrl,
-                ResourceSetName = _resourceSetName,
-                Properties = _properties,
-            };
-        }
-
-        public void ReloadState(SavedState savedState)
-        {
-            Init(new NavObject
-            {
-                ServiceUrl = savedState.ServiceUrl,
-                ResourceSetName = savedState.ResourceSetName,
-                Properties = savedState.Properties
             });
         }
 
@@ -116,7 +71,19 @@ namespace ODataPad.Core.ViewModels
         {
             if (this.SelectedResult != null)
             {
-                ShowResultDetails();
+                if (AppState.ViewModelsWithOwnViews.Contains(typeof (ResultDetailsViewModel)))
+                {
+                    ShowViewModel<ResultDetailsViewModel>(new ResultDetailsViewModel.NavObject(_selectedResult));
+                }
+                else
+                {
+                    this.SelectedResultDetails = this.SelectedResult.Text;
+                    AppState.ActiveResult = this.SelectedResult;
+                }
+            }
+            else
+            {
+                AppState.ActiveResult = null;
             }
         }
 
@@ -170,12 +137,5 @@ namespace ODataPad.Core.ViewModels
         }
 
         public bool IsSingleResultSelected { get { return this.SelectedResult != null; } }
-
-        private void ShowResultDetails()
-        {
-            this.SelectedResultDetails = string.Join(Environment.NewLine + Environment.NewLine,
-                this.SelectedResult.Properties
-                    .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
-        }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
-using System.Xml.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
-using ODataPad.Core.Services;
 
 namespace ODataPad.Core.ViewModels
 {
@@ -116,7 +113,7 @@ namespace ODataPad.Core.ViewModels
             {
                 if (AppState.ViewModelsWithOwnViews.Contains(typeof(ServiceDetailsViewModel)))
                 {
-                    ShowViewModel<ServiceDetailsViewModel>(this.SelectedService);
+                    ShowViewModel<ServiceDetailsViewModel>(new ServiceDetailsViewModel.NavObject(this.SelectedService));
                 }
                 else
                 {

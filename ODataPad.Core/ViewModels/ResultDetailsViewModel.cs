@@ -6,43 +6,24 @@ using ODataPad.Core.Models;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ResultDetailsViewModel : MvxViewModel
+    public partial class ResultDetailsViewModel : MvxViewModel
     {
         private ResultRow _resultRow;
+
+        public ResultDetailsViewModel()
+        {
+        }
 
         public ResultDetailsViewModel(ResultRow resultRow)
         {
             _resultRow = resultRow;
         }
 
-        public void Init(NavObject navObject)
+        public static ResultDetailsViewModel DesignModeCreate(ResultRow resultRow)
         {
-            _resultRow = navObject.ResultDetails;
-        }
-
-        public class NavObject
-        {
-            public ResultRow ResultDetails { get; set; }
-        }
-
-        public class SavedState
-        {
-            public List<string> Keys { get; set; }
-            public Dictionary<string, object> Properties { get; set; }
-        }
-
-        public SavedState SaveState()
-        {
-            return new SavedState()
-            {
-                Keys = new List<string>(_resultRow.Keys),
-                Properties = new Dictionary<string, object>(_resultRow.Properties)
-            };
-        }
-
-        public void ReloadState(SavedState savedState)
-        {
-            _resultRow = new ResultRow(savedState.Properties, savedState.Keys);
+            var result = new ResultDetailsViewModel(resultRow);
+            AppState.Current.ActiveResult = result;
+            return result;
         }
 
         public AppState AppState { get { return AppState.Current; } }
@@ -51,6 +32,17 @@ namespace ODataPad.Core.ViewModels
         public IDictionary<string, object> Properties { get { return _resultRow.Properties; } }
         public string KeySummary { get { return GetKeySummary(); } }
         public string ValueSummary { get { return GetPropertySummary(); } }
+
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                _text = value;
+                RaisePropertyChanged(() => Text);
+            }
+        }
 
         private string GetKeySummary()
         {

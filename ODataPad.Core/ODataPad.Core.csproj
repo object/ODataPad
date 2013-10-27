@@ -47,9 +47,12 @@
     <Compile Include="Services\PartialResultLoader.cs" />
     <Compile Include="Services\SamplesService.cs" />
     <Compile Include="ViewModels\QueryInProgress.cs" />
+    <Compile Include="ViewModels\ResourceSetDetailsViewModel.Init.cs" />
     <Compile Include="ViewModels\ResourceSetListViewModel.cs" />
+    <Compile Include="ViewModels\ResultDetailsViewModel.Init.cs" />
     <Compile Include="ViewModels\ResultListViewModel.cs" />
     <Compile Include="ViewModels\ResultDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ResultListViewModel.Init.cs" />
     <Compile Include="ViewModels\SchemaElementViewModel.cs" />
     <Compile Include="Models\ResourceProperty.cs" />
     <Compile Include="Models\ResultRow.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="ViewModels\HomeViewModelBase.cs" />
     <Compile Include="ViewModels\ResourceSetDetailsViewModel.cs" />
     <Compile Include="ViewModels\SchemaViewModel.cs" />
+    <Compile Include="ViewModels\ServiceDetailsViewModel.Init.cs" />
     <Compile Include="ViewModels\ServiceListViewModel.cs" />
     <Compile Include="ViewModels\ServiceEditViewModel.cs" />
     <Compile Include="ViewModels\ServiceDetailsViewModel.cs" />

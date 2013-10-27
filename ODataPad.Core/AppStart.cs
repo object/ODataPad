@@ -1,5 +1,4 @@
-﻿using Cirrious.CrossCore.IoC;
-using Cirrious.MvvmCross.ViewModels;
+﻿using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.ViewModels;
 
 namespace ODataPad.Core

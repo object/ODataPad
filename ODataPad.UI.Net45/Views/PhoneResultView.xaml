@@ -21,7 +21,7 @@
     <Grid
     Margin="20,10,20,0">
 
-      <RichTextBox
+            <RichTextBox
       x:Name="itemText"
       Margin="10,10"
       Padding="0,0"
@@ -29,11 +29,10 @@
       Background="{StaticResource MainBackgroundBrush}"
       Foreground="{StaticResource TextForegroundBrush}"
       BorderThickness="0"
-      DataContext="{Binding AppState.ActiveResourceSet}"
-      Visibility="{Binding Path=Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
+      DataContext="{Binding AppState.ActiveResult}">
         <FlowDocument>
           <Paragraph>
-            <Run Text="{Binding Path=Results.SelectedResultDetails}" />
+                        <Run Text="{Binding Path=Text}" />
           </Paragraph>
         </FlowDocument>
       </RichTextBox>

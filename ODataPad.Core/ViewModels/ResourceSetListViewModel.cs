@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
@@ -62,15 +59,9 @@ namespace ODataPad.Core.ViewModels
             {
                 if (AppState.ViewModelsWithOwnViews.Contains(typeof(ResourceSetDetailsViewModel)))
                 {
-                    var converter = Mvx.Resolve<IMvxJsonConverter>();
-
-                    ShowViewModel<ResourceSetDetailsViewModel>(new ResourceSetDetailsViewModel.NavObject
-                    {
-                        ServiceUrl = _serviceUrl,
-                        ResourceSetName = _selectedResourceSet.Name,
-                        SerializedProperties = converter.SerializeObject(_selectedResourceSet.Properties),
-                        SerializedAssociations = converter.SerializeObject(_selectedResourceSet.Associations),
-                    });
+                    ShowViewModel<ResourceSetDetailsViewModel>(new ResourceSetDetailsViewModel.NavObject(
+                        _serviceUrl, _selectedResourceSet.Name, 
+                        _selectedResourceSet.Properties, _selectedResourceSet.Associations));
                 }
                 else
                 {

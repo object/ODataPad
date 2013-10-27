@@ -8,9 +8,8 @@ using ODataPad.Core.Services;
 
 namespace ODataPad.Core.ViewModels
 {
-    public class ServiceDetailsViewModel : MvxViewModel
+    public partial class ServiceDetailsViewModel : MvxViewModel
     {
-        private ServiceInfo _serviceInfo;
         private ResourceSetListViewModel _resourceSets;
 
         public ServiceDetailsViewModel()
@@ -19,37 +18,25 @@ namespace ODataPad.Core.ViewModels
 
         public ServiceDetailsViewModel(ServiceInfo serviceInfo)
         {
-            Init(serviceInfo);
+            Init(new NavObject(serviceInfo));
         }
-
-        public void Init(ServiceInfo serviceInfo)
-        {
-            _serviceInfo = serviceInfo;
-            _resourceSets = new ResourceSetListViewModel(_serviceInfo.Url);
-
-            RebuildMetadataFromCache();
-
-            AppState.ActiveService = this;
-        }
-
-        internal ServiceInfo ServiceInfo { get { return _serviceInfo; }}
 
         public AppState AppState { get { return AppState.Current; } }
 
-        public string Name { get { return _serviceInfo.Name; } }
-        public string Description { get { return _serviceInfo.Description; } }
-        public string Url { get { return _serviceInfo.Url; } }
-        public string ImageBase64 { get { return _serviceInfo.ImageBase64; } }
-        public string MetadataCache { get { return _serviceInfo.MetadataCache; } }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Url { get; set; }
+        public string ImageBase64 { get; set; }
+        public string MetadataCache { get; set; }
 
         public ResourceSetListViewModel ResourceSets { get { return _resourceSets; } }
 
         private void RebuildMetadataFromCache()
         {
             this.ResourceSets.Items.Clear();
-            if (!string.IsNullOrEmpty(_serviceInfo.MetadataCache))
+            if (!string.IsNullOrEmpty(this.MetadataCache))
             {
-                var resourceSets = MetadataService.ParseServiceMetadata(_serviceInfo.MetadataCache);
+                var resourceSets = MetadataService.ParseServiceMetadata(this.MetadataCache);
                 foreach (var resourceSet in resourceSets)
                 {
                     this.ResourceSets.Items.Add(resourceSet);

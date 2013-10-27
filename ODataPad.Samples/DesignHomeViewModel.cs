@@ -41,7 +41,7 @@ namespace ODataPad.Samples
 
                 SelectTopItem(this.Services);
 
-                var selectedProperties = new Collection<ResourceProperty>
+                var collectionProperties = new Collection<ResourceProperty>
                                  {
                                      new ResourceProperty("Id", "Int32", true, false),
                                      new ResourceProperty("Name", "String", false, false),
@@ -49,26 +49,35 @@ namespace ODataPad.Samples
                                      new ResourceProperty("ApplicationUrl", "String", false, true),
                                  };
 
-                var selectedAssociations = new Collection<ResourceAssociation>
+                var collectionAssociations = new Collection<ResourceAssociation>
                 {
                 };
 
                 var collections = new[]
                                   {
                                       new ResourceSet("ODataConsumers", 
-                                          selectedProperties, selectedAssociations),
+                                          collectionProperties, collectionAssociations),
                                       new ResourceSet("ODataProducerApplications", 
                                           new Collection<ResourceProperty>(), new Collection<ResourceAssociation>()),
                                       new ResourceSet("ODataProducerLiveServices", 
                                           new Collection<ResourceProperty>(), new Collection<ResourceAssociation>()),
                                   };
 
-                if (AppState.ActiveService != null)
+                AppState.ActiveService.ResourceSets.DesignModePopulate(
+                    collections.Select(x => new ResourceSet(this.Services.Items.First().Name, x.Properties, x.Associations)));
+                SelectTopItem(AppState.ActiveService.ResourceSets);
+
+                var resultProperties = new Dictionary<string, object>()
                 {
-                    AppState.ActiveService.ResourceSets.DesignModePopulate(
-                        collections.Select(x => new ResourceSet(this.Services.Items.First().Name, x.Properties, x.Associations)));
-                    SelectTopItem(AppState.ActiveService.ResourceSets);
-                }
+                    {"Id", 1},
+                    {"Name", "SharePoint 2010"},
+                    {"Description", "(...)"},
+                    {"ApplicationUrl", "(...)"}
+                };
+
+                var resultKeys = new List<string>() { "Id" };
+
+                ResultDetailsViewModel.DesignModeCreate(new ResultRow(resultProperties, resultKeys));
             }
         }
 
