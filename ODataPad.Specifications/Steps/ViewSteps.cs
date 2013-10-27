@@ -122,7 +122,7 @@ namespace ODataPad.Specifications.Steps
         [Then(@"I should see result details that contain")]
         public void n(Table table)
         {
-            var details = ParseResultSummary(_viewModelDriver.AppState.ActiveResourceSet.Results.SelectedResultDetails);
+            var details = ParseResultSummary(_viewModelDriver.AppState.ActiveResult.Text);
             var expectedDetails = table.Rows.SelectMany(x => x.Values).ToList();
 
             Assert.AreEqual(expectedDetails.Count(), details.Count());

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
 
@@ -8,30 +8,22 @@ namespace ODataPad.Core.ViewModels
 {
     public partial class ResultDetailsViewModel : MvxViewModel
     {
-        private ResultRow _resultRow;
+        private ResultInfo _resultInfo;
 
         public ResultDetailsViewModel()
         {
         }
 
-        public ResultDetailsViewModel(ResultRow resultRow)
+        public ResultDetailsViewModel(ResultInfo resultInfo)
         {
-            _resultRow = resultRow;
-        }
-
-        public static ResultDetailsViewModel DesignModeCreate(ResultRow resultRow)
-        {
-            var result = new ResultDetailsViewModel(resultRow);
-            AppState.Current.ActiveResult = result;
-            return result;
+            _resultInfo = resultInfo;
+            this.Text = GetTextSummary();
         }
 
         public AppState AppState { get { return AppState.Current; } }
 
-        public IEnumerable<string> Keys { get { return _resultRow.Keys; } }
-        public IDictionary<string, object> Properties { get { return _resultRow.Properties; } }
-        public string KeySummary { get { return GetKeySummary(); } }
-        public string ValueSummary { get { return GetPropertySummary(); } }
+        public IEnumerable<string> Keys { get { return _resultInfo.Keys; } }
+        public IDictionary<string, object> Properties { get { return _resultInfo.Properties; } }
 
         private string _text;
         public string Text
@@ -44,52 +36,11 @@ namespace ODataPad.Core.ViewModels
             }
         }
 
-        private string GetKeySummary()
+        private string GetTextSummary()
         {
-            if (IsError())
-            {
-                return this.Properties.Keys.First();
-            }
-            else
-            {
-                var sb = new StringBuilder();
-                foreach (var result in this.Properties)
-                {
-                    if (!this.Keys.Contains(result.Key))
-                        continue;
-
-                    if (sb.Length > 0)
-                        sb.Append(" | ");
-                    var text = result.Value.ToString();
-                    sb.Append(text);
-                }
-                return sb.ToString();
-            }
-        }
-
-        private string GetPropertySummary()
-        {
-            if (IsError())
-            {
-                return this.Properties.Values.First().ToString();
-            }
-            else
-            {
-                var sb = new StringBuilder();
-                foreach (var result in this.Properties)
-                {
-                    if (this.Keys.Contains(result.Key))
-                        continue;
-
-                    if (sb.Length > 0)
-                        sb.Append(" | ");
-                    var text = result.Value == null ? "(null)" : result.Value.ToString();
-                    if (text.Length > 30)
-                        text = text.Substring(0, 30) + "...";
-                    sb.Append(text);
-                }
-                return sb.ToString();
-            }
+            return string.Join(Environment.NewLine + Environment.NewLine,
+                _resultInfo.Properties
+                    .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
         }
 
         private bool IsError()
@@ -97,6 +48,13 @@ namespace ODataPad.Core.ViewModels
             return this.Properties.Count == 1 &&
                 this.Properties.Keys.First() == "Error" &&
                 !this.Keys.Contains(this.Properties.Keys.First());
+        }
+
+        public static ResultDetailsViewModel DesignModeCreate(ResultInfo resultInfo)
+        {
+            var result = new ResultDetailsViewModel(resultInfo);
+            AppState.Current.ActiveResult = result;
+            return result;
         }
     }
 }

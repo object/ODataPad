@@ -233,7 +233,7 @@
                 DataContext="{Binding AppState.ActiveResourceSet}"
                 Visibility="{Binding Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                     <Paragraph>
-                        <Run Text="{Binding Results.SelectedResultDetails, Mode=TwoWay}" />
+                        <Run Text="{Binding AppState.ActiveResult.Text, Mode=TwoWay}" />
                     </Paragraph>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Tapped">

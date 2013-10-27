@@ -157,7 +157,7 @@
                         Visibility="{Binding Path=Results.IsSingleResultSelected, Converter={StaticResource BoolToVisibility}}">
                         <FlowDocument>
                             <Paragraph>
-                                <Run Text="{Binding Path=Results.SelectedResultDetails}" />
+                                <Run Text="{Binding Path=AppState.ActiveResult.Text}" />
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
                                         <i:InvokeCommandAction Command="{Binding Results.UnselectResultCommand}"/>

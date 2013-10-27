@@ -13,13 +13,11 @@ namespace ODataPad.Core.ViewModels
         {
             var converter = Mvx.Resolve<IMvxJsonConverter>();
 
-            _resultRow = new ResultRow(
+            _resultInfo = new ResultInfo(
                 converter.DeserializeObject<Dictionary<string, object>>(navObject.SerializedProperties),
                 converter.DeserializeObject<List<string>>(navObject.SerializedKeys));
 
-            this.Text = string.Join(Environment.NewLine + Environment.NewLine,
-                _resultRow.Properties
-                    .Select(y => y.Key + Environment.NewLine + (y.Value == null ? "(null)" : y.Value.ToString())));
+            this.Text = GetTextSummary();
 
             AppState.ActiveResult = this;
         }
@@ -31,7 +29,7 @@ namespace ODataPad.Core.ViewModels
 
             public NavObject() {}
 
-            public NavObject(ResultDetailsViewModel result)
+            public NavObject(ResultInfo result)
             {
                 var converter = Mvx.Resolve<IMvxJsonConverter>();
 
@@ -51,8 +49,8 @@ namespace ODataPad.Core.ViewModels
             var converter = Mvx.Resolve<IMvxJsonConverter>();
             return new SavedState()
             {
-                SerializedKeys = converter.SerializeObject(_resultRow.Keys),
-                SerializedProperties = converter.SerializeObject(_resultRow.Properties)
+                SerializedKeys = converter.SerializeObject(_resultInfo.Keys),
+                SerializedProperties = converter.SerializeObject(_resultInfo.Properties)
             };
         }
 

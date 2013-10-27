@@ -77,7 +77,7 @@ namespace ODataPad.Samples
 
                 var resultKeys = new List<string>() { "Id" };
 
-                ResultDetailsViewModel.DesignModeCreate(new ResultRow(resultProperties, resultKeys));
+                ResultDetailsViewModel.DesignModeCreate(new ResultInfo(resultProperties, resultKeys));
             }
         }
 

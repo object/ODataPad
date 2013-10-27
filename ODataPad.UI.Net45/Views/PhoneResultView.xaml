@@ -32,7 +32,7 @@
       DataContext="{Binding AppState.ActiveResult}">
         <FlowDocument>
           <Paragraph>
-                        <Run Text="{Binding Path=Text}" />
+                <Run Text="{Binding Path=Text}" />
           </Paragraph>
         </FlowDocument>
       </RichTextBox>

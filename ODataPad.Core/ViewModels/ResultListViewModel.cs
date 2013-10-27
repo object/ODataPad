@@ -39,15 +39,8 @@ namespace ODataPad.Core.ViewModels
             set { _queryResults = value; RaisePropertyChanged(() => QueryResults); }
         }
 
-        private string _selectedResultDetails;
-        public string SelectedResultDetails
-        {
-            get { return _selectedResultDetails; }
-            set { _selectedResultDetails = value; RaisePropertyChanged(() => SelectedResultDetails); }
-        }
-
-        private ResultDetailsViewModel _selectedResult;
-        public ResultDetailsViewModel SelectedResult
+        private ResultInfo _selectedResult;
+        public ResultInfo SelectedResult
         {
             get { return _selectedResult; }
             set
@@ -77,8 +70,7 @@ namespace ODataPad.Core.ViewModels
                 }
                 else
                 {
-                    this.SelectedResultDetails = this.SelectedResult.Text;
-                    AppState.ActiveResult = this.SelectedResult;
+                    AppState.ActiveResult = new ResultDetailsViewModel(this.SelectedResult);
                 }
             }
             else

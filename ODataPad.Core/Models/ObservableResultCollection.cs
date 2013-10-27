@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using ODataPad.Core.Interfaces;
-using ODataPad.Core.ViewModels;
 
 namespace ODataPad.Core.Models
 {
-    public class ObservableResultCollection : ObservableCollection<ResultDetailsViewModel>
+    public class ObservableResultCollection : ObservableCollection<ResultInfo>
     {
         public string ServiceUrl { get; private set; }
         public string ResourceSetName { get; private set; }
