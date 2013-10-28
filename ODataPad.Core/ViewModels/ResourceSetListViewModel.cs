@@ -68,7 +68,7 @@ namespace ODataPad.Core.ViewModels
                     AppState.ActiveResourceSet = new ResourceSetDetailsViewModel(_serviceUrl, _selectedResourceSet);
                 }
 
-                if (AppState.ActiveResourceSetMode == AppState.ResourceSetModes.Last())
+                if (AppState.IsResultViewSelected)
                 {
                     await AppState.ActiveResourceSet.Results.LoadResultsAsync();
                 }

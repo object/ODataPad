@@ -59,6 +59,7 @@ namespace ODataPad.Core
             {
                 _activeResult = value;
                 RaisePropertyChanged(() => ActiveResult);
+                RaisePropertyChanged(() => IsResultViewVisible);
             }
         }
 
@@ -83,11 +84,24 @@ namespace ODataPad.Core
                 RaisePropertyChanged(() => ActiveResourceSetMode);
                 RaisePropertyChanged(() => IsPropertyViewSelected);
                 RaisePropertyChanged(() => IsResultViewSelected);
+                RaisePropertyChanged(() => IsResultViewVisible);
             }
         }
 
-        public bool IsPropertyViewSelected { get { return this.ActiveResourceSetMode == this.ResourceSetModes.First(); } }
-        public bool IsResultViewSelected { get { return this.ActiveResourceSetMode == this.ResourceSetModes.Last(); } }
+        public bool IsPropertyViewSelected
+        {
+            get { return this.ActiveResourceSetMode == this.ResourceSetModes.First(); }
+        }
+
+        public bool IsResultViewSelected
+        {
+            get { return this.ActiveResourceSetMode == this.ResourceSetModes.Last(); }
+        }
+
+        public bool IsResultViewVisible
+        {
+            get { return this.IsResultViewSelected && this.ActiveResult == null; }
+        }
 
         private bool _isQueryInProgress;
         public bool IsQueryInProgress

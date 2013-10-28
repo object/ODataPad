@@ -48,7 +48,7 @@ namespace ODataPad.Specifications.Infrastructure
             AppState.ActiveService.ResourceSets.SelectedItem = resourceSet;
             AppState.ActiveService.ResourceSets.SelectResourceSetCommand.Execute(resourceSet);
 
-            if (AppState.ActiveResourceSetMode == AppState.ResourceSetModes.Last())
+            if (AppState.IsResultViewSelected)
                 WaitForResults(5);
         }
 

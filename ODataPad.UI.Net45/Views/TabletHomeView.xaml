@@ -126,7 +126,7 @@
                         TabIndex="3"
                         DataContext="{Binding AppState.ActiveResourceSet}"
                         ItemsSource="{Binding Results.QueryResults}"
-                        Visibility="{Binding Path=AppState.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding Path=AppState.IsResultViewVisible, Converter={StaticResource BoolToVisibility}}"
                         SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                         SelectionMode="Single" 
                         ItemTemplate="{StaticResource ResultItemTemplate}"

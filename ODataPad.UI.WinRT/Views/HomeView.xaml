@@ -212,7 +212,7 @@
                 DataContext="{Binding AppState.ActiveResourceSet}"
                 ItemsSource="{Binding Results.QueryResults}"
                 ItemTemplate="{StaticResource ResultItemTemplate}" 
-                Visibility="{Binding Path=AppState.IsResultViewSelected, Converter={StaticResource BoolToVisibility}}"
+                Visibility="{Binding Path=AppState.IsResultViewVisible, Converter={StaticResource BoolToVisibility}}"
                 SelectedItem="{Binding Results.SelectedResult, Mode=TwoWay}"
                 SelectionMode="Single" >
                     <i:Interaction.Triggers>
