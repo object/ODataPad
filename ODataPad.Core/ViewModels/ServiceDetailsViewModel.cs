@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
+using System.Windows.Input;
 using System.Xml.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using ODataPad.Core.Models;
@@ -30,6 +29,16 @@ namespace ODataPad.Core.ViewModels
         public string MetadataCache { get; set; }
 
         public ResourceSetListViewModel ResourceSets { get { return _resourceSets; } }
+
+        public ICommand GoBackCommand
+        {
+            get { return new MvxCommand(GoBack); }
+        }
+
+        public void GoBack()
+        {
+            ChangePresentation(new MvxClosePresentationHint(this));
+        }
 
         private void RebuildMetadataFromCache()
         {

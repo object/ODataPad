@@ -101,10 +101,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Simple.OData.Client.Core">
-      <HintPath>..\packages\Simple.OData.Client.0.17.0\lib\portable-net403+win8+sl5+wp8+MonoAndroid16+MonoTouch40\Simple.OData.Client.Core.dll</HintPath>
+      <HintPath>..\packages\Simple.OData.Client.0.22.0\lib\portable-net403+win8+sl5+wp8+MonoAndroid16+MonoTouch40\Simple.OData.Client.Core.dll</HintPath>
     </Reference>
     <Reference Include="Simple.OData.Client.Dynamic">
-      <HintPath>..\packages\Simple.OData.Client.0.17.0\lib\portable-net403+win8+sl5+wp8+MonoAndroid16+MonoTouch40\Simple.OData.Client.Dynamic.dll</HintPath>
+      <HintPath>..\packages\Simple.OData.Client.0.22.0\lib\portable-net403+win8+sl5+wp8+MonoAndroid16+MonoTouch40\Simple.OData.Client.Dynamic.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
