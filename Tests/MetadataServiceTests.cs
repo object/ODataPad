@@ -18,8 +18,8 @@ namespace ODataPad.Tests
         [TestMethod]
         public void GetSchemaAsString()
         {
-            var schemaString = MetadataService.GetSchemaAsString("http://services.odata.org/Website/odata.svc/");
-            Assert.IsTrue(schemaString.Contains("Consumers"));
+            var schemaString = MetadataService.GetSchemaAsString("http://services.odata.org/V2/OData/OData.svc/");
+            Assert.IsTrue(schemaString.Contains("Products"));
         }
     }
 }
