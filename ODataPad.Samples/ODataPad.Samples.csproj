@@ -79,7 +79,6 @@
     <None Include="Images\Pluralsight.png" />
     <None Include="Images\Stack Overflow.png" />
     <None Include="Images\twitpic.png" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SampleServices.xml">
